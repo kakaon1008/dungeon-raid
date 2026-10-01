@@ -328,6 +328,9 @@ details.rules ul b{color:var(--fg);font-weight:400}
 .liverow .who{flex:1;min-width:0;font-size:13px}.liverow .who b{font-family:var(--fd);font-weight:400;font-size:15px;color:#9fe8c8;margin-right:6px}
 .liverow .btn{white-space:nowrap}
 .mc-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+#kickBox{position:fixed;inset:0;z-index:500;background:rgba(5,4,3,.92);display:grid;place-items:center;padding:20px}#kickBox[hidden]{display:none}
+#kickBox .kb-in{max-width:420px;display:grid;gap:12px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px}
+#kickBox b{font-family:var(--fd);font-weight:400;font-size:20px;color:#ffb0a0}#kickBox p{margin:0;color:var(--mute);font-size:13px}
 #updBar{position:fixed;left:50%;top:calc(8px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:90;background:rgba(40,28,8,.92);border:1px solid #c99a3e;color:#ffe9a8;border-radius:8px;padding:5px 12px;font-size:12px;pointer-events:none}#updBar[hidden]{display:none}
 .chip.oldv{border-color:#e0644c!important;color:#ffb0a0}
 .livechip.join{color:#ffe9a8;border-color:#c99a3e;background:rgba(40,28,8,.8)}
@@ -850,7 +853,8 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>武器スキル</b>（<span data-kb="skill">F</span>キー・スマホは「技」）：武器の種類ごとに固有の技がある。剣＝旋風斬り、斧・槌＝大地割り（スタン）、短剣＝影走り、槍＝穿ち、弓＝五月雨、杖＝魔力爆発。斧や槌の通常攻撃は相手を一瞬スタンさせる。</li>
         <li><b>消耗品スロット</b>（<span data-kb="cons">G</span>キー・スマホは「道具」）：装備画面で1種類を選ぶと3個まで持ち込める。爆弾・煙玉・砥石・鉄の丸薬・俊足の薬・万能薬。商人で買うか工房で作る。宝箱からも出る。</li>
         <li><b>回復薬</b>は飲むのに1秒かかり、その後2.5秒かけて回復する。その間は足が遅くなる。槌で殴られるとスタンする。</li>
-        <li><b>耐久</b>：装備は使うほど傷み、0で壊れて効果がなくなる。ロビーで金貨と素材を払って修復できる（レア度が高いほど高い）。</li>
+        <li><b>応急修理</b>：レイド中も持ち物画面で装備を直せる。金貨は使わないが、そのレイドで拾った素材だけを使い、ロビーより多くの素材が要るうえ、傷みの半分しか戻らない。</li>
+        <li><b>耐久</b>：装備は使うほど傷み、0で壊れて効果がなくなる。壊れる前でもロビーでいつでも修復できる。少しの傷みなら金貨だけ、大きく傷むほど素材も必要（レア度が高いほど高い）。足りないときは払える分だけ一部修復する。</li>
         <li><b>品質の銘</b>：まれに「錆びた」「欠けた」「よくできた」「研ぎ澄まされた」「頑丈な」「名匠の」が付き、性能と耐久が変わる。</li>
         <li>PC操作：<span id="keyHint2"></span> · マウス 狙い · クリック 攻撃（キーは設定⚙で自由に変更できる）</li>
       </ul>
@@ -890,7 +894,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
 <div class="modal" id="optModal" hidden>
   <div class="mbox optbox">
     <h2><span>設定</span><button class="btn" type="button" id="optClose">× 閉じる</button></h2>
-    <div class="optrow"><span>BGM（ロビーの音楽）</span><button class="tog" id="oBgm" type="button"></button></div>
+    <div class="optrow"><span>BGM（ロビー・ダンジョン・ボス戦）</span><button class="tog" id="oBgm" type="button"></button></div>
     <div class="optrow"><span>BGMの音量</span><input type="range" id="oVol" min="0" max="100" step="5"></div>
     <div class="optrow"><span>効果音</span><button class="tog" id="oSfx" type="button"></button></div>
     <div class="optrow"><span>HUDの大きさ</span><div class="seg" id="oHud"><button type="button" data-v="0">小</button><button type="button" data-v="1">標準</button><button type="button" data-v="2">大</button></div></div>
@@ -1433,7 +1437,24 @@ class NetRoom{
 
 /* ---------- account + cloud save ---------- */
 function saveKey(){return AUTH.user?SAVE_KEY+':'+AUTH.user.id:SAVE_KEY}
-function persist(){SAVE.ts=Date.now();lsSet(saveKey(),JSON.stringify(SAVE));scheduleSync()}
+/* ---------- one device per account: the last device to log in wins ---------- */
+const SESS={sid:Math.random().toString(36).slice(2,10)+Date.now().toString(36),ch:null,at:0};
+let KICKED=false;
+async function claimSession(uid){
+  SESS.at=Date.now();
+  try{const {error}=await SB.rpc('claim_session',{p_sid:SESS.sid});if(error)SESS.noServer=true}catch(e){SESS.noServer=true}
+  try{if(SESS.ch){try{SB.removeChannel(SESS.ch)}catch(e){}}const ch=SB.channel('acct-'+uid,{config:{broadcast:{self:false}}});
+    ch.on('broadcast',{event:'claim'},m=>{const p=(m&&m.payload)||{};if(p.sid&&p.sid!==SESS.sid&&(p.at||0)>=SESS.at)kicked()});
+    ch.subscribe(st=>{if(st==='SUBSCRIBED')ch.send({type:'broadcast',event:'claim',payload:{sid:SESS.sid,at:SESS.at}})});SESS.ch=ch}catch(e){}
+}
+function kicked(){
+  if(KICKED)return;KICKED=true;AUTH.lock=true;clearTimeout(scheduleSync.t);
+  try{if(NET.ch&&NET.ch.leave)NET.ch.leave()}catch(e){}NET.ch=null;
+  if(G)G.done=true;
+  let k=$('#kickBox');if(!k){k=document.createElement('div');k.id='kickBox';k.innerHTML='<div class="kb-in"><b>他の端末でプレイされています</b><p>このアカウントに別の端末からログインがあったため、この端末での接続を終了しました。</p><button class="btn primary" type="button" id="kickRe">この端末で遊ぶ</button></div>';document.body.appendChild(k);$('#kickRe').onclick=()=>location.reload()}
+  k.hidden=false;try{musicSync()}catch(e){}
+}
+function persist(){if(KICKED)return;SAVE.ts=Date.now();lsSet(saveKey(),JSON.stringify(SAVE));scheduleSync()}
 function scheduleSync(){if(!AUTH.user||!SB)return;clearTimeout(scheduleSync.t);scheduleSync.t=setTimeout(flushDb,1200)}
 async function flushDb(){
   if(!AUTH.user||!SB)return;
@@ -1442,12 +1463,13 @@ async function flushDb(){
   try{
     do{
       AUTH.dirty=false;
-      const {error}=await SB.rpc('save_game',{p_data:SAVE,p_ts:SAVE.ts});
+      if(KICKED)return;const {error}=await SB.rpc('save_game',{p_data:SAVE,p_ts:SAVE.ts,p_sid:SESS.sid});
       if(error)throw error;
       AUTH.err=null;AUTH.syncedAt=Date.now();
     }while(AUTH.dirty&&!AUTH.lock);
   }catch(e){
     const m=String(e&&e.message||e);
+    if(m.indexOf('OTHER_SESSION')>=0){kicked();return}
     if(m.indexOf('BAD_SAVE')>=0){if(AUTH.err!==m)toast('⚠ サーバーがセーブを受け付けませんでした（'+m.replace('BAD_SAVE:','')+'）。この端末には保存されています');AUTH.err=m}
     else AUTH.err='NET';
     clearTimeout(AUTH.retryT);AUTH.retryT=setTimeout(flushDb,AUTH.err==='NET'?8000:60000);
@@ -1477,6 +1499,7 @@ function authMsg(e){
 }
 async function onLogin(user){
   AUTH.user=user;AUTH.guest=false;
+  await claimSession(user.id);
   let local=null;try{local=JSON.parse(lsGet(saveKey())||'null')}catch(e){}
   let srv=null,srvErr=null;
   try{const {data,error}=await SB.from('saves').select('data,ts').eq('user_id',user.id).maybeSingle();if(error)srvErr=error;else if(data)srv=data.data}catch(e){srvErr=e}
@@ -1593,7 +1616,7 @@ async function importCode(){
   if(!s||typeof s!=='object'||!s.equip){msg('セーブデータではないようです');return}
   s=migrate(s);s.inRaid=null;
   if(AUTH.user){
-    const {data,error}=await SB.rpc('import_save',{p_data:s});
+    const {data,error}=await SB.rpc('import_save',{p_data:s,p_sid:SESS.sid});if(error&&String(error.message||'').indexOf('OTHER_SESSION')>=0){kicked();return}
     if(error){msg(authMsg(error));return}
     s.ts=data.ts;
   }else s.ts=Date.now();
@@ -1672,7 +1695,7 @@ function buildPresence(){
   return p;
 }
 /* ---------- version check: everyone in a room should run the same build ---------- */
-const BUILD='2026.10.01.2300';
+const BUILD='2026.10.02.0010';
 const UPD={newer:null,t:0,going:false};
 async function checkUpdate(force){
   if(!/^https?:$/.test(location.protocol))return;const t=Date.now();if(!force&&t-UPD.t<45000)return;UPD.t=t;
@@ -2078,26 +2101,52 @@ function selItem(){
 }
 const WOODW=new Set(['bow','staff','wolfbow','spiritstaff','frostbow','ashstaff','heavycrossbow']);
 const CLOTHA=new Set(['hood','tunic','leather','gloves','boots','beastboots','trollhide','soulhood','nightgloves','galeboots']);
-function repairCost(it){
-  const mx=maxDur(it),f=clamp((mx-durOf(it))/mx,0,1);if(f<=0)return null;
+function repairCost(it,part){
+  part=part==null?1:part;const mx=maxDur(it),miss=Math.max(0,mx-durOf(it));if(miss<=0)return null;
+  const f=clamp(miss/mx*part,0,1),add=Math.max(1,Math.round(miss*part));
   const r=it.r|0,b=BASES[it.b],m={};
   const gold=Math.ceil(valueFull(it)*f*[0.6,1.1,2,3.6,6.5][r]+f*40);
-  const n=Math.ceil(f*[2,3,5,8,12][r]);
-  if(b.s==='ring')m.gem=Math.ceil(n/3);
+  // light wear costs only gold; materials are needed once the item is properly worn
+  if(f>=0.2){const n=Math.ceil(f*[2,3,5,8,12][r]);
+    if(b.s==='ring')m.gem=Math.ceil(n/3);
+    else if(b.s==='weapon'){if(WOODW.has(b.k))m.wood=n;else m.iron=n}
+    else if(CLOTHA.has(b.k)){m.fur=Math.ceil(n/2);m.cloth=Math.ceil(n/2)}
+    else m.iron=n;
+    if(r>=3&&f>=0.5)m.core=Math.ceil(f*(r===4?2:1));
+    if(r===4&&f>=0.8)m.sigil=1;}
+  return {gold,m,f,add,part};
+}
+function canPay(c){return c&&SAVE.gold>=c.gold&&Object.entries(c.m).every(([k,n])=>matHave(k,0)>=n)}
+function costText(c){const ms=Object.entries(c.m).map(([k,n])=>MATS[k].n+'×'+n);return [c.gold.toLocaleString()+'G',...ms].join('・')}
+/* best repair you can afford right now: full if possible, otherwise as much as your gold and materials allow */
+function bestRepair(it){const c=repairCost(it);if(!c)return null;if(canPay(c))return c;for(let k=0.9;k>0.05;k-=0.1){const c2=repairCost(it,k);if(c2&&canPay(c2))return c2}return null}
+function repairItem(it,silent){
+  const full=repairCost(it);if(!full)return false;const c=bestRepair(it);
+  if(!c){if(!silent)toast('修復に必要なもの：'+costText(full));return false}
+  SAVE.gold-=c.gold;for(const [k,n] of Object.entries(c.m))matTake(k,n,0);it.du=Math.min(maxDur(it),durOf(it)+c.add);
+  if(!silent){persist();renderLobby();sfx('equip');toast(itemName(it)+(c.part<1?' を一部修復した（耐久 '+Math.round(durOf(it))+'/'+maxDur(it)+'・残りは素材か金貨を用意してもう一度）':' を修復した'))}
+  return true;
+}
+/* field repair inside a raid: costs only materials picked up in this raid (no gold), costs more and restores only half of the wear */
+function fieldRepairCost(it){
+  const mx=maxDur(it),miss=Math.max(0,mx-durOf(it));if(miss<1)return null;
+  const f=miss/mx,r=it.r|0,b=BASES[it.b],m={},n=Math.max(1,Math.ceil(f*[3,5,8,12,18][r]));
+  if(b.s==='ring')m.gem=Math.max(1,Math.ceil(n/3));
   else if(b.s==='weapon'){if(WOODW.has(b.k))m.wood=n;else m.iron=n}
   else if(CLOTHA.has(b.k)){m.fur=Math.ceil(n/2);m.cloth=Math.ceil(n/2)}
   else m.iron=n;
-  if(r>=3)m.core=Math.ceil(f*(r===4?2:1));
-  if(r===4)m.sigil=1;
-  return {gold,m,f};
+  if(r>=2)m.bone=Math.ceil(n/2);
+  if(r>=3&&f>=0.4)m.core=1;
+  if(r===4&&f>=0.7)m.sigil=1;
+  return {m,add:Math.max(1,Math.round(miss*0.5))};
 }
-function canPay(c){return c&&SAVE.gold>=c.gold&&Object.entries(c.m).every(([k,n])=>matHave(k,0)>=n)}
-function costText(c){return c.gold.toLocaleString()+'G・'+Object.entries(c.m).map(([k,n])=>MATS[k].n+'×'+n).join('・')}
-function repairItem(it,silent){
-  const c=repairCost(it);if(!c)return false;
-  if(!canPay(c)){if(!silent)toast('修復に必要なもの：'+costText(c));return false}
-  SAVE.gold-=c.gold;for(const [k,n] of Object.entries(c.m))matTake(k,n,0);it.du=maxDur(it);
-  if(!silent){persist();renderLobby();sfx('equip');toast(itemName(it)+' を修復した')}
+function fieldHave(id){let n=0;for(let q=0;q<3;q++)n+=G.mats[mkey(id,q)]||0;return n}
+function fieldCanPay(c){return Object.entries(c.m).every(([k,n])=>fieldHave(k)>=n)}
+function fieldRepair(it){
+  const c=fieldRepairCost(it);if(!c)return false;
+  if(!fieldCanPay(c)){flashMsg('このレイドで拾った素材が足りない：'+Object.entries(c.m).map(([k,n])=>MATS[k].n+' '+fieldHave(k)+'/'+n).join('・'));sfx('hurt',0.4);return false}
+  for(let [k,n] of Object.entries(c.m))for(let q=0;q<3&&n>0;q++){const kk=mkey(k,q),h=G.mats[kk]||0,t=Math.min(h,n);G.mats[kk]=h-t;if(!(G.mats[kk]>0))delete G.mats[kk];n-=t}
+  it.du=Math.min(maxDur(it),durOf(it)+c.add);sfx('equip');flashMsg(itemName(it)+' を応急修理した（耐久 '+Math.round(durOf(it))+'/'+maxDur(it)+'）');
   return true;
 }
 function repairAll(){
@@ -2232,7 +2281,7 @@ function renderLobby(){
     else if(SEL.where==='equip'){acts.push({label:'外す',fn:()=>lobbyAct('unequip')});acts.push({label:'ポーチへ',fn:()=>lobbyAct('pouch')});acts.push({label:'売却 '+sellPrice(it)+'G',fn:()=>lobbyAct('sell'),cls:'danger'})}
     else{acts.push({label:'装備する',fn:()=>lobbyAct('equip'),cls:'primary'});acts.push({label:'倉庫へ',fn:()=>lobbyAct('topouchout')});acts.push({label:'売却 '+sellPrice(it)+'G',fn:()=>lobbyAct('sell'),cls:'danger'})}
     if(SEL.where!=='pouch'&&!it.ins)acts.splice(1,0,{label:'保険 '+insCost(it)+'G',fn:()=>lobbyAct('insure')});
-    {const rc=repairCost(it);if(rc)acts.unshift({label:'修復（'+costText(rc)+'）',fn:()=>lobbyAct('repair'),cls:canPay(rc)?(isBroken(it)?'primary':''):''})}
+    {const rc=repairCost(it);if(rc){const bc=bestRepair(it);const full=bc&&bc.part>=1;acts.unshift({label:(full?'修復':bc?'一部修復':'修復')+'（耐久 '+Math.round(durOf(it))+'/'+maxDur(it)+' · '+costText(bc||rc)+'）',fn:()=>lobbyAct('repair'),cls:bc?((isBroken(it)||rc.f>=0.25)?'primary':''):''})}}
     inspector(ins,it,acts,SEL.where==='equip'?undefined:SAVE.equip[slot],'装備中');
     if(it.ins){const n=document.createElement('p');n.className='hint';n.style.color='var(--acc)';n.textContent='保険付き：死んでも持ち去られなければ3分後に倉庫へ戻る';ins.querySelector('.pw').after(n)}
   }else if(SEL&&SEL.where==='equip'){ins.innerHTML='<p class="hint">'+SLOTN[SEL.slot]+'は空いています。</p>'}
@@ -2776,7 +2825,7 @@ async function gacha(n){
     try{
       if(!(await flushDbNow())){toast(AUTH.err==='NET'?'サーバーにつながらないため、今はガチャを引けません':'セーブがサーバーと同期できていないため、ガチャを引けません');return}
       AUTH.lock=true;
-      const {data,error}=await SB.rpc('gacha_pull',{p_n:n});
+      const {data,error}=await SB.rpc('gacha_pull',{p_n:n,p_sid:SESS.sid});if(error&&String(error.message||'').indexOf('OTHER_SESSION')>=0){kicked();return}
       if(error){toast('ガチャ失敗：'+authMsg(error));return}
       SAVE.gold=data.gold;SAVE.cos.own=data.own.slice();
       res=data.res.map(x=>({c:COS[COSI[x.id]],fresh:!!x.fresh,refund:x.refund|0})).filter(x=>x.c);
@@ -4276,6 +4325,7 @@ function renderInv(){
       acts.push({label:'バッグへ出す',fn:()=>{if(G.bag.length>=16){flashMsg('バッグがいっぱいです');return}G.bag.push(it);SAVE.pouch=null;persist();G.invSel={where:'bag',i:G.bag.length-1};renderInv()}});
       acts.push({label:'装備する',fn:()=>{const old=G.equip[slot];G.equip[slot]=it;SAVE.pouch=old||null;restat();persist();G.invSel={where:'equip',slot};renderInv()},cls:'primary'});
     }
+    {const fc=fieldRepairCost(it);if(fc){const ok=fieldCanPay(fc);acts.unshift({label:'応急修理（耐久+'+fc.add+' · '+Object.entries(fc.m).map(([k,n])=>MATS[k].n+'×'+n).join('・')+'）',fn:()=>{if(fieldRepair(it)){restat();renderInv();renderHud()}},cls:ok?'primary':''})}}
     inspector(right,it,acts,sel.where==='equip'?undefined:G.equip[slot],'装備中');
   }else if(sel&&sel.where==='equip'){right.innerHTML='<p class="hint">'+SLOTN[sel.slot]+'は空いています。</p>'}
   else{
@@ -5245,7 +5295,7 @@ function renderHud(){
 
 /* ---------- main loop ---------- */
 function frame(ts){
-  requestAnimationFrame(frame);
+  requestAnimationFrame(frame);if(KICKED)return;
   if(!G)return;
   const t=ts/1000;const dt=Math.min(0.05,G.lastT?t-G.lastT:0.016);G.lastT=t;G.lastDt=dt;
   try{
@@ -5414,6 +5464,7 @@ function sfx(k,vol){
   const a=AUD.ctx;if(!a||AUD.mute)return;vol=vol==null?1:vol;
   if(k==='roar'){noise(a,1.6,0.5*vol,500,90);try{const o=a.createOscillator(),g=a.createGain(),t=a.currentTime;o.type='sawtooth';o.frequency.setValueAtTime(95,t);o.frequency.linearRampToValueAtTime(140,t+0.4);o.frequency.exponentialRampToValueAtTime(48,t+1.5);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.12*vol,t+0.25);g.gain.exponentialRampToValueAtTime(0.0001,t+1.6);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+1.7)}catch(e){}return}
   if(k==='boom'){noise(a,0.7,0.6*vol,1800,60);return}
+  if(k==='bossenc'){noise(a,1.8,0.55*vol,300,50);try{const t=a.currentTime;for(const [f,d] of [[55,0],[58.27,0],[82.4,0.02],[110,0.04]]){const o=a.createOscillator(),g=a.createGain(),lp=a.createBiquadFilter();o.type='sawtooth';o.frequency.setValueAtTime(f,t+d);o.frequency.linearRampToValueAtTime(f*1.03,t+2.2);lp.type='lowpass';lp.frequency.setValueAtTime(300,t);lp.frequency.linearRampToValueAtTime(1600,t+0.6);lp.frequency.exponentialRampToValueAtTime(200,t+2.4);g.gain.setValueAtTime(0.0001,t+d);g.gain.linearRampToValueAtTime(0.09*vol,t+d+0.15);g.gain.exponentialRampToValueAtTime(0.0001,t+2.6);o.connect(lp);lp.connect(g);g.connect(a.destination);o.start(t+d);o.stop(t+2.7)}}catch(e){}return}
   if(k==='fanfare'){[523,659,784,1047].forEach((f,i)=>{try{const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+i*0.09;o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.07*vol,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.35);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+0.4)}catch(e){}});return}
   const T={tap:[1150,720,0.035,'triangle',0.03],tab:[520,860,0.07,'sine',0.045],swing:[180,90,0.06,'triangle',0.05],hit:[220,110,0.08,'square',0.04],hurt:[120,60,0.15,'sawtooth',0.07],loot:[520,780,0.08,'sine',0.05],rare:[440,1320,0.35,'triangle',0.07],coin:[880,1320,0.1,'square',0.03],chest:[160,320,0.18,'triangle',0.06],equip:[300,450,0.08,'triangle',0.05],dodge:[260,140,0.1,'sine',0.05],bow:[600,200,0.08,'triangle',0.04],magic:[300,900,0.18,'sine',0.05],drink:[400,600,0.25,'sine',0.04],die:[200,40,0.8,'sawtooth',0.08],extract:[330,990,0.6,'triangle',0.07],kill:[500,250,0.3,'square',0.05],start:[110,220,0.6,'sine',0.06]}[k];
   if(!T)return;
@@ -5640,11 +5691,46 @@ const MUS={out:null,wet:null,timer:0,next:0,step:0,playing:false,nb:null};
 const mtof=m=>440*Math.pow(2,(m-69)/12);
 const MPROG=[[50,53,57],[46,50,53],[53,57,60],[48,52,55],[50,53,57],[55,58,62],[46,50,53],[45,49,52]];
 const MBEAT=60/76/2;
-function musicWanted(){return !!(OPT.bgm&&!G&&AUD.ctx&&AUD.ctx.state!=='closed'&&!document.hidden)}
-function musicSync(){if(musicWanted()){if(!MUS.playing)musicStart()}else if(MUS.playing)musicStop()}
-function musicStart(){
+function musicWanted(){return !!(OPT.bgm&&AUD.ctx&&AUD.ctx.state!=='closed'&&!document.hidden&&!(typeof KICKED!=='undefined'&&KICKED))}
+/* which tune should be playing: lobby, the region you are in, or the boss theme once a boss has noticed you */
+function bossEngaged(){if(!G||G.done)return null;if(G.mode==='boss')return G.mons[0]||true;const me=G.me;for(const m of G.mons){if(m.dead||!(m.k==='boss'||m.k==='dragon'))continue;if(m.s!==0&&Math.hypot(m.rx-me.x,m.ry-me.y)<700)return m}return null}
+function bossWatch(){if(!G)return;const b=bossEngaged();if(b&&!G.bossOn){G.bossOn=true;if(!G.bossSeen||now()-G.bossSeen>40){sfx('bossenc');if(G.mode!=='boss'&&b.name)banner('強敵の気配',b.name+' に見つかった','#ff5a4a')}G.bossSeen=now()}else if(!b&&G.bossOn){G.bossOn=false}}
+function musicKey(){if(!G)return 'lobby';return G.bossOn?'boss':(MTHEME[G.map.biome]?G.map.biome:'dungeon')}
+function musicSync(){if(!musicWanted()){if(MUS.playing)musicStop();return}const k=musicKey();if(!MUS.playing)musicStart(k);else if(MUS.key!==k){musicStop();musicStart(k)}}
+setInterval(()=>{try{bossWatch();musicSync()}catch(e){}},400);
+const MTHEME={
+  dungeon:{bpm:58,prog:[[45,48,52],[41,45,48],[43,46,50],[40,44,47]],pad:['sawtooth',600,0.011,7,2],bass:0.09,bell:0.035,drip:0.3,kick:[0],mel:0.25,melType:'sine'},
+  forest:{bpm:68,prog:[[50,53,57],[48,52,55],[46,50,53],[45,48,52]],pad:['triangle',1300,0.022,6,2],bass:0.07,arp:[0,1,2,1],arpType:'triangle',arpVol:0.03,arpProb:0.7,arpOct:12,wind:1,mel:0.35,melType:'sine'},
+  ruins:{bpm:62,prog:[[40,43,47],[41,44,48],[38,41,45],[40,43,46]],pad:['sawtooth',750,0.013,9,2],bass:0.1,bell:0.05,kick:[0,4],crackle:1,mel:0.2,melType:'triangle'},
+  town:{bpm:64,prog:[[52,55,59],[48,52,55],[50,53,57],[47,50,54]],pad:['triangle',900,0.016,5,2],bass:0.06,arp:[2,1,0,1],arpType:'sine',arpVol:0.034,arpProb:0.85,arpOct:24,bell:0.03,mel:0.15,melType:'sine'},
+  mine:{bpm:76,prog:[[43,46,50],[41,44,48],[43,46,50],[39,43,46]],pad:['sawtooth',520,0.011,8,2],bass:0.1,clank:[0,3,6],kick:[0,4],mel:0.15,melType:'triangle',drip:0.15},
+  swamp:{bpm:52,prog:[[47,50,54],[46,49,53],[44,47,51],[45,48,52]],pad:['sawtooth',460,0.013,18,2],bass:0.08,bubble:0.45,mel:0.2,melType:'sine',wind:1},
+  crypt:{bpm:48,prog:[[45,48,52],[44,48,51],[41,45,48],[40,44,47]],pad:['sawtooth',1300,0.008,12,3],bass:0.07,bell:0.055,mel:0.3,melType:'triangle'},
+  boss:{bpm:132,prog:[[45,48,52],[45,48,52],[46,50,53],[44,47,51]],pad:['sawtooth',1500,0.011,9,2],ost:[0,0,12,0,0,12,0,7],kick:[0,2,4,6],hat:[1,3,5,7],crash:1,stab:1,mel:0.5,melType:'square'},
+};
+function mNoise(t,dur,vol,type,freq,q){const a=AUD.ctx;if(!MUS.nb||!MUS.out)return;const src=a.createBufferSource(),g=a.createGain(),f=a.createBiquadFilter();src.buffer=MUS.nb;src.loop=dur>0.2;f.type=type;f.frequency.value=freq;if(q)f.Q.value=q;g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+Math.min(0.02,dur*0.3));g.gain.exponentialRampToValueAtTime(0.0001,t+dur);src.connect(f);f.connect(g);g.connect(MUS.out);src.start(t);src.stop(t+dur+0.05)}
+function themeStep(C,step,t,B){
+  const s=step%8,bar=Math.floor(step/8)%C.prog.length,ch=C.prog[bar],h=(step*2654435761>>>0)%1000/1000,h2=(step*40503+7>>>0)%1000/1000;
+  if(s===0){const [ty,lp,vol,det,nv]=C.pad;for(const m of ch)for(let k=0;k<(nv||2);k++)mVoice(t,mtof(m),B*8.6,ty,vol,B*2.2,{det:(k-(nv-1)/2)*2*(det||7),lp,wet:k===0?1:0})}
+  if(C.bass&&(s===0||(C.bpm>100&&s===4)))mVoice(t,mtof(ch[0]-12),B*(C.bpm>100?3.6:7.5),'triangle',C.bass,0.03,{lp:420});
+  if(C.ost){const m=ch[0]-12+C.ost[s];mVoice(t,mtof(m),B*0.9,'sawtooth',0.05,0.005,{lp:700})}
+  if(C.arp&&s%2===0&&h<C.arpProb)mVoice(t,mtof(ch[C.arp[s/2]]+(C.arpOct||12)),B*1.8,C.arpType,C.arpVol,0.005,{wet:1});
+  if(C.mel&&(s===0||s===4||(C.bpm>100&&s===6))&&h2<C.mel){const mel=[ch[0]+24,ch[1]+24,ch[2]+24,ch[0]+12][Math.floor(h*4)];mVoice(t,mtof(mel),B*(C.bpm>100?1.6:3.2),C.melType,C.melType==='square'?0.016:0.03,C.bpm>100?0.01:0.15,{wet:1,lp:C.melType==='square'?1800:4000})}
+  if(C.bell&&s===0&&bar%2===0){const f=mtof(ch[2]+24);mVoice(t,f,3.2,'sine',C.bell,0.004,{wet:1});mVoice(t,f*2.76,1.6,'sine',C.bell*0.4,0.004);mVoice(t,f*5.4,0.8,'sine',C.bell*0.15,0.004)}
+  if(C.kick&&C.kick.includes(s))mVoice(t,110,0.3,'sine',C.bpm>100?0.2:0.12,0.004,{glide:40});
+  if(C.hat&&C.hat.includes(s))mNoise(t,0.05,0.03,'highpass',6500);
+  if(C.crash&&s===0&&bar===0)mNoise(t,1.6,0.05,'highpass',3500);
+  if(C.stab&&s===0&&bar%2===1)for(const m of ch)mVoice(t,mtof(m+12),B*1.2,'square',0.02,0.005,{lp:1600});
+  if(C.drip&&s%2===1&&h<C.drip){const f=1400+h2*1400;mVoice(t,f,0.25,'sine',0.03,0.002,{glide:f*1.6,wet:1})}
+  if(C.clank&&C.clank.includes(s)&&h<0.75){mNoise(t,0.09,0.06,'bandpass',1900+h2*900,8);mVoice(t,880+h2*600,0.18,'square',0.012,0.002,{lp:3000})}
+  if(C.bubble&&s%2===0&&h<C.bubble){const f=180+h2*160;mVoice(t,f,0.22,'sine',0.05,0.01,{glide:f*2.8})}
+  if(C.wind&&s===0&&bar%2===0)mNoise(t,B*12,0.022,'lowpass',500+h2*400);
+  if(C.crackle&&h<0.5)mNoise(t+h2*B,0.03,0.025,'highpass',2500);
+}
+function musicStart(key){
+  key=key||'lobby';MUS.key=key;MUS.cfg=MTHEME[key]||null;MUS.beat=MUS.cfg?60/MUS.cfg.bpm/2:MBEAT;
   const a=AUD.ctx;if(!a)return;if(a.state==='suspended'){try{a.resume()}catch(e){}}
-  const out=a.createGain();out.gain.value=0.0001;out.gain.setTargetAtTime(Math.max(0.0001,OPT.vol/100*0.55),a.currentTime,0.9);
+  const out=a.createGain();out.gain.value=0.0001;out.gain.setTargetAtTime(Math.max(0.0001,OPT.vol/100*0.55*(key==='lobby'?1:key==='boss'?0.85:0.75)),a.currentTime,key==='boss'?0.3:0.9);
   const comp=a.createDynamicsCompressor();comp.threshold.value=-18;out.connect(comp);comp.connect(a.destination);
   const wet=a.createGain();wet.gain.value=0.3;const dl=a.createDelay(1.5);dl.delayTime.value=MBEAT*3;const fb=a.createGain();fb.gain.value=0.33;const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;
   wet.connect(dl);dl.connect(lp);lp.connect(fb);fb.connect(dl);lp.connect(out);
@@ -5656,7 +5742,7 @@ function musicStop(){
   const a=AUD.ctx,o=MUS.out,c=MUS.comp;MUS.playing=false;clearInterval(MUS.timer);MUS.out=null;MUS.wet=null;
   if(o&&a){o.gain.cancelScheduledValues(a.currentTime);o.gain.setTargetAtTime(0.0001,a.currentTime,0.35);setTimeout(()=>{try{o.disconnect();c.disconnect()}catch(e){}},2500)}
 }
-function musicTick(){const a=AUD.ctx;if(!a||!MUS.out)return;if(MUS.next<a.currentTime-1)MUS.next=a.currentTime+0.05;while(MUS.next<a.currentTime+0.3){try{musicStep(MUS.step,MUS.next)}catch(e){}MUS.next+=MBEAT;MUS.step++}}
+function musicTick(){const a=AUD.ctx;if(!a||!MUS.out)return;if(MUS.next<a.currentTime-1)MUS.next=a.currentTime+0.05;while(MUS.next<a.currentTime+0.3){try{if(MUS.cfg)themeStep(MUS.cfg,MUS.step,MUS.next,MUS.beat);else musicStep(MUS.step,MUS.next)}catch(e){}MUS.next+=MUS.beat||MBEAT;MUS.step++}}
 function mVoice(t,f,dur,type,vol,att,opt){
   const a=AUD.ctx,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(opt&&opt.det)o.detune.value=opt.det;if(opt&&opt.glide)o.frequency.exponentialRampToValueAtTime(opt.glide,t+dur*0.8);
   g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+att);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
