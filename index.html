@@ -580,6 +580,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
 .conschip.on{border-color:var(--acc);color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,var(--panel2))}
 .skl{border:1px solid #6a8acf;padding:8px 10px;color:#9fc0ff;background:rgba(80,120,200,.08)}
 .skl p{margin:2px 0 0;font-size:12px;color:var(--fg)}
+#sortSel{background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:7px 8px;color:var(--fg)}
 </style>
 
 </head>
@@ -611,7 +612,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         </div>
         <div class="party" id="party"></div>
         <button class="pvpsw" id="pvpSw" type="button"><span id="pvpSwT"></span><span class="sw"></span></button>
-        <p class="hint">同じ部屋コードの友達と同じダンジョンへ。同じチームはパーティになり、互いに攻撃できない。</p>
+        <p class="hint">同じ部屋コードの友達と同じダンジョンへ。同じチーム（A〜D）はパーティになり、互いに攻撃できない。チームの誰かが出撃すると全員一緒に出発し、同じ場所から始まる。</p>
       </div>
       <div class="lcard"><h3>進行中のレイド</h3><div class="raids" id="raidList"></div><p class="hint" id="raidNone">今はだれも潜っていない。</p></div>
     </aside>
@@ -636,7 +637,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
   </section>
   <section class="pane" id="paneStash">
     <h2>倉庫 <span class="hint" id="stashCount"></span><span class="goldv" id="goldV"></span></h2>
-    <div class="stashbar"><button class="btn" id="bulkBtn" type="button">まとめて売却</button><button class="btn" id="expandBtn" type="button"></button><span class="hint">ドラッグで移動・装備・売却（スマホは長押し）</span></div>
+    <div class="stashbar"><select id="sortSel" aria-label="並べ替え"><option value="">並べ替え…</option><option value="rar">レア度順</option><option value="pow">戦力順</option><option value="lv">レベル順</option><option value="slot">部位順</option><option value="val">売値順</option><option value="dur">耐久が少ない順</option><option value="new">新しい順</option></select><button class="btn" id="bulkBtn" type="button">まとめて売却</button><button class="btn" id="expandBtn" type="button"></button><span class="hint">ドラッグで移動・装備・売却（スマホは長押し）</span></div>
     <div class="grid" id="stashGrid"></div>
     <h3>素材 <span class="hint">（素材ポーチ・無制限）</span></h3>
     <div class="matrow" id="stashMats"></div>
@@ -786,6 +787,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
     <div class="optrow"><span>効果音</span><button class="tog" id="oSfx" type="button"></button></div>
     <div class="optrow"><span>HUDの大きさ</span><div class="seg" id="oHud"><button type="button" data-v="0">小</button><button type="button" data-v="1">標準</button><button type="button" data-v="2">大</button></div></div>
     <div class="optrow"><span>ミニマップの大きさ</span><div class="seg" id="oMap"><button type="button" data-v="0">小</button><button type="button" data-v="1">標準</button><button type="button" data-v="2">大</button></div></div>
+    <div class="optrow"><span>チームの出撃に自動で合流</span><button class="tog" id="oFollow" type="button"></button></div>
     <div class="optrow"><span>全画面表示</span><button class="btn" id="oFull" type="button">全画面にする</button></div>
     <div class="optrow" id="oAutoRow"><span>出撃時に自動で全画面</span><button class="tog" id="oAuto" type="button"></button></div>
     <div class="optcol"><b>📱 アプリとして遊ぶ（URLバーを消す）</b><p class="hint" id="oInstHint"></p><button class="btn primary" id="oInst" type="button" hidden>ホーム画面に追加</button></div>
@@ -938,7 +940,7 @@ const ELM=[
   {k:'ice',n:'氷',pre:'氷結の',col:'#8fd8ff',rgb:'143,216,255',d:'凍結：2秒間、移動を40%遅くする'},
   {k:'thunder',n:'雷',pre:'雷撃の',col:'#ffe066',rgb:'255,224,102',d:'連鎖：近くの敵2体に50%の雷が走る'},
   {k:'poison',n:'毒',pre:'猛毒の',col:'#9ae05a',rgb:'154,224,90',d:'猛毒：5秒間じわじわ削る（3回まで重なる）'},
-  {k:'dark',n:'闇',pre:'闇の',col:'#b07cff',rgb:'176,124,255',d:'吸命：与えたダメージの一部を吸い取る'},
+  {k:'dark',n:'闇',pre:'闇の',col:'#b07cff',rgb:'176,124,255',d:'吸命：与えたダメージのごく一部を吸い取る（0.4秒に1回まで）'},
 ];
 const FIST={k:'fist',n:'素手',s:'weapon',dmg:[3,5],aspd:2,range:38,arc:80};
 const AW={atkp:1.6,flat:4,crit:2.5,critd:0.7,aspd:2,hp:0.9,arm:2.2,move:3,ls:12,regen:14,luck:0.6,dodge:1.2,rng:1.1};
@@ -1047,6 +1049,7 @@ function checkAbandoned(){
   }
 }
 const INS_MS=3*60*1000;
+const sellPrice=it=>Math.max(1,Math.round(value(it)*0.55));
 const insCost=it=>Math.max(120,Math.ceil(valueFull(it)*1.9));
 function processClaims(){
   if(!SAVE||!SAVE.claims.length)return false;
@@ -1092,7 +1095,7 @@ const RELAY_MS=250;
    - list keys that receivers apply additively only carry their newest entries in between
    - same-raid peers get every frame (10/s once 6+ are together), everyone else 1/s
    - the host only sends each peer the monsters near that peer */
-const NSLOW=new Set(['n','tm','lv','pl','ti','cs','eq','w','wr','we','po','tr','ov','mh','rid','seed','t0','jt','gr','df','mode','bk','np','ph','cp','rh','rj','rr']);
+const NSLOW=new Set(['spi','n','tm','lv','pl','ti','cs','eq','w','wr','we','po','tr','ov','mh','rid','seed','t0','jt','gr','df','mode','bk','np','ph','cp','rh','rj','rr']);
 const NTAIL={tk:10,oc:8,md:16};
 const NEAR_R=1500;           // fallback relay through Supabase: at most 4 updates/sec per player
 let SB=null;
@@ -1502,6 +1505,7 @@ function buildPresence(){
       hp:Math.ceil(m.hp),mh:G.stats.mhp,cs:cosIdx(),eq:eqIdx(G.equip),we:G.stats.el,po:SAVE.pvpOff?1:0,tr:[...G.truce].slice(0,12),ov:[...G.ov].slice(0,12),st:m.st,w:G.stats.wb.k,wr:G.equip.weapon?G.equip.weapon.r:0,dg:G.dodgeT>0?1:0,sn:G.sneak?1:0,
       ev:G.myEv,tk:G.myTaken.slice(G.trim?-25:-80),oc:G.myOpened.slice(-40)});
     if(G.mode==='boss'){p.bd=Math.round(G.bossDmg||0);if(G.spec)p.sp=1}
+    if(typeof G.spi==='number')p.spi=G.spi;
     if(G.smokeT>0)p.smk=1;
     if(m.st==='dead'&&G.corpse)p.cp=G.corpse;
     if(G.isHost){
@@ -1844,7 +1848,7 @@ function inspector(el,it,acts,cmp,cmpLabel){
   const h=document.createElement('div');h.className='ins';
   h.innerHTML='<div class="ins-head" data-r="'+it.r+'"><span class="g">'+itemIconHTML(it,'icoL')+'</span><div><div class="nm">'+esc(itemName(it))+'</div><div class="sub">'+RAR[it.r].n+' · '+SLOTN[b.s]+' · Lv'+it.l+' · 品質 '+Math.round(it.q*100)+'%</div></div></div>'+
     '<div class="pw">戦力 <b>'+p+'</b> '+diff+'</div>'+(cmp?'<div class="cmpnote">比較：'+esc(cmpLabel||'装備中')+' '+esc(itemName(cmp))+'（戦力 '+power(cmp)+'）</div>':'')+
-    '<ul class="lines">'+lines+'</ul>'+leg+'<div class="val">売値 '+value(it)+'G</div>';
+    '<ul class="lines">'+lines+'</ul>'+leg+'<div class="val">売値 '+sellPrice(it)+'G</div>';
   const a=document.createElement('div');a.className='acts';
   for(const x of acts||[])a.appendChild(armedBtn(x.label,x.fn,x.cls));
   h.appendChild(a);el.appendChild(h);
@@ -2007,9 +2011,9 @@ function renderLobby(){
   const it=selItem();const ins=$('#inspect');
   if(it){
     const slot=BASES[it.b].s;const acts=[];
-    if(SEL.where==='stash'){acts.push({label:'装備する',fn:()=>lobbyAct('equip'),cls:'primary'});acts.push({label:'ポーチへ',fn:()=>lobbyAct('pouch')});acts.push({label:'売却 '+value(it)+'G',fn:()=>lobbyAct('sell'),cls:it.r>=3?'danger':''})}
-    else if(SEL.where==='equip'){acts.push({label:'外す',fn:()=>lobbyAct('unequip')});acts.push({label:'ポーチへ',fn:()=>lobbyAct('pouch')});acts.push({label:'売却 '+value(it)+'G',fn:()=>lobbyAct('sell'),cls:'danger'})}
-    else{acts.push({label:'装備する',fn:()=>lobbyAct('equip'),cls:'primary'});acts.push({label:'倉庫へ',fn:()=>lobbyAct('topouchout')});acts.push({label:'売却 '+value(it)+'G',fn:()=>lobbyAct('sell'),cls:'danger'})}
+    if(SEL.where==='stash'){acts.push({label:'装備する',fn:()=>lobbyAct('equip'),cls:'primary'});acts.push({label:'ポーチへ',fn:()=>lobbyAct('pouch')});acts.push({label:'売却 '+sellPrice(it)+'G',fn:()=>lobbyAct('sell'),cls:it.r>=3?'danger':''})}
+    else if(SEL.where==='equip'){acts.push({label:'外す',fn:()=>lobbyAct('unequip')});acts.push({label:'ポーチへ',fn:()=>lobbyAct('pouch')});acts.push({label:'売却 '+sellPrice(it)+'G',fn:()=>lobbyAct('sell'),cls:'danger'})}
+    else{acts.push({label:'装備する',fn:()=>lobbyAct('equip'),cls:'primary'});acts.push({label:'倉庫へ',fn:()=>lobbyAct('topouchout')});acts.push({label:'売却 '+sellPrice(it)+'G',fn:()=>lobbyAct('sell'),cls:'danger'})}
     if(SEL.where!=='pouch'&&!it.ins)acts.splice(1,0,{label:'保険 '+insCost(it)+'G',fn:()=>lobbyAct('insure')});
     {const rc=repairCost(it);if(rc)acts.unshift({label:'修復（'+costText(rc)+'）',fn:()=>lobbyAct('repair'),cls:canPay(rc)?(isBroken(it)?'primary':''):''})}
     inspector(ins,it,acts,SEL.where==='equip'?undefined:SAVE.equip[slot],'装備中');
@@ -2538,8 +2542,20 @@ function renderNet(){
   t.textContent=NET.status==='on'?'部屋「'+NET.party+'」に接続中'+x:NET.status==='connecting'?'接続中…':'オフライン（サーバーにつながりません）';
 }
 function partyPeers(){return NET.ch?NET.ch.peers().filter(p=>!p.sameTab&&p.presence&&p.presence.n):[]}
+function partyFollow(){
+  if(G||!AUTH.ready||!OPT.follow||!$('#authModal').hidden)return;
+  const myTm=+$('#inTeam').value||0;if(!myTm)return;
+  for(const p of partyPeers()){const pr=p.presence;
+    if(pr.ph!=='raid'||pr.mode==='boss'||(+pr.tm||0)!==myTm||!pr.rid||typeof pr.t0!=='number')continue;
+    if(Date.now()-pr.t0>20000||PF_SEEN.has(pr.rid))continue;
+    PF_SEEN.add(pr.rid);toast('チーム'+'ABCD'[myTm-1]+'の '+String(pr.n).slice(0,10)+' が出撃！一緒に出発する');
+    audioInit();autoFull();startRaid(pr.rid,pr.seed>>>0,pr.t0,{gr:pr.gr?1:0,diff:clamp(pr.df|0,0,3)});return;
+  }
+}
+const PF_SEEN=new Set();
 function renderParty(){
   if(G)return;
+  partyFollow();if(G)return;
   brCheckDepart();if(G)return;
   renderBossRaid();
   const box=$('#party');box.innerHTML='';
@@ -2978,9 +2994,22 @@ function startRaid(raidId,seed,t0,opts={}){
   if(boss){const K=map.arena,bm=G.mons[0];bm.mhp=bm.hp=Math.round(K.b.hp*(1+0.5*((opts.np||1)-1)));bm.dm=K.b.dmg;bm.br=K.b.br||'255,120,40';bm.star=K.star;bm.def=Object.assign({},MON.rboss,{r:K.b.r,breath:K.b.breath?1:0});bm.name=K.b.n}
   const fc3=map.B.fog;for(let i=0;i<MW*MH;i++){G.fogImg.data[i*4]=fc3[0];G.fogImg.data[i*4+1]=fc3[1];G.fogImg.data[i*4+2]=fc3[2]}
   // spawn far from other players
-  const others=[];for(const p of partyPeers()){const pr=p.presence;if(pr.ph==='raid'&&pr.rid===raidId&&pr.st==='alive')others.push(pr)}
-  let best=map.spawns[0]||{x:MW*TS/2,y:MH*TS/2},bd=-1;
-  for(const s of map.spawns){const d=others.length?Math.min(...others.map(o=>Math.hypot(o.x-s.x,o.y-s.y))):Math.random()*1000;if(d>bd){bd=d;best=s}}
+  const myTm=+$('#inTeam').value||0,SP=map.spawns.length?map.spawns:[{x:MW*TS/2,y:MH*TS/2}];
+  const inRaid=partyPeers().map(p=>p.presence).filter(pr=>pr.ph==='raid'&&pr.rid===raidId);
+  const mates=myTm?inRaid.filter(pr=>(+pr.tm||0)===myTm&&typeof pr.spi==='number'):[];
+  const foes=inRaid.filter(pr=>!(myTm&&(+pr.tm||0)===myTm)&&pr.st==='alive');
+  let spi;
+  if(boss)spi=0;
+  else if(mates.length)spi=mates.sort((a,b)=>(a.jt||0)-(b.jt||0))[0].spi;      // join where the team first came in
+  else if(myTm){                                                                  // the team picks the same spot on every member's screen
+    const order=SP.map((_,i)=>i).sort((a,b)=>((hashStr(raidId+':'+myTm+':'+a)%997)-(hashStr(raidId+':'+myTm+':'+b)%997)));
+    const taken=new Set(inRaid.filter(pr=>(+pr.tm||0)!==myTm&&typeof pr.spi==='number').map(pr=>pr.spi));
+    spi=order.find(i=>!taken.has(i));if(spi==null)spi=order[0];
+  }else{
+    const taken=new Set(inRaid.filter(pr=>typeof pr.spi==='number').map(pr=>pr.spi));let bd=-1;
+    SP.forEach((s,i)=>{const d=(foes.length?Math.min(...foes.map(o=>Math.hypot(o.x-s.x,o.y-s.y))):Math.random()*1000)+(taken.has(i)?-5000:0);if(d>bd){bd=d;spi=i}});
+  }
+  spi=clamp(spi|0,0,SP.length-1);G.spi=spi;const best=SP[spi];
   G.me.x=best.x+R.f(Math.random,-20,20);G.me.y=best.y+R.f(Math.random,-20,20);
   if(collides(G.me.x,G.me.y,PR)){G.me.x=best.x;G.me.y=best.y}
   $('#hideout').hidden=true;$('#raid').hidden=false;toggleBigMap(false);musicSync();
@@ -2996,7 +3025,7 @@ function startRaid(raidId,seed,t0,opts={}){
   if(map.arena)addFeed('ボスレイド開始 · '+map.arena.b.n+'を8分以内に倒せ');else addFeed('レイド開始 · 脱出地点：'+map.exts.map(e=>e.n).join('、'));
   sendPresence();sfx('start');
 }
-function newRaid(){let seed=(Math.random()*4294967296)>>>0;const b=+($('#inBiome')?$('#inBiome').value:-1);if(b>=0)seed=(seed-(seed%3)+b)>>>0;lsSet('meikutsu-biome',String(b));const df=+$('#inDiff').value||0;lsSet('meikutsu-diff',String(df));startRaid(rid(6),seed,Date.now(),{diff:df})}
+function newRaid(){setTimeout(()=>{if(G)PF_SEEN.add(G.rid)},0);let seed=(Math.random()*4294967296)>>>0;const b=+($('#inBiome')?$('#inBiome').value:-1);if(b>=0)seed=(seed-(seed%3)+b)>>>0;lsSet('meikutsu-biome',String(b));const df=+$('#inDiff').value||0;lsSet('meikutsu-diff',String(df));startRaid(rid(6),seed,Date.now(),{diff:df})}
 function leaveRaid(){
   if(!G)return;
   if(G.me.st==='alive'&&!G.done)return;
@@ -3250,7 +3279,7 @@ function dealMonster(m,d,el,ep){
   if(el>=0)elemHit(m.rx,m.ry,el);
   if(G.mode==='boss'){if(m.def.rboss)G.bossDmg=(G.bossDmg||0)+v;else if(m.sl)G.bossDmg=(G.bossDmg||0)+v*0.5}
   if(el===2&&!d.chain){let n=0;const near=G.mons.filter(o=>o!==m&&!o.dead&&!disguised(o)&&Math.hypot(o.rx-m.rx,o.ry-m.ry)<160).sort((a,b)=>Math.hypot(a.rx-m.rx,a.ry-m.ry)-Math.hypot(b.rx-m.rx,b.ry-m.ry));for(const o of near){if(n++>=2)break;G.fx.push({t:'zap',x:m.rx,y:m.ry,x2:o.rx,y2:o.ry,life:0.3,max:0.3});dealMonster(o,{v:Math.round(d.v*0.5),crit:false,thunder:0,chain:1},-1,0)}}
-  if(el===4)G.me.hp=Math.min(G.stats.mhp,G.me.hp+Math.min(v*(ep||0)/600,G.stats.mhp*0.02));
+  if(el===4&&!d.chain){const t=now();if(t-(G.drainT||0)>0.4){G.drainT=t;G.me.hp=Math.min(G.stats.mhp,G.me.hp+Math.min(v*(ep||0)/1500,G.stats.mhp*0.01))}}
   if(el===0)m.vBurn=now()+3;if(el===1)m.vSlow=now()+2;if(el===3)m.vPoi=now()+5;
   addText(m.rx,m.ry-m.def.r-6,v,d.crit?'#ffd36b':'#f4ece0',d.crit);m.hitMe=true;if(d.crit)shake(2.5);
   if(d.thunder)G.fx.push({t:'bolt',x:m.rx,y:m.ry,life:0.25,max:0.25});
@@ -4167,11 +4196,12 @@ function drawPlayer(x,y,a,col,wk,wr,dodge,alpha,name,hpPct,friend,cs,moving,op){
   ctx.beginPath();ctx.moveTo(0,-7.5);ctx.lineTo(lhx,lhy);ctx.moveTo(sx,sy);ctx.lineTo(hx,hy);ctx.stroke();
   // torso
   ctx.save();ctx.beginPath();ctx.ellipse(-1,0,6.8,9.8,0,0,Math.PI*2);ctx.clip();fillSkin(skin,col,tn);
-  if(chestK==='leather'){ctx.fillStyle='#6a4a2a';ctx.fillRect(-7,-7,12,14);ctx.fillStyle='#3a2816';ctx.fillRect(-7,-0.8,12,1.6)}
-  else if(chestK==='mail'||chestK==='ghostmail'){ctx.fillStyle=chestK==='ghostmail'?'rgba(140,170,195,.92)':'#878d95';ctx.fillRect(-8,-10,14,20);ctx.fillStyle='rgba(0,0,0,.25)';for(let i=-3;i<=3;i++)for(let j=-4;j<=4;j++)if((i+j)%2===0)ctx.fillRect(i*2-1,j*2,1,1)}
-  else if(chestK==='plate'||chestK==='dragonplate'){ctx.fillStyle=chestK==='dragonplate'?'#8a2a24':'#b4bac2';ctx.fillRect(-8,-10,14,20);ctx.fillStyle='rgba(255,255,255,.25)';ctx.fillRect(-3,-10,2,20);if(chestK==='dragonplate'){ctx.fillStyle='rgba(0,0,0,.3)';for(let i=-3;i<=3;i++){ctx.beginPath();ctx.arc(-4,i*3,2,0,Math.PI);ctx.fill()}}}
+  // armour only covers part of the torso so the chosen skin still shows
+  if(chestK==='leather'||chestK==='trollhide'||chestK==='brigandine'){ctx.strokeStyle=chestK==='trollhide'?'#4e5a3a':'#5a3a20';ctx.lineWidth=2.6;ctx.beginPath();ctx.moveTo(-6,-8);ctx.lineTo(4,8);ctx.moveTo(-6,8);ctx.lineTo(4,-8);ctx.stroke();ctx.fillStyle='#3a2816';ctx.fillRect(-7,-0.9,12,1.8);ctx.fillStyle='#e4b450';ctx.fillRect(-1.6,-1.2,2.4,2.4)}
+  else if(chestK==='mail'||chestK==='ghostmail'){ctx.fillStyle=chestK==='ghostmail'?'rgba(170,205,230,.38)':'rgba(150,158,168,.42)';ctx.fillRect(-8,-10,14,20);ctx.fillStyle='rgba(0,0,0,.22)';for(let i=-3;i<=3;i++)for(let j=-4;j<=4;j++)if((i+j)%2===0)ctx.fillRect(i*2-1,j*2,1,1)}
+  else if(chestK==='plate'||chestK==='dragonplate'){ctx.fillStyle=chestK==='dragonplate'?'#8a2a24':'#b4bac2';ctx.beginPath();ctx.ellipse(-0.5,0,4.4,6.6,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillRect(-1.2,-6,1.4,12);ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=0.8;ctx.beginPath();ctx.ellipse(-0.5,0,4.4,6.6,0,0,Math.PI*2);ctx.stroke()}
   ctx.restore();
-  if(chestK==='plate'||chestK==='dragonplate'){ctx.fillStyle=chestK==='dragonplate'?'#6a1a16':'#9aa0a8';ctx.beginPath();ctx.arc(-0.5,-8.5,3.6,0,Math.PI*2);ctx.arc(-0.5,8.5,3.6,0,Math.PI*2);ctx.fill()}
+  if(chestK==='plate'||chestK==='dragonplate'){ctx.fillStyle=chestK==='dragonplate'?'#6a1a16':'#9aa0a8';ctx.beginPath();ctx.arc(-0.5,-8.6,2.6,0,Math.PI*2);ctx.arc(-0.5,8.6,2.6,0,Math.PI*2);ctx.fill()}
   ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(-1,0,6.8,9.8,0,0,Math.PI*2);ctx.stroke();
   // weapon + hands
   ctx.save();
@@ -4791,7 +4821,7 @@ function dragStart(){
   const d=DRAG.p;d.started=true;const it=dragItem(d.src);if(!it){DRAG.p=null;return}
   const g=document.createElement('div');g.className='dragGhost';g.innerHTML=itemIconHTML(it,'ico');g.dataset.r=it.r;document.body.appendChild(g);DRAG.ghost=g;
   const z=$('#dropZone');z.hidden=false;z.className='dropZone';
-  z.innerHTML=d.src.c==='L'?'ここに落として売却 <b>+'+value(it).toLocaleString()+'G</b>':d.src.where==='loot'?'拾うならバッグへ':'ここに落として捨てる';
+  z.innerHTML=d.src.c==='L'?'ここに落として売却 <b>+'+sellPrice(it).toLocaleString()+'G</b>':d.src.where==='loot'?'拾うならバッグへ':'ここに落として捨てる';
   if(d.src.where==='loot')z.hidden=true;
   for(const el of document.querySelectorAll('[data-drop]'))if(dropOk(d.src,el._dt,it))el.classList.add('droppable');
   document.body.classList.add('dragging');try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}
@@ -4883,7 +4913,7 @@ function sellUndoable(srcs){
   const items=[];let gold=0;
   const sorted=srcs.slice().sort((a,b)=>(b.i||0)-(a.i||0));
   for(const src of sorted){
-    const it=dragItem(src);if(!it)continue;const v=value(it);gold+=v;
+    const it=dragItem(src);if(!it)continue;const v=sellPrice(it);gold+=v;
     if(src.where==='stash')SAVE.stash.splice(src.i,1);else if(src.where==='equip')SAVE.equip[src.slot]=null;else SAVE.pouch=null;
     items.push({it,src});
   }
@@ -4916,6 +4946,14 @@ function bulkPick(){
   });
   return out;
 }
+const SLOTORD={weapon:0,head:1,chest:2,hands:3,feet:4,ring:5};
+function sortStash(k){
+  if(!k)return;const st=SAVE.stash.map((it,i)=>({it,i}));
+  const by={rar:(a,b)=>b.it.r-a.it.r||power(b.it)-power(a.it),pow:(a,b)=>power(b.it)-power(a.it),lv:(a,b)=>b.it.l-a.it.l||b.it.r-a.it.r,
+    slot:(a,b)=>SLOTORD[BASES[a.it.b].s]-SLOTORD[BASES[b.it.b].s]||b.it.r-a.it.r||power(b.it)-power(a.it),val:(a,b)=>sellPrice(b.it)-sellPrice(a.it),
+    dur:(a,b)=>durFrac(a.it)-durFrac(b.it),new:(a,b)=>b.i-a.i}[k];
+  if(!by)return;st.sort(by);SAVE.stash=st.map(x=>x.it);SEL=null;persist();renderLobby();
+}
 function openBulk(){$('#bulkModal').hidden=false;renderBulk()}
 function renderBulk(){
   const box=$('#bulkBody');box.innerHTML='';
@@ -4925,7 +4963,7 @@ function renderBulk(){
   box.appendChild(chips);
   const opt=(label,key)=>{const b=document.createElement('button');b.type='button';b.className='optline';b.innerHTML='<span class="tog'+(BULK[key]?' on':'')+'"></span>'+label;b.onclick=()=>{BULK[key]=!BULK[key];renderBulk()};return b};
   box.append(opt('保険付きの品は売らない','ins'),opt('装備中より弱い品だけ売る','weaker'));
-  const list=bulkPick(),sum=list.reduce((a,s)=>a+value(SAVE.stash[s.i]),0);
+  const list=bulkPick(),sum=list.reduce((a,s)=>a+sellPrice(SAVE.stash[s.i]),0);
   const prev=document.createElement('div');prev.className='grid bulkprev';for(const s of list.slice(0,40)){const t=tile(SAVE.stash[s.i]);t.tabIndex=-1;t.style.pointerEvents='none';prev.appendChild(t)}
   if(list.length>40){const m=document.createElement('p');m.className='hint';m.textContent='ほか '+(list.length-40)+'点';box.append(prev,m)}else box.appendChild(prev);
   const go=armedBtn(list.length?list.length+'点を売却（+'+sum.toLocaleString()+'G）':'売る品がありません',()=>{$('#bulkModal').hidden=true;sellUndoable(list)},'danger');go.disabled=!list.length;go.classList.add('bulkgo');
@@ -4933,7 +4971,7 @@ function renderBulk(){
 }
 
 /* ---------- options / music / app mode ---------- */
-const OPT=Object.assign({bgm:true,vol:60,sfx:true,hud:1,map:1,autofs:true},(()=>{try{return JSON.parse(lsGet('meikutsu-opt')||'{}')}catch(e){return {}}})());
+const OPT=Object.assign({bgm:true,vol:60,sfx:true,hud:1,map:1,autofs:true,follow:true},(()=>{try{return JSON.parse(lsGet('meikutsu-opt')||'{}')}catch(e){return {}}})());
 function saveOpt(){lsSet('meikutsu-opt',JSON.stringify(OPT));applyOpt()}
 function applyOpt(){
   AUD.mute=!OPT.sfx;
@@ -4969,7 +5007,7 @@ function autoFull(){if(OPT.autofs&&document.body.classList.contains('touchui')&&
 function openOpt(){$('#optModal').hidden=false;renderOpt()}
 function renderOpt(){
   if($('#optModal').hidden)return;
-  $('#oBgm').classList.toggle('on',!!OPT.bgm);$('#oSfx').classList.toggle('on',!!OPT.sfx);$('#oAuto').classList.toggle('on',!!OPT.autofs);
+  $('#oBgm').classList.toggle('on',!!OPT.bgm);$('#oFollow').classList.toggle('on',!!OPT.follow);$('#oSfx').classList.toggle('on',!!OPT.sfx);$('#oAuto').classList.toggle('on',!!OPT.autofs);
   $('#oVol').value=OPT.vol;
   for(const b of document.querySelectorAll('#oHud button'))b.classList.toggle('on',+b.dataset.v===OPT.hud);
   for(const b of document.querySelectorAll('#oMap button'))b.classList.toggle('on',+b.dataset.v===OPT.map);
@@ -5083,10 +5121,10 @@ function toggleBigMap(force){
   $('#acctChip').onclick=()=>{if(!AUTH.ready)return;$('#hideout').dataset.tab='prof';SEL=null;renderLobby()};
   $('#impGo').onclick=importCode;$('#expGo').onclick=copyExport;
   setInterval(renderAcct,2000);
-  $('#repAllBtn').onclick=repairAll;$('#bulkBtn').onclick=openBulk;$('#bulkClose').onclick=()=>{$('#bulkModal').hidden=true};$('#expandBtn').onclick=expandStash;
+  $('#repAllBtn').onclick=repairAll;$('#sortSel').onchange=()=>{sortStash($('#sortSel').value);$('#sortSel').value=''};$('#bulkBtn').onclick=openBulk;$('#bulkClose').onclick=()=>{$('#bulkModal').hidden=true};$('#expandBtn').onclick=expandStash;
   $('#optBtn').onclick=openOpt;$('#optBtnR').onclick=openOpt;$('#optClose').onclick=()=>{$('#optModal').hidden=true};
   $('#musBtn').onclick=()=>{audioInit();OPT.bgm=!OPT.bgm;saveOpt()};
-  $('#oBgm').onclick=()=>{audioInit();OPT.bgm=!OPT.bgm;saveOpt()};$('#oSfx').onclick=()=>{OPT.sfx=!OPT.sfx;saveOpt()};$('#oAuto').onclick=()=>{OPT.autofs=!OPT.autofs;saveOpt()};
+  $('#oBgm').onclick=()=>{audioInit();OPT.bgm=!OPT.bgm;saveOpt()};$('#oSfx').onclick=()=>{OPT.sfx=!OPT.sfx;saveOpt()};$('#oAuto').onclick=()=>{OPT.autofs=!OPT.autofs;saveOpt()};$('#oFollow').onclick=()=>{OPT.follow=!OPT.follow;saveOpt()};
   $('#oVol').oninput=()=>{OPT.vol=+$('#oVol').value;saveOpt()};
   for(const b of document.querySelectorAll('#oHud button'))b.onclick=()=>{OPT.hud=+b.dataset.v;saveOpt()};
   for(const b of document.querySelectorAll('#oMap button'))b.onclick=()=>{OPT.map=+b.dataset.v;saveOpt()};
