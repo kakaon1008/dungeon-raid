@@ -574,6 +574,12 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
 .it .durb i{display:block;height:100%}
 .it .brk{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--fd);font-size:20px;color:#ff6a50;background:rgba(40,8,4,.55);text-shadow:0 0 4px #000;border-radius:3px}
 #repAllBtn{justify-self:start}
+.consrow{display:flex;flex-wrap:wrap;gap:6px}
+.conschip{border:1px solid var(--line);background:var(--panel2);border-radius:20px;padding:5px 12px 5px 6px;font-size:13px;display:inline-flex;gap:6px;align-items:center}
+.conschip b{font-family:var(--fd);font-weight:400;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.35);color:var(--gold)}
+.conschip.on{border-color:var(--acc);color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,var(--panel2))}
+.skl{border:1px solid #6a8acf;padding:8px 10px;color:#9fc0ff;background:rgba(80,120,200,.08)}
+.skl p{margin:2px 0 0;font-size:12px;color:var(--fg)}
 </style>
 
 </head>
@@ -626,11 +632,14 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
       <h3>セーフポーチ</h3>
       <div class="pouchrow"><div id="pouchSlot" style="width:56px"></div><p class="hint">ここに入れた1品は死んでも失わない。レイド中にも出し入れできる。</p></div>
     </div>
+    <div><h3>消耗品スロット <span class="hint">（1種類・3個まで持ち込み／レイド中はGキー・「道具」ボタン）</span></h3><div class="consrow" id="consSlot"></div></div>
   </section>
   <section class="pane" id="paneStash">
     <h2>倉庫 <span class="hint" id="stashCount"></span><span class="goldv" id="goldV"></span></h2>
     <div class="stashbar"><button class="btn" id="bulkBtn" type="button">まとめて売却</button><button class="btn" id="expandBtn" type="button"></button><span class="hint">ドラッグで移動・装備・売却（スマホは長押し）</span></div>
     <div class="grid" id="stashGrid"></div>
+    <h3>素材 <span class="hint">（素材ポーチ・無制限）</span></h3>
+    <div class="matrow" id="stashMats"></div>
   </section>
   <section class="pane" id="paneShop">
     <h2>商人 <span class="goldv" id="goldV2"></span></h2>
@@ -730,7 +739,12 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>竜</b>：3回に1回くらいの割合で、マップのどこかに棲む珍しい魔物。場所は地図に出ない。咆哮の聞こえる方角や、爪痕・焦げ跡などの痕跡を頼りに探そう。個体ごとにLv1〜5と属性が違い、高いLvほど強くお宝も豪華。仲間と挑もう。まれに竜限定の衣装を落とす。</li>
         <li><b>属性武器</b>：武器にまれに炎・氷・雷・毒・闇の属性が付く（レア度が高いほど出やすい）。燃焼・凍結・連鎖・猛毒・吸命の効果と、それぞれの攻撃エフェクトがある。</li>
         <li><b>攻撃アシスト</b>（画面左上のボタン・スマホは「狙」・PCはRキーですぐ切り替え）：オンだと攻撃した瞬間だけ近くの敵の方を向く（弓・杖は動きを先読み）。移動中や逃げるときは進む方向を向いたまま。</li>
-        <li>PC操作：WASD 移動 · マウス 狙い · クリック 攻撃 · Space 回避 · Q 回復薬 · E 調べる · Tab 持ち物 · C 忍び足 · R アシスト射撃 · M 消音</li>
+        <li><b>武器スキル</b>（Fキー・スマホは「技」）：武器の種類ごとに固有の技がある。剣＝旋風斬り、斧・槌＝大地割り（スタン）、短剣＝影走り、槍＝穿ち、弓＝五月雨、杖＝魔力爆発。斧や槌の通常攻撃は相手を一瞬スタンさせる。</li>
+        <li><b>消耗品スロット</b>（Gキー・スマホは「道具」）：装備画面で1種類を選ぶと3個まで持ち込める。爆弾・煙玉・砥石・鉄の丸薬・俊足の薬・万能薬。商人で買うか工房で作る。宝箱からも出る。</li>
+        <li><b>回復薬</b>は飲むのに1秒かかり、その後2.5秒かけて回復する。その間は足が遅くなる。槌で殴られるとスタンする。</li>
+        <li><b>耐久</b>：装備は使うほど傷み、0で壊れて効果がなくなる。ロビーで金貨と素材を払って修復できる（レア度が高いほど高い）。</li>
+        <li><b>品質の銘</b>：まれに「錆びた」「欠けた」「よくできた」「研ぎ澄まされた」「頑丈な」「名匠の」が付き、性能と耐久が変わる。</li>
+        <li>PC操作：WASD 移動 · マウス 狙い · クリック 攻撃 · F 武器スキル · G 消耗品 · Space 回避 · Q 回復薬 · E 調べる · Tab 持ち物 · C 忍び足 · R アシスト射撃 · M 消音</li>
       </ul>
     </details></div></div>
 </div>
@@ -741,6 +755,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
     <div class="who"><span id="hName"></span><span class="chip" id="hTeam"></span></div>
     <div class="hpbar"><div id="hpFill"></div><span id="hpText"></span></div>
     <div class="hrow"><span class="kbd">Q</span>回復薬<b id="hPot"></b><span class="kbd">Space</span>回避<b id="hDodge"></b></div>
+    <div class="hrow"><span class="kbd">F</span>技<b id="hSkill"></b><span class="kbd">G</span>道具<b id="hCons"></b></div>
     <div class="hbtns"><button class="btn assist" id="assistBtn" type="button" hidden></button><button class="btn assist" id="pvpBtn" type="button">PvP</button><button class="btn assist" id="optBtnR" type="button" aria-label="設定">⚙</button></div>
     <div class="hrow">金貨<b id="hGold"></b>· 巻物<b id="hScroll"></b>· 撃破<b id="hKills"></b><span id="hSneak"></span></div>
   </div>
@@ -753,7 +768,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
   <div class="hud" id="bossBar" hidden><span id="bbName"></span><div class="bb"><div id="bbFill"></div></div></div>
   <div class="hud hud-bl"><ul id="feed"></ul></div>
   <div class="hud hud-bc"><div id="hPrompt"></div><div id="hMsg"></div></div>
-  <div class="hud hud-br"><p>WASD 移動 · クリック 攻撃 · Space 回避 · Q 回復 · E 調べる · X 帰還の巻物 · Tab 持ち物 · C 忍び足</p></div>
+  <div class="hud hud-br"><p>WASD 移動 · クリック 攻撃 · F 武器スキル · G 消耗品 · Space 回避 · Q 回復 · E 調べる · X 帰還の巻物 · Tab 持ち物 · C 忍び足</p></div>
   <div class="hud" id="extract" hidden><div class="ring"><div id="exFill"></div></div><span id="exText">脱出中</span></div>
   <button id="mapShade" type="button" aria-label="地図を閉じる" hidden></button>
   <div id="touch" hidden></div>
@@ -878,9 +893,23 @@ const BASES=[
   {k:'soulring',n:'魂喰らいの指輪',s:'ring',craft:1},
   {k:'goldcharm',n:'黄金の護符',s:'ring',craft:1},
   {k:'dragoneye',n:'竜眼の指輪',s:'ring',craft:1},
+  {k:'scimitar',n:'曲刀',s:'weapon',dmg:[9,15],aspd:1.8,range:56,arc:120},
+  {k:'warhammer',n:'戦鎚',s:'weapon',dmg:[20,32],aspd:0.8,range:54,arc:110},
+  {k:'rapier',n:'細剣',s:'weapon',dmg:[8,13],aspd:2.2,range:72,arc:40},
+  {k:'halberd',n:'斧槍',s:'weapon',dmg:[15,24],aspd:1.0,range:96,arc:70},
+  {k:'shortbow',n:'短弓',s:'weapon',dmg:[7,11],aspd:1.7,proj:{spd:600,range:400,r:4}},
+  {k:'wand',n:'短杖',s:'weapon',dmg:[9,14],aspd:1.3,proj:{spd:420,range:360,r:6}},
+  {k:'coif',n:'鎖頭巾',s:'head',arm:[4,8],mv:-1},
+  {k:'leathercap',n:'革の帽子',s:'head',arm:[3,6]},
+  {k:'robe',n:'魔導衣',s:'chest',arm:[5,10]},
+  {k:'brigandine',n:'鋲打ち鎧',s:'chest',arm:[13,20],mv:-5},
+  {k:'chaingloves',n:'鎖籠手',s:'hands',arm:[4,8]},
+  {k:'sandals',n:'旅の草鞋',s:'feet',arm:[1,3]},
+  {k:'sabatons',n:'鉄靴',s:'feet',arm:[7,12],mv:-4},
+  {k:'amulet',n:'首飾り',s:'ring'},
 ];
 const BI={};BASES.forEach((b,i)=>BI[b.k]=i);
-const GL={sword:'剣',axe:'斧',dagger:'匕',spear:'槍',bow:'弓',staff:'杖',hood:'巾',helm:'兜',greathelm:'冑',tunic:'衣',leather:'革',mail:'鎖',plate:'鎧',gloves:'手',gauntlet:'甲',boots:'靴',greaves:'脛',ring:'環',seal:'印',bonecleaver:'鉈',wolfbow:'牙',spiritstaff:'霊',dragonblade:'刀',ghostmail:'衣',dragonplate:'竜',beastboots:'獣',kingring:'王',fangknife:'牙',thornspear:'茨',frostbow:'霜',thunderhammer:'槌',ashstaff:'灰',shadowblade:'影',heavycrossbow:'弩',reaper:'鎌',trollhide:'苔',soulhood:'霊',scalehelm:'鱗',corefist:'核',nightgloves:'夜',galeboots:'風',scalegreaves:'鱗',soulring:'魂',goldcharm:'護',dragoneye:'眼'};
+const GL={sword:'剣',axe:'斧',dagger:'匕',spear:'槍',bow:'弓',staff:'杖',hood:'巾',helm:'兜',greathelm:'冑',tunic:'衣',leather:'革',mail:'鎖',plate:'鎧',gloves:'手',gauntlet:'甲',boots:'靴',greaves:'脛',ring:'環',seal:'印',bonecleaver:'鉈',wolfbow:'牙',spiritstaff:'霊',dragonblade:'刀',ghostmail:'衣',dragonplate:'竜',beastboots:'獣',kingring:'王',fangknife:'牙',thornspear:'茨',frostbow:'霜',thunderhammer:'槌',ashstaff:'灰',shadowblade:'影',heavycrossbow:'弩',reaper:'鎌',trollhide:'苔',soulhood:'霊',scalehelm:'鱗',corefist:'核',nightgloves:'夜',galeboots:'風',scalegreaves:'鱗',soulring:'魂',goldcharm:'護',dragoneye:'眼',scimitar:'曲',warhammer:'鎚',rapier:'細',halberd:'戟',shortbow:'弓',wand:'杖',coif:'頭',leathercap:'帽',robe:'衣',brigandine:'鋲',chaingloves:'籠',sandals:'鞋',sabatons:'靴',amulet:'飾'};
 const AFF=[
   {k:'atkp',n:'攻撃力',f:'+%v%',r:[4,20],s:'weapon ring hands',pre:'鋭い',w:10},
   {k:'flat',n:'追加ダメージ',f:'+%v',r:[1,5],s:'weapon ring hands',pre:'重い',w:8,scale:1},
@@ -894,6 +923,7 @@ const AFF=[
   {k:'regen',n:'HP再生',f:'+%v/秒',r:[0.2,1.2],s:'chest head ring',pre:'再生の',w:0,dec:1},
   {k:'luck',n:'金運',f:'+%v%',r:[5,25],s:'head ring hands feet',pre:'黄金の',w:5},
   {k:'dodge',n:'回避の再使用',f:'-%v%',r:[5,20],s:'feet chest',pre:'身軽な',w:5},
+  {k:'rng',n:'射程',f:'+%v%',r:[6,25],s:'weapon',pre:'遠矢の',w:7,proj:1},
 ];
 const LEG=[
   {k:'thunder',n:'雷鳴',d:'攻撃の25%で落雷。攻撃力の80%を追加で与える'},
@@ -911,7 +941,7 @@ const ELM=[
   {k:'dark',n:'闇',pre:'闇の',col:'#b07cff',rgb:'176,124,255',d:'吸命：与えたダメージの一部を吸い取る'},
 ];
 const FIST={k:'fist',n:'素手',s:'weapon',dmg:[3,5],aspd:2,range:38,arc:80};
-const AW={atkp:1.6,flat:4,crit:2.5,critd:0.7,aspd:2,hp:0.9,arm:2.2,move:3,ls:6,regen:14,luck:0.6,dodge:1.2};
+const AW={atkp:1.6,flat:4,crit:2.5,critd:0.7,aspd:2,hp:0.9,arm:2.2,move:3,ls:12,regen:14,luck:0.6,dodge:1.2,rng:1.1};
 
 function genItem(r,l,id,o={}){
   let bi;
@@ -923,7 +953,7 @@ function genItem(r,l,id,o={}){
   const q=Math.round(R.f(r,0.55,1.45)*100)/100;
   const slot=BASES[bi].s;
   let n=RAR[rar].aff+(slot==='ring'?1:0);
-  const pool=[];AFF.forEach((a,i)=>{if(a.s.split(' ').includes(slot))pool.push(i)});
+  const pool=[];AFF.forEach((a,i)=>{if(a.s.split(' ').includes(slot)&&a.w>0&&(!a.proj||BASES[bi].proj))pool.push(i)});
   const v=[];
   if(o.force)for(const fk of o.force){const ai=AFF.findIndex(a=>a.k===fk);const pi=pool.indexOf(ai);if(pi<0)continue;pool.splice(pi,1);const a=AFF[ai];const sc=a.scale?(1+0.12*(l-1)):(1+0.035*(l-1));let val=R.f(r,(a.r[0]+a.r[1])/2,a.r[1])*sc;val=a.dec?Math.round(val*10)/10:Math.max(1,Math.round(val));v.push([ai,val]);n=Math.max(n-1,0)}
   while(n>0&&pool.length){
@@ -933,11 +963,12 @@ function genItem(r,l,id,o={}){
     v.push([ai,val]);n--;
   }
   const out={id:id||rid(),b:bi,r:rar,l,q,v,x:rar===4?R.i(r,0,LEG.length-1):-1,lsv2:1};
+  if(o.pf!=null)out.pf=o.pf;else if(r()<0.16){const cand=PFX.map((P,i)=>(P.wpn&&slot!=='weapon')?0:P.w);out.pf=R.w(r,cand)}
   if(slot==='weapon'){const e=o.elem!=null?o.elem:(r()<0.05+0.03*rar?R.i(r,0,ELM.length-1):-1);if(e>=0){out.e=e;out.ep=Math.round(R.f(r,10,35)*(1+0.03*(l-1)))}}
   return out;
 }
 function baseVals(it){
-  const b=BASES[it.b],sc=(1+0.13*(it.l-1))*RAR[it.r].mult,o={};
+  const b=BASES[it.b],sc=(1+0.13*(it.l-1))*RAR[it.r].mult*(pfOf(it)?pfOf(it).m:1),o={};
   if(b.dmg){o.dmin=Math.max(1,Math.round(b.dmg[0]*it.q*sc));o.dmax=Math.max(o.dmin+1,Math.round(b.dmg[1]*it.q*sc))}
   if(b.arm){const u=clamp((it.q-0.55)/0.9,0,1);o.arm=Math.max(1,Math.round((b.arm[0]+(b.arm[1]-b.arm[0])*u)*sc))}
   if(b.mv)o.mv=b.mv;
@@ -954,17 +985,19 @@ function power(it){
 }
 const valueFull=it=>Math.round((4+power(it)*0.5*Math.pow(RAR[it.r].val,0.55))*0.42);
 const value=it=>Math.max(1,Math.round(valueFull(it)*(0.35+0.65*durFrac(it))));
+const PFX=[{n:'錆びた',m:0.82,du:0.7,w:6},{n:'欠けた',m:0.9,du:0.85,w:8},{n:'よくできた',m:1.07,du:1.1,w:8},{n:'研ぎ澄まされた',m:1.13,du:1,w:4,wpn:1},{n:'頑丈な',m:1.05,du:1.5,w:5},{n:'名匠の',m:1.2,du:1.25,w:1.5}];
+const pfOf=it=>it&&it.pf!=null&&PFX[it.pf]?PFX[it.pf]:null;
 function itemName(it){
   const b=BASES[it.b];
   const ep=it.e>=0?ELM[it.e].pre:'';
-  if(it.x>=0)return '【'+LEG[it.x].n+'】'+ep+b.n;
-  const qual=it.q>=1.32?'極上の':it.q<=0.68?'粗悪な':'';
+  if(it.x>=0)return '【'+LEG[it.x].n+'】'+(pfOf(it)?pfOf(it).n:'')+ep+b.n;
+  const P=pfOf(it);const qual=P?P.n:it.q>=1.32?'極上の':it.q<=0.68?'粗悪な':'';
   let pre='';if(it.v.length){let best=it.v[0];for(const a of it.v)if(a[1]*AW[AFF[a[0]].k]>best[1]*AW[AFF[best[0]].k])best=a;pre=AFF[best[0]].pre}
   return qual+(ep||pre)+b.n;
 }
 const affText=(ai,v)=>AFF[ai].f.replace('%v',v);
 function calcStats(eq){
-  const s={mhp:100,arm:0,move:0,atkp:0,flat:0,crit:5,critd:50,aspd:0,ls:0,regen:0,luck:0,dodge:0,hp:0,leg:{}};
+  const s={mhp:100,arm:0,move:0,atkp:0,flat:0,crit:5,critd:50,aspd:0,ls:0,regen:0,luck:0,dodge:0,hp:0,rng:0,leg:{}};
   for(const sl of SLOTS){
     const it=eq[sl];if(!it||isBroken(it))continue;
     const bv=baseVals(it);if(bv.arm)s.arm+=bv.arm;if(bv.mv)s.move+=bv.mv;
@@ -977,7 +1010,7 @@ function calcStats(eq){
   if(s.leg.gale){s.move+=15;s.dodge+=30}
   const w=eq.weapon&&!isBroken(eq.weapon)?eq.weapon:null,wb=w?BASES[w.b]:FIST,wv=w?baseVals(w):{dmin:3,dmax:5};
   s.wb=wb;s.dmin=wv.dmin;s.dmax=wv.dmax;s.el=w&&w.e>=0?w.e:-1;s.ep=w&&w.ep||0;
-  s.aspdF=wb.aspd*(1+s.aspd/100);s.range=wb.range;s.arc=wb.arc;s.proj=wb.proj;
+  s.aspdF=wb.aspd*(1+s.aspd/100);s.range=wb.range;s.arc=wb.arc;s.proj=wb.proj?Object.assign({},wb.proj,{range:Math.round(wb.proj.range*(1+s.rng/100))}):null;
   s.speed=Math.max(80,150*(1+s.move/100));
   s.dodgeCd=2.2*(1-Math.min(s.dodge,60)/100);
   s.red=s.arm/(s.arm+100);
@@ -987,12 +1020,12 @@ function calcStats(eq){
 }
 /* durability: every item wears out; at 0 it's broken and gives nothing until repaired */
 const DURMAX=[160,200,250,320,400];
-const maxDur=it=>DURMAX[clamp(it.r|0,0,4)]+(BASES[it.b]&&BASES[it.b].craft?60:0);
+const maxDur=it=>Math.round((DURMAX[clamp(it.r|0,0,4)]+(BASES[it.b]&&BASES[it.b].craft?60:0))*(pfOf(it)?pfOf(it).du:1));
 const durOf=it=>it.du==null?maxDur(it):it.du;
 const isBroken=it=>!!it&&durOf(it)<=0;
 const durFrac=it=>clamp(durOf(it)/maxDur(it),0,1);
-const encItem=it=>[it.b,it.r,it.l,Math.round(it.q*100),it.x,it.e>=0?it.e:-1,it.ep||0].concat(...it.v,[Math.round(durOf(it))]);
-function decItem(a){const v=[];for(let i=7;i+1<a.length;i+=2)v.push([a[i],a[i+1]]);const o={id:rid(),b:a[0],r:a[1],l:a[2],q:a[3]/100,x:a[4],v};if(a[5]>=0){o.e=a[5];o.ep=a[6]}if((a.length-7)%2===1)o.du=+a[a.length-1];o.lsv2=1;return o}
+const encItem=it=>[it.b,it.r,it.l,Math.round(it.q*100),it.x,it.e>=0?it.e:-1,it.ep||0].concat(...it.v,[Math.round(durOf(it))*8+(it.pf!=null?it.pf+1:0)]);
+function decItem(a){const v=[];for(let i=7;i+1<a.length;i+=2)v.push([a[i],a[i+1]]);const o={id:rid(),b:a[0],r:a[1],l:a[2],q:a[3]/100,x:a[4],v};if(a[5]>=0){o.e=a[5];o.ep=a[6]}if((a.length-7)%2===1){const t=+a[a.length-1];o.du=Math.floor(t/8);if(t%8)o.pf=t%8-1}o.lsv2=1;return o}
 
 /* =========================================================
    save — personal stash (db when available, browser copy as backup)
@@ -1002,9 +1035,9 @@ let SAVE=null,dbRef=null,dbBusy=false,dbDirty=false;
 function emptyEquip(){return {weapon:null,head:null,chest:null,hands:null,feet:null,ring:null}}
 function starterSword(){const it=genItem(rngFrom(Date.now()>>>0),1,rid(),{b:0,rar:0});it.q=Math.max(it.q,0.9);return it}
 function newSave(){const e=emptyEquip();e.weapon=starterSword();
-  return {v:1,ts:Date.now(),name:'',gold:150,potions:2,stash:[],equip:e,pouch:null,inRaid:null,lost:null,claims:[],cos:{own:[],eq:{}},mats:{},scrolls:0,keys:{},dex:{m:{},i:{},l:{}},xp:0,ach:{},prof:{plate:'np_wood',title:'t_novice'},st:{raids:0,ext:0,kills:0,deaths:0,best:0}}}
+  return {v:1,ts:Date.now(),name:'',gold:150,potions:2,cons:{},consSel:null,stash:[],equip:e,pouch:null,inRaid:null,lost:null,claims:[],cos:{own:[],eq:{}},mats:{},scrolls:0,keys:{},dex:{m:{},i:{},l:{}},xp:0,ach:{},prof:{plate:'np_wood',title:'t_novice'},st:{raids:0,ext:0,kills:0,deaths:0,best:0}}}
 function noRegen(it){if(!it||!Array.isArray(it.v))return;for(const a of it.v){if(a[0]===9){a[0]=5;a[1]=Math.max(1,Math.round(a[1]*20))}else if(a[0]===8&&!it.lsv2){a[1]=Math.max(0.2,Math.round(a[1]*4)/10)}}it.lsv2=1}
-function migrate(s){if(!s||typeof s!=='object')return newSave();try{for(const it of [...(s.stash||[]),...Object.values(s.equip||{}),s.pouch,...((s.claims||[]).flatMap(c=>c.items||[])),...((s.lost&&s.lost.items)||[])])noRegen(it)}catch(e){}s.equip=Object.assign(emptyEquip(),s.equip||{});s.stash=Array.isArray(s.stash)?s.stash:[];s.st=Object.assign({raids:0,ext:0,kills:0,deaths:0,best:0},s.st||{});if(typeof s.gold!=='number')s.gold=0;if(typeof s.potions!=='number')s.potions=0;if(!Array.isArray(s.claims))s.claims=[];if(!s.mats||typeof s.mats!=='object')s.mats={};if(!s.keys||typeof s.keys!=='object')s.keys={};if(typeof s.xp!=='number')s.xp=0;if(!s.ach)s.ach={};if(!s.prof)s.prof={plate:'np_wood',title:'t_novice'};if(!s.dex||typeof s.dex!=='object')s.dex={m:{},i:{},l:{}};if(typeof s.scrolls!=='number')s.scrolls=0;if(!s.cos||typeof s.cos!=='object')s.cos={own:[],eq:{}};if(!Array.isArray(s.cos.own))s.cos.own=[];if(!s.cos.eq)s.cos.eq={};if(s.lost===undefined)s.lost=null;return s}
+function migrate(s){if(!s||typeof s!=='object')return newSave();try{for(const it of [...(s.stash||[]),...Object.values(s.equip||{}),s.pouch,...((s.claims||[]).flatMap(c=>c.items||[])),...((s.lost&&s.lost.items)||[])])noRegen(it)}catch(e){}s.equip=Object.assign(emptyEquip(),s.equip||{});s.stash=Array.isArray(s.stash)?s.stash:[];s.st=Object.assign({raids:0,ext:0,kills:0,deaths:0,best:0},s.st||{});if(typeof s.gold!=='number')s.gold=0;if(typeof s.potions!=='number')s.potions=0;if(!Array.isArray(s.claims))s.claims=[];if(!s.mats||typeof s.mats!=='object')s.mats={};if(!s.keys||typeof s.keys!=='object')s.keys={};if(typeof s.xp!=='number')s.xp=0;if(!s.ach)s.ach={};if(!s.prof)s.prof={plate:'np_wood',title:'t_novice'};if(!s.dex||typeof s.dex!=='object')s.dex={m:{},i:{},l:{}};if(typeof s.scrolls!=='number')s.scrolls=0;if(!s.cos||typeof s.cos!=='object')s.cos={own:[],eq:{}};if(!Array.isArray(s.cos.own))s.cos.own=[];if(!s.cos.eq)s.cos.eq={};if(s.lost===undefined)s.lost=null;if(!s.cons||typeof s.cons!=='object')s.cons={};if(s.consSel&&!CONS[s.consSel])s.consSel=null;return s}
 function checkAbandoned(){
   if(SAVE.inRaid){
     const ins=Array.isArray(SAVE.inRaid.ins)?SAVE.inRaid.ins:[];
@@ -1469,12 +1502,13 @@ function buildPresence(){
       hp:Math.ceil(m.hp),mh:G.stats.mhp,cs:cosIdx(),eq:eqIdx(G.equip),we:G.stats.el,po:SAVE.pvpOff?1:0,tr:[...G.truce].slice(0,12),ov:[...G.ov].slice(0,12),st:m.st,w:G.stats.wb.k,wr:G.equip.weapon?G.equip.weapon.r:0,dg:G.dodgeT>0?1:0,sn:G.sneak?1:0,
       ev:G.myEv,tk:G.myTaken.slice(G.trim?-25:-80),oc:G.myOpened.slice(-40)});
     if(G.mode==='boss'){p.bd=Math.round(G.bossDmg||0);if(G.spec)p.sp=1}
+    if(G.smokeT>0)p.smk=1;
     if(m.st==='dead'&&G.corpse)p.cp=G.corpse;
     if(G.isHost){
       const ma=[],md=[];
       for(const mo of G.mons){
         if(mo.dead){md.push(mo.id);continue}
-        if(mo.s!==0||mo.hp<mo.mhp)ma.push(mo.id,Math.round(mo.x),Math.round(mo.y),Math.ceil(mo.hp),mo.s,Math.round(mo.ang*100),mo.kind||0,(mo.burn?1:0)|(mo.slowT>0?2:0)|(mo.poiT>0?4:0)|(mo.guardT>0?8:0));
+        if(mo.s!==0||mo.hp<mo.mhp)ma.push(mo.id,Math.round(mo.x),Math.round(mo.y),Math.ceil(mo.hp),mo.s,Math.round(mo.ang*100),mo.kind||0,(mo.burn?1:0)|(mo.slowT>0?2:0)|(mo.poiT>0?4:0)|(mo.guardT>0?8:0)|(mo.stunT>0?16:0));
       }
       p.m=ma;p.md=md;
     }
@@ -1550,12 +1584,23 @@ const ICON_VAR={
   scalegreaves:{k:'greaves',met:['#5a120e','#d0452f'],gem:'#ffb04a'},
   soulring:{k:'ring',band:['#2a2a3a','#8a8aa8'],gem:'#8fe4ff'},
   goldcharm:{k:'seal',band:['#a8792c','#ffe9a8'],trim:'#e4b450'},
+  scimitar:{k:'scimitar'},warhammer:{k:'hammer'},rapier:{k:'rapier'},halberd:{k:'halberd'},
+  shortbow:{k:'bow',small:1,wood:['#7a5a2a','#c89a5a']},wand:{k:'staff',small:1},
+  coif:{k:'hood',cloth:'#8a9098',deco:g=>{g.save();g.beginPath();g.moveTo(13,56);g.quadraticCurveTo(8,20,32,7);g.quadraticCurveTo(56,20,51,56);g.closePath();g.clip();g.strokeStyle='rgba(0,0,0,.35)';g.lineWidth=0.8;for(let y=8;y<58;y+=3)for(let x=8+((y/3)%2)*1.5;x<56;x+=3){g.beginPath();g.arc(x,y,1.1,0,Math.PI*2);g.stroke()}g.restore();g.fillStyle='#120c08';g.beginPath();g.ellipse(32,35,10,13,0,0,Math.PI*2);g.fill()}},
+  leathercap:{k:'helm',met:['#5a3a20','#a8743f'],trim:'#3a2414'},
+  robe:{k:'tunic',cloth:'#3a2a5a',deco:g=>{g.strokeStyle='#c9a8ff';g.lineWidth=1.2;g.beginPath();g.moveTo(32,20);g.lineTo(32,54);g.stroke();for(const y of [28,36,46]){g.beginPath();g.arc(32,y,2.2,0,Math.PI*2);g.stroke()}}},
+  brigandine:{k:'leather',lea:['#4a2a1a','#7a4a2a'],deco:g=>{g.fillStyle='#d8dce4';for(let y=18;y<52;y+=6)for(let x=23;x<43;x+=5){g.beginPath();g.arc(x,y,1,0,Math.PI*2);g.fill()}}},
+  chaingloves:{k:'gauntlet',met:['#5a5f66','#b8bec6']},
+  sandals:{k:'boots',lea:['#a08050','#d8b880'],deco:g=>{g.strokeStyle='#5a3a1a';g.lineWidth=1.6;for(const y of [16,26,36,46]){g.beginPath();g.moveTo(21,y);g.lineTo(39,y+3);g.stroke()}}},
+  sabatons:{k:'greaves',met:['#4a4f58','#a6aeb8']},
+  amulet:{k:'amulet'},
   dragoneye:{k:'ring',band:['#5a120e','#e4b450'],gem:'#ff3a2a',deco:g=>{g.fillStyle='#1a0806';g.beginPath();g.ellipse(32,24,1.3,4.6,0,0,Math.PI*2);g.fill()}},
 };
 function drawItemArt(g,k,r,e,leg){
   const V=ICON_VAR[k];const sv=[IC_WOOD,IC_LEA,IC_CLOTH];
   if(V){k=V.k;if(V.wood)IC_WOOD=V.wood;if(V.lea)IC_LEA=V.lea;if(V.cloth){IC_CLOTH=IC_CLOTH.slice();IC_CLOTH[r]=V.cloth}}
-  try{drawItemArt0(g,k,r,e,leg,V)}finally{IC_WOOD=sv[0];IC_LEA=sv[1];IC_CLOTH=sv[2]}
+  if(V&&V.small){g.save();g.translate(32,32);g.scale(0.8,0.8);g.translate(-32,-32)}
+  try{drawItemArt0(g,k,r,e,leg,V)}finally{IC_WOOD=sv[0];IC_LEA=sv[1];IC_CLOTH=sv[2];if(V&&V.small)g.restore()}
 }
 function drawItemArt0(g,k,r,e,leg,V){
   const M=V&&V.met||IC_MET[r],T=V&&V.trim||IC_TRIM[r],GM=V&&V.gem||IC_GEM[r];
@@ -1690,6 +1735,26 @@ function drawItemArt0(g,k,r,e,leg,V){
   case 'kingring':icRingBand(g,['#a8792c','#ffe9a8']);
     icShape(g,()=>{g.moveTo(20,32);g.lineTo(18,14);g.lineTo(25,22);g.lineTo(32,10);g.lineTo(39,22);g.lineTo(46,14);g.lineTo(44,32);g.closePath()},icLin(g,18,10,46,32,'#ffe9a8','#b8862e'));
     for(const x of [18,32,46])icGem(g,x,x===32?10:14,1.8,'#ff5a5a');icGem(g,32,25,4.6,'#dc92ff');break;
+  case 'scimitar':
+    icShape(g,()=>{g.moveTo(22,46);g.quadraticCurveTo(46,40,52,8);g.quadraticCurveTo(54,30,27,50);g.closePath()},blade(26,54));
+    g.strokeStyle='rgba(255,255,255,.5)';g.lineWidth=1.2;g.beginPath();g.moveTo(26,46);g.quadraticCurveTo(46,38,51,12);g.stroke();
+    icShape(g,()=>{g.moveTo(17,43);g.lineTo(28,53);g.lineTo(26,55);g.lineTo(15,45);g.closePath()},T,1.6);
+    icShape(g,()=>{g.moveTo(21,50);g.lineTo(12,59);g.lineTo(15,62);g.lineTo(24,53);g.closePath()},IC_LEA[0],1.8);icGem(g,13,60,1.8,GM);break;
+  case 'rapier':icRot(g,45,()=>{
+    icShape(g,()=>{g.moveTo(30.8,42);g.lineTo(31.2,6);g.lineTo(32,1);g.lineTo(32.8,6);g.lineTo(33.2,42);g.closePath()},blade(30,34),1.6);
+    icShape(g,()=>g.ellipse(32,44,7,3.2,0,0,Math.PI*2),T,1.6);
+    g.strokeStyle=IC_OUT;g.lineWidth=1.6;g.beginPath();g.arc(36,48,5,-1.2,1.6);g.stroke();g.strokeStyle=T;g.lineWidth=1;g.beginPath();g.arc(36,48,5,-1.2,1.6);g.stroke();
+    icRect(g,30.6,46,2.8,10,IC_LEA[0],1.6,1);icShape(g,()=>g.arc(32,58,2.6,0,Math.PI*2),T,1.6);icGem(g,32,58,1.5,GM)});break;
+  case 'halberd':icRot(g,40,()=>{
+    icRect(g,30.3,14,3.4,49,icLin(g,30,0,34,0,IC_WOOD[0],IC_WOOD[1]),2,1.5);
+    icShape(g,()=>{g.moveTo(32,1);g.lineTo(35,9);g.lineTo(32,16);g.lineTo(29,9);g.closePath()},blade(28,36));
+    icShape(g,()=>{g.moveTo(33.5,13);g.lineTo(44,8);g.quadraticCurveTo(50,18,44,28);g.lineTo(33.5,22);g.closePath()},blade(34,50));
+    icShape(g,()=>{g.moveTo(30.5,15);g.lineTo(24,17);g.lineTo(30.5,20);g.closePath()},M[1],1.4);icRect(g,29,22,6,3,T,1.4,1)});break;
+  case 'amulet':
+    g.strokeStyle=IC_OUT;g.lineWidth=3;g.beginPath();g.moveTo(14,8);g.quadraticCurveTo(32,46,50,8);g.stroke();
+    g.strokeStyle=r>=3?'#e4b450':'#c4cad1';g.lineWidth=1.6;g.setLineDash([2,1.5]);g.beginPath();g.moveTo(14,8);g.quadraticCurveTo(32,46,50,8);g.stroke();g.setLineDash([]);
+    icShape(g,()=>{g.moveTo(32,30);g.lineTo(40,40);g.lineTo(32,56);g.lineTo(24,40);g.closePath()},icLin(g,24,30,40,56,r>=3?'#ffe9a8':'#e2e6ea',r>=3?'#a8792c':'#7a8088'),1.8);
+    icGem(g,32,42,4.4,GM||'#8a8a8a');break;
   case 'hammer':icRot(g,-35,()=>{
     icRect(g,30,16,4.5,46,icLin(g,30,0,35,0,IC_WOOD[0],IC_WOOD[1]),2,2);
     icRect(g,15,5,34,17,icLin(g,15,0,49,0,M[0],M[1]),2.2,3);
@@ -1764,6 +1829,7 @@ function inspector(el,it,acts,cmp,cmpLabel){
     lines+=b.proj?'<li><span>射程</span><b>'+Math.round(b.proj.range/TS)+'マス · 飛び道具'+(b.proj.pierce?' · 貫通':'')+'</b></li>':'<li><span>間合い</span><b>'+(b.range/TS).toFixed(1)+'マス · '+b.arc+'°</b></li>';
   }
   if(bv.arm)lines+='<li><span>防御</span><b>'+bv.arm+'</b></li>';
+  {const P=pfOf(it);if(P)lines+='<li><span>品質の銘</span><b style="color:'+(P.m>=1?'#7cc47f':'#e0644c')+'">'+P.n+'（性能'+(P.m>=1?'+':'')+Math.round((P.m-1)*100)+'%・耐久×'+P.du+'）</b></li>'}
   {const fr=durFrac(it);lines+='<li><span>耐久</span><b style="color:'+(fr<=0?'#e0644c':fr<=0.15?'#ff9a6a':fr<0.5?'#e4b450':'inherit')+'">'+(fr<=0?'壊れている':Math.round(durOf(it))+' / '+maxDur(it))+'</b></li>'}
   if(bv.mv)lines+='<li><span>移動速度</span><b class="neg">'+bv.mv+'%</b></li>';
   for(const [ai,v] of it.v)lines+='<li class="aff"><span>'+AFF[ai].n+'</span><b>'+affText(ai,v)+'</b></li>';
@@ -1772,8 +1838,9 @@ function inspector(el,it,acts,cmp,cmpLabel){
     if(cmp){const d=p-power(cmp);diff=d>0?'<span class="up">▲'+d+'</span>':d<0?'<span class="down">▼'+(-d)+'</span>':'<span class="hint">±0</span>'}
     else diff='<span class="up">空き枠</span>';
   }
-  const elh=it.e>=0?'<div class="elm" style="--ec:'+ELM[it.e].col+'"><b>'+ELM[it.e].n+'属性 +'+it.ep+'%</b><p>'+ELM[it.e].d+'</p></div>':'';
-  const leg=elh+(it.x>=0?'<div class="leg"><b>'+LEG[it.x].n+'</b><p>'+LEG[it.x].d+'</p></div>':'');
+  const sk=b.s==='weapon'?skillOfBase(b):null;const skh=sk?'<div class="skl"><b>固有スキル：'+sk.n+'</b><p>'+sk.d+'（再使用'+sk.cd+'秒）'+(HEAVYW.has(b.k)?'。通常攻撃が当たった相手は一瞬スタンする':'')+'</p></div>':'';
+  const elh=skh+(it.e>=0?'<div class="elm" style="--ec:'+ELM[it.e].col+'"><b>'+ELM[it.e].n+'属性 +'+it.ep+'%</b><p>'+ELM[it.e].d+'</p></div>':'');
+  const leg=elh+(it.e>=0?'':'')+(it.x>=0?'<div class="leg"><b>'+LEG[it.x].n+'</b><p>'+LEG[it.x].d+'</p></div>':'');
   const h=document.createElement('div');h.className='ins';
   h.innerHTML='<div class="ins-head" data-r="'+it.r+'"><span class="g">'+itemIconHTML(it,'icoL')+'</span><div><div class="nm">'+esc(itemName(it))+'</div><div class="sub">'+RAR[it.r].n+' · '+SLOTN[b.s]+' · Lv'+it.l+' · 品質 '+Math.round(it.q*100)+'%</div></div></div>'+
     '<div class="pw">戦力 <b>'+p+'</b> '+diff+'</div>'+(cmp?'<div class="cmpnote">比較：'+esc(cmpLabel||'装備中')+' '+esc(itemName(cmp))+'（戦力 '+power(cmp)+'）</div>':'')+
@@ -1856,6 +1923,16 @@ function lobbyAct(kind){
   }
   persist();renderLobby();
 }
+const CONS={
+  bomb:{n:'爆弾',g:'爆',d:'前方に投げて爆発させる。範囲の魔物に70ダメージ＋スタン',p:160},
+  smoke:{n:'煙玉',g:'煙',d:'6秒間、魔物の追跡を振り切り、見つかりにくくなる',p:140},
+  whet:{n:'砥石',g:'砥',d:'40秒間、与えるダメージ+25%',p:180},
+  ironpill:{n:'鉄の丸薬',g:'丸',d:'25秒間、受けるダメージ-25%',p:180},
+  swift:{n:'俊足の薬',g:'速',d:'20秒間、移動速度+25%',p:150},
+  elixir:{n:'万能薬',g:'万',d:'状態異常を治し、HPを30すぐに回復',p:200},
+};
+const CONS_IDS=Object.keys(CONS);
+const SHOP_CONS=CONS_IDS.map(id=>({k:'c:'+id,t:CONS[id].n,d:CONS[id].d,p:CONS[id].p}));
 const SHOP=[
   {k:'pot',t:'回復薬',d:'2.5秒かけてHP45回復。持ち込みは5本まで',p:70},
   {k:'box1',t:'補給箱',d:'ランダムな装備 1品（Lv1–2）',p:170},
@@ -1863,6 +1940,7 @@ const SHOP=[
   {k:'box3',t:'封印の櫃',d:'レア以上 1品（Lv7–8）',p:2400},
 ];
 function buy(w){
+  if(w.k.startsWith('c:')){const id=w.k.slice(2);if(SAVE.gold<w.p){toast('金貨が足りません');return}if((SAVE.cons[id]||0)>=20){toast('これ以上持てません（20個まで）');return}SAVE.gold-=w.p;SAVE.cons[id]=(SAVE.cons[id]||0)+1;if(!SAVE.consSel)SAVE.consSel=id;sfx('coin');persist();renderLobby();toast(CONS[id].n+'を買った（所持 '+SAVE.cons[id]+'）');return}
   if(SAVE.gold<w.p){toast('金貨が足りません');return}
   if(w.k!=='pot'&&SAVE.stash.length>=stashCap()){toast('倉庫がいっぱいです');return}
   if(w.k==='pot'&&SAVE.potions>=20){toast('回復薬はこれ以上持てません');return}
@@ -1891,6 +1969,7 @@ function renderLobby(){
   renderProf();
   renderLobbyTop();
   $('#stashCount').textContent=SAVE.stash.length+' / '+stashCap();
+  {const ids=Object.keys(MATS).filter(id=>(SAVE.mats[id]||0)>0);$('#stashMats').innerHTML=ids.length?ids.map(id=>'<span class="mat" data-r="'+MATS[id].r+'"><b>'+MATS[id].g+'</b>'+esc(MATS[id].n)+' ×'+SAVE.mats[id]+'</span>').join('')+CONS_IDS.filter(id=>(SAVE.cons[id]||0)>0).map(id=>'<span class="mat" data-r="1"><b>'+CONS[id].g+'</b>'+esc(CONS[id].n)+' ×'+SAVE.cons[id]+'</span>').join(''):'<p class="hint">素材はまだない。</p>'}
   {const lv=stashLv(),b=$('#expandBtn');if(lv>=STASH_COST.length){b.textContent='倉庫は最大（'+stashCap()+'枠）';b.disabled=true}else{b.textContent='拡張 +'+STASH_STEP+'枠（'+STASH_COST[lv].toLocaleString()+'G）';b.disabled=false}}
   const st=SAVE.st;
   $('#record').innerHTML='出撃 <b>'+st.raids+'</b> 生還 <b>'+st.ext+'</b> 死亡 <b>'+st.deaths+'</b> プレイヤー撃破 <b>'+st.kills+'</b> ボス討伐 <b>'+(st.raidWins||0)+'</b> 最高持ち帰り <b>'+(st.best||0).toLocaleString()+'G</b>';
@@ -1902,13 +1981,16 @@ function renderLobby(){
     const l=document.createElement('span');l.textContent=SLOTN[s];c.appendChild(l);eg.appendChild(c);
   }
   const S=calcStats(SAVE.equip);
-  let dl='<dt>最大HP</dt><dd>'+S.mhp+'</dd><dt>防御</dt><dd>'+S.arm+'（被ダメ-'+Math.round(S.red*100)+'%）</dd><dt>武器</dt><dd>'+esc(S.wb.n)+' '+S.dmin+'–'+S.dmax+'</dd><dt>攻撃速度</dt><dd>'+S.aspdF.toFixed(2)+'/秒</dd><dt>会心</dt><dd>'+S.crit+'% × '+(1+S.critd/100).toFixed(2)+'</dd><dt>移動速度</dt><dd>'+Math.round(S.speed/1.5)+'%</dd>';
+  let dl='<dt>最大HP</dt><dd>'+S.mhp+'</dd><dt>防御</dt><dd>'+S.arm+'（被ダメ-'+Math.round(S.red*100)+'%）</dd><dt>武器</dt><dd>'+esc(S.wb.n)+' '+S.dmin+'–'+S.dmax+'</dd><dt>攻撃速度</dt><dd>'+S.aspdF.toFixed(2)+'/秒</dd>'+(S.proj?'<dt>射程</dt><dd>'+(S.proj.range/TS).toFixed(1)+'マス</dd>':'<dt>間合い</dt><dd>'+(S.range/TS).toFixed(1)+'マス · '+S.arc+'°</dd>')+'<dt>会心</dt><dd>'+S.crit+'% × '+(1+S.critd/100).toFixed(2)+'</dd><dt>移動速度</dt><dd>'+Math.round(S.speed/1.5)+'%</dd>';
   if(S.atkp)dl+='<dt>攻撃力</dt><dd>+'+S.atkp+'%</dd>';
   if(S.ls)dl+='<dt>吸血</dt><dd>'+S.ls+'%</dd>';
   if(S.regen)dl+='<dt>HP再生</dt><dd>'+S.regen.toFixed(1)+'/秒</dd>';
   if(S.luck)dl+='<dt>金運</dt><dd>+'+S.luck+'%</dd>';
   for(const k in S.leg){const L=LEG.find(x=>x.k===k);dl+='<dd class="leg">'+L.n+'：'+L.d+'</dd>'}
   $('#statList').innerHTML=dl;
+  {const cs=$('#consSlot');cs.innerHTML='';const own=CONS_IDS.filter(id=>(SAVE.cons[id]||0)>0);
+    if(!own.length)cs.innerHTML='<p class="hint">消耗品を持っていない。商人で買うか、工房で作れる。</p>';
+    for(const id of own){const b=document.createElement('button');b.type='button';b.className='conschip'+(SAVE.consSel===id?' on':'');b.innerHTML='<b>'+CONS[id].g+'</b>'+esc(CONS[id].n)+' ×'+SAVE.cons[id];b.title=CONS[id].d;b.onclick=()=>{SAVE.consSel=SAVE.consSel===id?null:id;persist();renderLobby()};cs.appendChild(b)}}
   const ps=$('#pouchSlot');ps.innerHTML='';ps.appendChild(tile(SAVE.pouch,{label:'空',drag:{c:'L',where:'pouch'},drop:{c:'L',where:'pouch'},sel:SEL&&SEL.where==='pouch',onClick:()=>{SEL={where:'pouch'};renderLobby()}}));
   // stash
   const sg=$('#stashGrid');sg.innerHTML='';
@@ -1917,7 +1999,7 @@ function renderLobby(){
   for(let i=0;i<empties;i++)sg.appendChild(tile(null,{drop:{c:'L',where:'stash'}}));
   // shop
   const sh=$('#shop');sh.innerHTML='';
-  for(const w of SHOP){const b=document.createElement('button');b.type='button';b.className='ware';b.disabled=SAVE.gold<w.p;
+  for(const w of [...SHOP,...SHOP_CONS]){const b=document.createElement('button');b.type='button';b.className='ware';b.disabled=SAVE.gold<w.p;
     b.innerHTML='<span class="t">'+w.t+(w.k==='pot'?' <span class="hint">所持 '+SAVE.potions+'</span>':'')+'</span><span class="d">'+w.d+'</span><span class="p">'+w.p+'G</span>';b.onclick=()=>buy(w);sh.appendChild(b)}
   const hasWeapon=SAVE.equip.weapon||SAVE.stash.some(x=>BASES[x.b].s==='weapon')||(SAVE.pouch&&BASES[SAVE.pouch.b].s==='weapon');
   if(!hasWeapon&&SAVE.gold<60){const b=document.createElement('button');b.type='button';b.className='ware';b.innerHTML='<span class="t">支給品</span><span class="d">武器を失った冒険者への無償の長剣</span><span class="p">0G</span>';b.onclick=freeKit;sh.appendChild(b)}
@@ -1994,6 +2076,12 @@ const RECIPES=[
   {g:'限定装飾',id:'c_deye',n:'竜眼の指輪',d:'会心率と会心ダメージが必ず付く。エピック以上',m:{scale:2,heart:1,gem:2},gold:3000,out:{kind:'gear',b:'dragoneye',l:10,minR:3,force:['crit','critd']}},
   {g:'消耗品',id:'k_pot',n:'回復薬 ×3',d:'2.5秒かけてHP45回復',m:{moss:2,claw:2},gold:0,out:{kind:'pot',n:3}},
   {g:'消耗品',id:'k_scroll',n:'帰還の巻物',d:'レイド中に10秒動かずにいると、その場から脱出できる。3枚まで持ち込み',m:{soul:3,cloth:2},gold:100,out:{kind:'scroll',n:1}},
+  {g:'消耗品',id:'k_bomb',n:'爆弾',d:CONS.bomb.d,m:{iron:2,wood:2,bone:2},gold:60,out:{kind:'cons',id:'bomb',n:1}},
+  {g:'消耗品',id:'k_smoke',n:'煙玉',d:CONS.smoke.d,m:{cloth:3,moss:1},gold:40,out:{kind:'cons',id:'smoke',n:1}},
+  {g:'消耗品',id:'k_whet',n:'砥石',d:CONS.whet.d,m:{iron:2,bone:3},gold:60,out:{kind:'cons',id:'whet',n:1}},
+  {g:'消耗品',id:'k_iron',n:'鉄の丸薬',d:CONS.ironpill.d,m:{iron:3,moss:2},gold:60,out:{kind:'cons',id:'ironpill',n:1}},
+  {g:'消耗品',id:'k_swift',n:'俊足の薬',d:CONS.swift.d,m:{fur:2,moss:2},gold:50,out:{kind:'cons',id:'swift',n:1}},
+  {g:'消耗品',id:'k_elix',n:'万能薬',d:CONS.elixir.d,m:{moss:3,soul:1},gold:70,out:{kind:'cons',id:'elixir',n:1}},
   {g:'交易品',id:'t_bone',n:'骨細工の装飾品',d:'作るとすぐ商人が買い取る',m:{bone:10},gold:0,out:{kind:'gold',n:80}},
   {g:'交易品',id:'t_fur',n:'毛皮の外套',d:'作るとすぐ商人が買い取る',m:{fur:8,cloth:4},gold:0,out:{kind:'gold',n:115}},
   {g:'交易品',id:'t_gem',n:'宝石細工',d:'作るとすぐ商人が買い取る',m:{gem:3},gold:0,out:{kind:'gold',n:190}},
@@ -2015,6 +2103,7 @@ function craft(rc){
     const it=genItem(r,o.l+R.i(r,0,1),null,opt);SAVE.stash.push(it);dexItem(it);SEL={where:'stash',i:SAVE.stash.length-1};
     toast(RAR[it.r].n+'「'+itemName(it)+'」が完成した');sfx(it.r>=3?'rare':'equip');
   }else if(o.kind==='pot'){SAVE.potions=Math.min(20,SAVE.potions+o.n);toast('回復薬を作った（所持 '+SAVE.potions+'）');sfx('drink')}
+  else if(o.kind==='cons'){SAVE.cons[o.id]=(SAVE.cons[o.id]||0)+o.n;if(!SAVE.consSel)SAVE.consSel=o.id;toast(CONS[o.id].n+'を作った（所持 '+SAVE.cons[o.id]+'）');sfx('equip')}
   else if(o.kind==='scroll'){SAVE.scrolls=(SAVE.scrolls||0)+o.n;toast('帰還の巻物を作った（所持 '+SAVE.scrolls+'）');sfx('magic')}
   else{SAVE.gold+=o.n;toast(rc.n+'を納品して '+o.n+'G を得た');sfx('coin')}
   addXp(10);unlockAch('craft');
@@ -2131,6 +2220,55 @@ function sceneStatic(b,seed,w,h){
   if(SCN.cache.size>8)SCN.cache.clear();
   const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d'),r=rngFrom(seed+b*7919);
   const gy=h*0.78;
+  if(b===3){  // the adventurers' town at dusk — the hideout
+    const meta={wins:[],lamps:[],chims:[],gate:null};c.meta=meta;
+    let gr=g.createLinearGradient(0,0,0,gy);gr.addColorStop(0,'#0c0d22');gr.addColorStop(0.45,'#2a1f3e');gr.addColorStop(0.8,'#6a3442');gr.addColorStop(1,'#b8603a');g.fillStyle=gr;g.fillRect(0,0,w,h);
+    for(let i=0;i<120;i++){g.fillStyle='rgba(255,255,255,'+(r()*0.7+0.1)*(1-0.0)+')';const y=r()*gy*0.55;g.fillRect(r()*w,y,1.3,1.3)}
+    {const mx=w*0.82,my=h*0.13,mr=Math.min(w,h)*0.045;const mg=g.createRadialGradient(mx,my,mr*0.4,mx,my,mr*6);mg.addColorStop(0,'rgba(255,236,200,.28)');mg.addColorStop(1,'rgba(255,236,200,0)');g.fillStyle=mg;g.fillRect(0,0,w,h);g.fillStyle='#fff3d6';g.beginPath();g.arc(mx,my,mr,0,Math.PI*2);g.fill();g.fillStyle='#2a1f3e';g.beginPath();g.arc(mx+mr*0.45,my-mr*0.15,mr*0.9,0,Math.PI*2);g.fill()}
+    // castle on the hill
+    {g.fillStyle='#1c1528';g.beginPath();g.ellipse(w*0.5,gy-h*0.2,w*0.42,h*0.16,0,Math.PI,0);g.fill();
+     const cxx=w*0.5,base=gy-h*0.33,u=Math.min(w,h)*0.012;g.fillStyle='#181224';
+     const tw=(x,wd,ht)=>{g.fillRect(x-wd/2,base-ht,wd,ht);for(let k=-wd/2;k<wd/2;k+=u*2.2)g.fillRect(x+k,base-ht-u*1.6,u*1.2,u*1.6)};
+     tw(cxx,u*14,u*12);tw(cxx-u*11,u*5,u*20);tw(cxx+u*11,u*5,u*17);tw(cxx-u*20,u*4,u*11);tw(cxx+u*19,u*4,u*13);
+     g.beginPath();g.moveTo(cxx-u*13.5,base-u*20);g.lineTo(cxx-u*11,base-u*28);g.lineTo(cxx-u*8.5,base-u*20);g.fill();
+     g.beginPath();g.moveTo(cxx+u*8.5,base-u*17);g.lineTo(cxx+u*11,base-u*24);g.lineTo(cxx+u*13.5,base-u*17);g.fill();
+     for(const [x,y] of [[cxx-u*11,base-u*15],[cxx+u*11,base-u*12],[cxx-u*3,base-u*7],[cxx+u*3,base-u*7],[cxx-u*20,base-u*7]]){meta.wins.push({x,y,w:u*0.9,h:u*1.6,far:1});g.fillStyle='#ffbf5a';g.fillRect(x-u*0.45,y,u*0.9,u*1.6)}}
+    // houses
+    const house=(x,base,bw,bh,far)=>{
+      const walls=far?['#4a3a40','#3e3440','#514048']:['#8c6a4c','#7a5c44','#9c7c5c','#6e5e54','#86705a'],roofs=far?['#2a1e2a','#33222c']:['#5a2a24','#3c3a4c','#6a4628','#4a2e2a'];
+      const wc=walls[Math.floor(r()*walls.length)],rc=roofs[Math.floor(r()*roofs.length)],rh=bh*(0.45+r()*0.25);
+      g.fillStyle=wc;g.fillRect(x,base-bh,bw,bh);
+      if(!far){g.strokeStyle='rgba(40,24,14,.85)';g.lineWidth=Math.max(1.5,bw*0.035);g.strokeRect(x,base-bh,bw,bh);g.beginPath();g.moveTo(x,base-bh*0.5);g.lineTo(x+bw,base-bh*0.5);g.moveTo(x+bw*0.5,base-bh);g.lineTo(x+bw*0.5,base);if(r()<0.6){g.moveTo(x,base-bh);g.lineTo(x+bw*0.5,base-bh*0.5);g.moveTo(x+bw,base-bh);g.lineTo(x+bw*0.5,base-bh*0.5)}g.stroke()}
+      g.fillStyle=rc;g.beginPath();g.moveTo(x-bw*0.08,base-bh);g.lineTo(x+bw*0.5,base-bh-rh);g.lineTo(x+bw*1.08,base-bh);g.closePath();g.fill();
+      if(!far){g.strokeStyle='rgba(0,0,0,.35)';g.lineWidth=1;for(let k=1;k<5;k++){const yy=base-bh-rh*k/5;const half=bw*0.58*(1-k/5);g.beginPath();g.moveTo(x+bw*0.5-half,yy);g.lineTo(x+bw*0.5+half,yy);g.stroke()}}
+      if(r()<0.7){const chx=x+bw*(0.2+r()*0.55),chw=bw*0.12,cht=rh*0.8;g.fillStyle=far?'#20161e':'#4a3a34';g.fillRect(chx,base-bh-cht,chw,cht*0.9);meta.chims.push({x:chx+chw/2,y:base-bh-cht,s:bw*0.12,far})}
+      const nw=bw>w*0.07?2:1;
+      for(let k=0;k<nw;k++)for(let row=0;row<(bh>h*0.18?2:1);row++){const wx=x+bw*(nw===1?0.36:0.16+k*0.48),wy=base-bh*(row?0.86:0.42),ww=bw*0.2,wh=bh*0.17;const lit=r()<0.75;
+        g.fillStyle=lit?'#ffc46a':'#1a1418';g.fillRect(wx,wy,ww,wh);if(!far){g.strokeStyle='#3a2414';g.lineWidth=Math.max(1,bw*0.02);g.strokeRect(wx,wy,ww,wh);g.beginPath();g.moveTo(wx+ww/2,wy);g.lineTo(wx+ww/2,wy+wh);g.moveTo(wx,wy+wh/2);g.lineTo(wx+ww,wy+wh/2);g.stroke();g.fillStyle='#5a3a24';g.fillRect(wx-ww*0.12,wy+wh,ww*1.24,wh*0.14)}
+        if(lit)meta.wins.push({x:wx+ww/2,y:wy,w:ww,h:wh,far})}
+      if(!far){const dw=bw*0.2,dh=bh*0.32,dx=x+bw*(r()<0.5?0.12:0.62);g.fillStyle='#3a2416';g.fillRect(dx,base-dh,dw,dh);g.fillStyle='#e4b450';g.fillRect(dx+dw*0.75,base-dh*0.5,dw*0.1,dw*0.1);if(r()<0.45){g.fillStyle='#5a3a24';g.fillRect(dx-dw*0.3,base-dh*1.35,dw*1.6,dh*0.22);g.fillStyle='#e4b450';g.font='bold '+Math.round(dh*0.17)+'px DotGothic16, monospace';g.textAlign='center';g.fillText(['宿','酒','鍛冶','薬','道具'][Math.floor(r()*5)],dx+dw/2,base-dh*1.17)}}
+    };
+    const farBase=gy-h*0.12;for(let x=-w*0.05;x<w*1.05;){const bw=w*(0.045+r()*0.04);house(x,farBase,bw,h*(0.12+r()*0.09),1);x+=bw*(0.9+r()*0.3)}
+    // the town gate in the middle (where you set out from)
+    {const gx=w*0.5,gw=Math.min(w*0.26,h*0.5),gh=h*0.46,base=gy-h*0.005;meta.gate={x:gx,y:base-gh*0.55,w:gw};
+     g.fillStyle='#3a3440';g.fillRect(gx-gw*0.5,base-gh,gw,gh);
+     for(let k=-gw*0.5;k<gw*0.5;k+=gw*0.11)g.fillRect(gx+k,base-gh-gw*0.06,gw*0.07,gw*0.06);
+     g.strokeStyle='rgba(0,0,0,.35)';g.lineWidth=1;for(let yy=base-gh;yy<base;yy+=gh*0.08){g.beginPath();g.moveTo(gx-gw*0.5,yy);g.lineTo(gx+gw*0.5,yy);g.stroke()}
+     const ow=gw*0.52,oh=gh*0.72;g.fillStyle='#07060a';g.beginPath();g.moveTo(gx-ow/2,base);g.lineTo(gx-ow/2,base-oh+ow/2);g.arc(gx,base-oh+ow/2,ow/2,Math.PI,0);g.lineTo(gx+ow/2,base);g.fill();
+     const rg=g.createLinearGradient(0,base-oh,0,base);rg.addColorStop(0,'rgba(90,60,120,.0)');rg.addColorStop(1,'rgba(120,90,160,.35)');g.fillStyle=rg;g.fill();
+     g.strokeStyle='#4a4250';g.lineWidth=gw*0.05;g.beginPath();g.arc(gx,base-oh+ow/2,ow/2+gw*0.02,Math.PI,0);g.stroke();
+     g.fillStyle='#8a2a24';for(const sx of [-1,1]){g.fillRect(gx+sx*gw*0.36-gw*0.06,base-gh*0.92,gw*0.12,gh*0.4);g.fillStyle='#e4b450';g.fillRect(gx+sx*gw*0.36-gw*0.015,base-gh*0.82,gw*0.03,gw*0.03);g.fillStyle='#8a2a24'}
+     meta.lamps.push({x:gx-ow*0.62,y:base-oh*0.75,s:gw*0.04},{x:gx+ow*0.62,y:base-oh*0.75,s:gw*0.04})}
+    // front houses, left and right of the gate
+    for(const side of [-1,1]){let x=side<0?-w*0.02:w*0.5+Math.min(w*0.26,h*0.5)*0.55;const lim=side<0?w*0.5-Math.min(w*0.26,h*0.5)*0.55:w*1.02;while(x<lim-w*0.03){const bw=Math.min(lim-x,w*(0.08+r()*0.05));house(x,gy,bw,h*(0.24+r()*0.12),0);x+=bw*(0.98+r()*0.1)}}
+    // lamp posts on the plaza
+    for(const lx of [w*0.2,w*0.8]){const lh=h*0.3;g.fillStyle='#1a1418';g.fillRect(lx-w*0.004,gy-lh,w*0.008,lh+h*0.02);g.fillRect(lx-w*0.014,gy-lh,w*0.028,h*0.012);meta.lamps.push({x:lx,y:gy-lh-h*0.02,s:w*0.01})}
+    // cobblestones
+    gr=g.createLinearGradient(0,gy,0,h);gr.addColorStop(0,'#4a3e3a');gr.addColorStop(1,'#1a1412');g.fillStyle=gr;g.fillRect(0,gy,w,h-gy);
+    for(let row=0;row<9;row++){const t0=row/9,t1=(row+1)/9,y0=gy+(h-gy)*t0*t0,y1=gy+(h-gy)*t1*t1,sz=(0.3+t1)*w*0.035;for(let x=-(row%2)*sz/2;x<w+sz;x+=sz){const v=58+Math.floor(r()*22);g.fillStyle='rgb('+v+','+(v-8)+','+(v-12)+')';g.beginPath();g.ellipse(x,(y0+y1)/2,sz*0.45,(y1-y0)*0.42,0,0,Math.PI*2);g.fill()}}
+    gr=g.createLinearGradient(0,gy,0,h);gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(1,'rgba(0,0,0,.45)');g.fillStyle=gr;g.fillRect(0,gy,w,h-gy);
+    SCN.cache.set(key,c);return c;
+  }
   if(b===0){
     let gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'#17110d');gr.addColorStop(0.75,'#0b0807');gr.addColorStop(1,'#050403');g.fillStyle=gr;g.fillRect(0,0,w,h);
     const bh=Math.max(14,h/26),bw=bh*2.2;
@@ -2169,6 +2307,17 @@ function sceneStatic(b,seed,w,h){
 }
 function drawSceneLive(g,b,w,h,tn){
   const gy=h*0.78;
+  if(b===3){
+    const meta=(sceneStatic(3,SCN.seed,w,h).meta)||{wins:[],lamps:[],chims:[]};
+    g.globalCompositeOperation='lighter';
+    meta.wins.forEach((o,i)=>{const fl=0.75+0.25*Math.sin(tn*(1.3+i%3)+i*1.7)*Math.sin(tn*2.1+i);const R2=(o.far?2.2:1.6)*Math.max(o.w,o.h)*fl;const gl=g.createRadialGradient(o.x,o.y+o.h/2,1,o.x,o.y+o.h/2,R2);gl.addColorStop(0,'rgba(255,190,90,'+(o.far?0.22:0.3)*fl+')');gl.addColorStop(1,'rgba(255,190,90,0)');g.fillStyle=gl;g.fillRect(o.x-R2,o.y+o.h/2-R2,R2*2,R2*2)});
+    meta.lamps.forEach((o,i)=>{const fl=0.85+0.15*Math.sin(tn*11+i*3)*Math.sin(tn*7+i);const R2=o.s*14*fl;const gl=g.createRadialGradient(o.x,o.y,1,o.x,o.y,R2);gl.addColorStop(0,'rgba(255,200,110,.55)');gl.addColorStop(1,'rgba(255,170,80,0)');g.fillStyle=gl;g.fillRect(o.x-R2,o.y-R2,R2*2,R2*2);g.fillStyle='rgba(255,236,170,.95)';g.beginPath();g.ellipse(o.x,o.y,o.s*0.8,o.s*1.2*fl,0,0,Math.PI*2);g.fill()});
+    g.globalCompositeOperation='source-over';
+    meta.chims.forEach((o,i)=>{for(let k=0;k<4;k++){const ph=((tn*0.18+k/4+i*0.37)%1),x=o.x+Math.sin(tn*0.6+k+i)*o.s*0.8+ph*o.s*1.5,y=o.y-ph*h*0.16;g.fillStyle='rgba(150,140,160,'+(0.22*(1-ph))*(o.far?0.6:1)+')';g.beginPath();g.arc(x,y,o.s*(0.5+ph*1.4),0,Math.PI*2);g.fill()}});
+    for(let i=0;i<18;i++){const ph=((tn*0.07+i*0.13)%1),x=(i*137.7)%w+Math.sin(tn*0.8+i)*20,y=gy-h*0.05-ph*h*0.3;g.fillStyle='rgba(255,220,140,'+(0.5*(1-ph))*(0.5+0.5*Math.sin(tn*3+i))+')';g.fillRect(x,y,2,2)}
+    {const per=9,ph=(tn%per)/per;if(ph<0.06){const k=ph/0.06,x0=w*(0.2+((Math.floor(tn/per)*0.37)%0.6)),y0=h*0.08;g.strokeStyle='rgba(255,255,255,'+(1-k)+')';g.lineWidth=1.5;g.beginPath();g.moveTo(x0+k*w*0.12,y0+k*h*0.05);g.lineTo(x0+k*w*0.12-w*0.03,y0+k*h*0.05-h*0.012);g.stroke()}}
+    return;
+  }
   if(b===0){
     const ax=w/2,ay=gy-h*0.02,ar=Math.min(w*0.2,h*0.42),cyy=ay-ar*0.3;
     g.save();g.beginPath();g.arc(ax,ay-ar*0.55,ar*0.8,Math.PI,0);g.lineTo(ax+ar*0.8,ay);g.lineTo(ax-ar*0.8,ay);g.clip();
@@ -2190,7 +2339,7 @@ function drawSceneLive(g,b,w,h,tn){
   }
 }
 function drawPedestal(g,cx,gy,s,tn,b){
-  const col=['168,120,255','140,230,170','255,150,70'][b];
+  const col=['168,120,255','140,230,170','255,150,70','255,205,130'][b]||'255,205,130';
   g.fillStyle='rgba(0,0,0,.5)';g.beginPath();g.ellipse(cx,gy+s*4,s*30,s*8,0,0,Math.PI*2);g.fill();
   g.fillStyle='#2a241f';g.beginPath();g.ellipse(cx,gy+s*2,s*26,s*7,0,0,Math.PI*2);g.fill();
   g.fillStyle='#3a322b';g.beginPath();g.ellipse(cx,gy,s*26,s*7,0,0,Math.PI*2);g.fill();
@@ -2205,7 +2354,7 @@ function stageLoop(){
   const cvs=$('#stage');const cw=cvs.clientWidth,ch=cvs.clientHeight;if(!cw||!ch)return;
   const dpr=Math.min(2,window.devicePixelRatio||1),W=Math.round(cw*dpr),H=Math.round(ch*dpr);
   if(cvs.width!==W||cvs.height!==H){cvs.width=W;cvs.height=H}
-  const g=cvs.getContext('2d'),tn=now(),b=sceneBiome();
+  const g=cvs.getContext('2d'),tn=now(),b=3;
   g.setTransform(1,0,0,1,0,0);g.drawImage(sceneStatic(b,SCN.seed,W,H),0,0);
   drawSceneLive(g,b,W,H,tn);
   const gy=H*0.80,cx=W/2,s=clamp(Math.min(H/95,W/70),2.2,6.2);
@@ -2594,15 +2743,18 @@ function genMap(seed){
     if(o.boss){const bx=o.cx|0,by=o.y+2;set(bx,by,1);chests.push({id:cid++,x:bx*TS+TS/2,y:by*TS+TS/2,tier:3,dg:1,boss:1})}
     if(o.spawn)continue;
     const ri=rooms.indexOf(o);
-    const M=(k,p,extra)=>mons.push(Object.assign({id:mid++,k,x:p.x,y:p.y,tier:dg>0.66?3:dg>0.33?2:1,dg,room:ri,elite:r()<0.06+0.3*Math.pow(dg,1.5)?1:0},extra||{}));
+    const M=(k,p,extra)=>mons.push(Object.assign({id:mid++,k,x:p.x,y:p.y,tier:dg>0.66?3:dg>0.33?2:1,dg,room:ri,elite:r()<0.025+0.12*Math.pow(dg,1.5)?1:0},extra||{}));
     if(o.lair){mons.push({id:mid++,k:'dragon',x:(o.cx|0)*TS+16,y:(o.cy|0)*TS+16,tier:3,dg:1,room:ri,lv:o.lv,el:o.el});const p=floorIn(o,usedT);if(p)chests.push({id:cid++,x:p.x,y:p.y,tier:3,dg:1,boss:0});continue}
     if(o.boss){mons.push({id:mid++,k:'boss',x:(o.cx|0)*TS,y:(o.cy|0)*TS+TS,tier:3,dg:1,room:ri});for(let k=0;k<3;k++){const p=floorIn(o,usedT);if(p)M(k?'caster':'brute',p,{elite:1})}continue}
     if(!o.ext&&r()<0.04){o.horde=1;const nh=R.i(r,8,13);for(let k=0;k<nh;k++){const p=floorIn(o,usedT);if(p)M('swarm',p,{elite:0})}const p=floorIn(o,usedT);if(p)M(r()<0.5?'brute':'charger',p,{elite:1});continue}
     if(!o.ext&&r()<0.05){o.horde=2;const pk=R.pick(r,['ghoul','archer','skel','charger']);const np=R.i(r,4,6);for(let k=0;k<np;k++){const p=floorIn(o,usedT);if(p)M(pk,p,{elite:k===0?1:0})}continue}
-    const nm=o.ext?R.i(r,0,1):1+Math.round(dg*3.4)+R.i(r,0,1);
+    const nm=Math.round((o.ext?R.i(r,0,1):1+Math.round(dg*3.4)+R.i(r,0,1))*1.2);
     const ws=[30,22,20,6+20*dg,6+12*dg,4+10*dg,3+8*dg,3+12*dg,dg>0.2?6:2];
-    for(let k=0;k<nm;k++){const p=floorIn(o,usedT);if(!p)continue;const t2=['skel','ghoul','archer','brute','caster','bomber','shaman','charger','swarm'][R.w(r,ws)];
-      if(t2==='swarm'){for(let j=0;j<R.i(r,3,5);j++){const q=floorIn(o,usedT);if(q)M('swarm',q,{elite:0})}}else M(t2,p)}
+    // monsters in a room stand together as a pack around one spot
+    const near=(c0,rad)=>{if(!c0)return floorIn(o,usedT);for(let k=0;k<40;k++){const x=Math.floor(c0.x/TS)+R.i(r,-rad,rad),y=Math.floor(c0.y/TS)+R.i(r,-rad,rad);if(x<o.x||y<o.y||x>=o.x+o.w||y>=o.y+o.h)continue;const key=y*MW+x;if(t[key]===1&&!usedT.has(key)){usedT.add(key);return {x:x*TS+TS/2,y:y*TS+TS/2}}}return floorIn(o,usedT)};
+    let c0=null;
+    for(let k=0;k<nm;k++){const p=near(c0,2);if(!p)continue;if(!c0)c0=p;const t2=['skel','ghoul','archer','brute','caster','bomber','shaman','charger','swarm'][R.w(r,ws)];
+      if(t2==='swarm'){for(let j=0;j<R.i(r,3,5);j++){const q=near(p,1);if(q)M('swarm',q,{elite:0})}}else M(t2,p)}
   }
   for(const c of chests){if(c.boss)continue;if(r()<0.035){c.mimId=mid;mons.push({id:mid++,k:'mimic',x:c.x,y:c.y,tier:c.tier,dg:c.dg,chest:c.id})}}
   // dragon traces around the lair
@@ -2805,6 +2957,7 @@ function startRaid(raidId,seed,t0,opts={}){
   const equip=SAVE.equip;SAVE.equip=emptyEquip();
   const carry=Math.min(5,SAVE.potions);SAVE.potions-=carry;
   const carryS=Math.min(3,SAVE.scrolls||0);SAVE.scrolls-=carryS;
+  const cid=SAVE.consSel&&CONS[SAVE.consSel]?SAVE.consSel:null,cn=cid?Math.min(3,(SAVE.cons&&SAVE.cons[cid])||0):0;if(cid)SAVE.cons[cid]-=cn;
   SAVE.inRaid={rid:raidId,t:Date.now(),ins:SLOTS.map(s=>equip[s]).filter(it=>it&&it.ins).map(it=>Object.assign({},it))};SAVE.st.raids++;
   persist();
   const stats=calcStats(equip);
@@ -2812,14 +2965,15 @@ function startRaid(raidId,seed,t0,opts={}){
   G={rid:raidId,seed,t0,gr,mode:boss?'boss':'raid',key:opts.key||null,np:opts.np||1,dur:boss?BOSS_MS:RAID_MS,diff:df,keys:{},deaths:0,lseed:(seed^hashStr(raidId))>>>0,grave:opts.grave||null,recovered:[],jt:Date.now(),map,img:renderMapImage(map),equip,stats,bag:[],gold:0,potions:carry,kills:0,
     me:{x:0,y:0,a:0,hp:stats.mhp,st:'alive'},atkCd:0,dodgeT:0,dodgeCd:0,dodgeDir:[0,0],iframe:0,potT:0,sneak:false,undying:false,
     mons:map.mons.map(m=>{const D=MON[m.k],SK=m.k==='rboss'?{n:map.arena.b.n,col:map.arena.b.col,f:map.arena.b.f}:SKINS[map.biome][m.k],dg=m.dg||0;
-      const el=(m.elite||(m.k!=='boss'&&m.k!=='dragon'&&m.k!=='rboss'&&!m.sl&&(hashStr(seed+':'+m.id)%1000)/1000<DF.el))?1:0,hm=(m.k==='boss'?1:(1+2.4*Math.pow(dg,1.4)))*(el?2.6:1)*(gr?1.2:1)*DF.hp,dmm=(m.k==='boss'?1:(1+1.2*Math.pow(dg,1.3)))*(el?1.45:1)*(gr?1.25:1)*DF.dmg;
+      const el=(m.elite||(m.k!=='boss'&&m.k!=='dragon'&&m.k!=='rboss'&&!m.sl&&(hashStr(seed+':'+m.id)%1000)/1000<DF.el))?1:0,hm=(m.k==='boss'?1:(1+2.4*Math.pow(dg,1.4)))*(el?3.8:1)*(gr?1.2:1)*DF.hp,dmm=(m.k==='boss'?1:(1+1.2*Math.pow(dg,1.3)))*(el?1.75:1)*(gr?1.25:1)*DF.dmg;
       return {id:m.id,k:m.k,def:D,x:m.x,y:m.y,hx:m.x,hy:m.y,rx:m.x,ry:m.y,tx:m.x,ty:m.y,mhp:Math.round(D.hp*hm),hp:Math.round(D.hp*hm),dm:dmm,spm:1+0.15*dg,s:0,ang:0,cd:0,wt:0,dead:false,tier:m.tier,dg,elite:el,room:m.room,sl:m.sl?1:0,kind:0,name:(el?'精鋭・':'')+SK.n,col:SK.col,f:SK.f,hat:SK.hat,orbc:SK.orb,ph:Math.random()*6.28}}),
     mats:{},scrolls:carryS,recallT:0,truce:new Set(),ov:new Set(),pvpOpen:false,
     taken:new Set(),opened:new Set(),myTaken:[],myOpened:[],lootCache:new Map(),
     proj:[],fx:[],texts:[],feed:[],remote:new Map(),seq:0,myEv:[],isHost:true,
     vis:new Float32Array(MW*MH),explored:new Uint8Array(MW*MH),visT:0,lastT:0,lastSend:0,lastHud:0,
-    exT:0,loot:null,inv:false,invSel:null,corpse:null,done:false,startT:Date.now()};
+    exT:0,loot:null,inv:false,invSel:null,corpse:null,done:false,startT:Date.now(),cons:{id:cid,n:cn},consX:{},skCd:0,stunT:0,drinkT:0};
   const fc=document.createElement('canvas');fc.width=MW;fc.height=MH;G.fogC=fc;G.fogCtx=fc.getContext('2d');G.fogImg=G.fogCtx.createImageData(MW,MH);
+  for(const m of G.mons){const hv=hashStr(seed+':w'+m.id)%100;if(m.k==='skel'&&hv<30){m.wpn='spear';m.rm=1.8}else if(m.k==='brute'&&hv<45){m.wpn='hammer';m.rm=1.1;m.am=1.35}if(m.elite)m.spm=(m.spm||1)*1.12}
   for(const m of G.mons){const src=map.mons[m.id];if(m.k==='dragon'){m.lv=src.lv;m.el=src.el;const hm=(1+0.55*(src.lv-1))*(gr?1.2:1);m.mhp=m.hp=Math.round(MON.dragon.hp*hm);m.dm=(1+0.25*(src.lv-1))*(gr?1.25:1);m.name=dragonName(src.lv,src.el);m.col=ELEM[src.el].col;m.br=ELEM[src.el].br}if(m.k==='mimic')m.chest=src.chest}
   if(boss){const K=map.arena,bm=G.mons[0];bm.mhp=bm.hp=Math.round(K.b.hp*(1+0.5*((opts.np||1)-1)));bm.dm=K.b.dmg;bm.br=K.b.br||'255,120,40';bm.star=K.star;bm.def=Object.assign({},MON.rboss,{r:K.b.r,breath:K.b.breath?1:0});bm.name=K.b.n}
   const fc3=map.B.fog;for(let i=0;i<MW*MH;i++){G.fogImg.data[i*4]=fc3[0];G.fogImg.data[i*4+1]=fc3[1];G.fogImg.data[i*4+2]=fc3[2]}
@@ -2905,7 +3059,7 @@ function applyHostState(pr){
     const m=G.mons[pr.m[i]];if(!m||m.dead)continue;awake.add(m.id);
     m.tx=pr.m[i+1];m.ty=pr.m[i+2];m.hp=pr.m[i+3];
     const s=pr.m[i+4];if(s===2&&m.s!==2)m.wStart=now();if(s===4&&m.s!==4&&m.def.rboss)bossDownFx(m);
-    m.s=s;m.ang=pr.m[i+5]/100;m.kind=pr.m[i+6];const sb=pr.m[i+7]|0;const tn2=now();if(sb&1)m.vBurn=tn2+0.5;if(sb&2)m.vSlow=tn2+0.5;if(sb&4)m.vPoi=tn2+0.5;m.vGuard=(sb&8)?tn2+0.3:0;
+    m.s=s;m.ang=pr.m[i+5]/100;m.kind=pr.m[i+6];const sb=pr.m[i+7]|0;const tn2=now();if(sb&1)m.vBurn=tn2+0.5;if(sb&2)m.vSlow=tn2+0.5;if(sb&4)m.vPoi=tn2+0.5;m.vGuard=(sb&8)?tn2+0.3:0;if(sb&16)m.vStun=tn2+0.3;
   }
   for(const m of G.mons)if(!m.dead&&!awake.has(m.id)){m.tx=m.hx;m.ty=m.hy;m.s=0;m.hp=m.mhp}
 }
@@ -2916,7 +3070,7 @@ function processEv(e,Rm){
     G.fx.push({t:'sw',x,y,a,range,arc,life:ee>=0?0.3:0.18,max:ee>=0?0.3:0.18,col:'#f0e6d0',el:ee});if(ee>=0&&visAt(x,y)>0)elemSwing(x,y,a,range,arc,ee);Rm.swT=now();
     if(alive&&G.iframe<=0&&hostile(Rm.team,myTeam())){
       const d=Math.hypot(me.x-x,me.y-y);
-      if(d<=range+PR&&Math.abs(angDiff(Math.atan2(me.y-y,me.x-x),a))<=(arc/2)*Math.PI/180+Math.asin(Math.min(1,PR/Math.max(d,1)))){if(pvpHit(Rm)){takeHit(dmg,crit,Rm,fl);if(ee>=0)selfStatus(ee,dmg,Rm.name)}}
+      if(d<=range+PR&&Math.abs(angDiff(Math.atan2(me.y-y,me.x-x),a))<=(arc/2)*Math.PI/180+Math.asin(Math.min(1,PR/Math.max(d,1)))){if(pvpHit(Rm)){takeHit(dmg,crit,Rm,fl);if(fl&4)stunMe(0.35);if(ee>=0)selfStatus(ee,dmg,Rm.name)}}
     }
   }else if(ty==='sh'){
     const [,, ,x,y,a100,spd,range,dmg,crit,r,pierce,mon,fl,el]=e;
@@ -2927,9 +3081,15 @@ function processEv(e,Rm){
     const [,, ,x,y,a100,range,half100,dmg,mid]=e;const mm=G.mons[mid];
     G.fx.push({t:'breath',x,y,a:a100/100,range,br:mm&&mm.br||'255,120,40',life:0.6,max:0.6});applyMc(x,y,a100/100,range,half100/100,dmg);
   }else if(ty==='bm'){
-    const [,, ,x,y,rad,dmg]=e;boom(x,y,rad);applyMa(x,y,rad,dmg);
+    const [,, ,x,y,rad,dmg]=e;boom(x,y,rad);applyMa(x,y,rad,dmg);if(G.me.st==='alive'&&Math.hypot(G.me.x-x,G.me.y-y)<rad+PR)stunMe(0.4);
   }else if(ty==='ml'){
     const [,, ,x0,y0,x1,y1,w,dmg]=e;G.fx.push({t:'dash',x:x0,y:y0,x2:x1,y2:y1,life:0.35,max:0.35});applyMl(x0,y0,x1,y1,w,dmg);
+  }else if(ty==='st'){
+    if(G.isHost){const m=G.mons[e[3]];if(m&&!m.dead)m.stunT=Math.max(m.stunT||0,(m.def.rboss?Math.min(4,e[4]):e[4])/10)}
+  }else if(ty==='sm'){
+    if(G.isHost)dropAggro(Rm.peer);
+  }else if(ty==='pb'){
+    const [,, ,x,y,rad]=e;if(visAt(x,y)>0)boom(x,y,rad);
   }else if(ty==='tg'){
     const [,, ,x,y,rad,ms]=e;G.fx.push({t:'warn',x,y,r:rad,life:ms/1000,max:ms/1000});
   }else if(ty==='or'){
@@ -2993,6 +3153,7 @@ function rollDmg(targetLowHp){
   let v=base*mult+s.flat;let crit=Math.random()*100<s.crit;if(crit)v*=1+s.critd/100;
   let thunder=0;if(s.leg.thunder&&Math.random()<0.25)thunder=Math.round(base*mult*0.8);
   if(targetLowHp&&s.leg.exec)v*=1.6;
+  if(G.buffD>0)v*=1.25;
   return {v:Math.max(1,Math.round(v)),crit,thunder};
 }
 function assistAim(){
@@ -3001,10 +3162,65 @@ function assistAim(){
   let px=tg.x,py=tg.y;if(s.proj)for(let i=0;i<2;i++){const tt=Math.hypot(px-me.x,py-me.y)/s.proj.spd;px=tg.x+tg.vx*tt;py=tg.y+tg.vy*tt}
   G.aimA=Math.atan2(py-me.y,px-me.x);G.aimHold=0.28;me.a=G.aimA;G.autoTg=tg;G.leadPt=s.proj?[px,py]:null;
 }
+const HEAVYW=new Set(['axe','bonecleaver','thunderhammer','warhammer','reaper']);
+const SKILLS={
+  sword:{n:'旋風斬り',d:'周囲360°をまとめて斬る（威力×1.5）',cd:7},
+  axe:{n:'大地割り',d:'前方を大きく叩き割り、敵を1.2秒スタン（威力×2.2）',cd:9},
+  dagger:{n:'影走り',d:'前方へ素早く踏み込み、確定会心の一撃（威力×2）',cd:6},
+  spear:{n:'穿ち',d:'2倍の間合いで一直線に貫く（威力×2）',cd:7},
+  bow:{n:'五月雨',d:'扇状に5本の矢を放つ（1本あたり威力×0.8）',cd:8},
+  staff:{n:'魔力爆発',d:'自分の周りに魔力を炸裂させる（半径4.5マス・威力×1.6）',cd:9},
+};
+const skillOfBase=b=>b&&SKILLS[wclass(b.k)]||null;
+function stunMon(m,sec){if(!m||m.dead)return;if(m.def.rboss)sec=Math.min(sec,0.4);if(G.isHost){m.stunT=Math.max(m.stunT||0,sec)}else{m.vStun=now()+sec;pushEv('st',m.id,Math.round(sec*10))}}
+function stunMe(sec){if(!G||G.me.st!=='alive'||G.iframe>0)return;if(!(G.stunT>0))addText(G.me.x,G.me.y-34,'スタン','#ffe066');G.stunT=Math.max(G.stunT||0,sec)}
+function meleeHit(range,arc,mult,opt){
+  opt=opt||{};const s=G.stats,me=G.me,a=me.a;
+  const d=rollDmg(false);if(opt.crit&&!d.crit){d.crit=true;d.v=Math.round(d.v*(1+s.critd/100))}d.v=Math.round(d.v*mult);d.thunder=Math.round((d.thunder||0)*mult);
+  const fl=(s.leg.exec?1:0)|(opt.stun?4:0);
+  if(arc>=360)G.fx.push({t:'ring',x:me.x,y:me.y,r:range,life:0.35,max:0.35,col:opt.col||'#ffe6a0'});
+  else G.fx.push({t:'sw',x:me.x,y:me.y,a,range,arc,life:0.32,max:0.32,col:opt.col||'#fff2d6',el:s.el});
+  pushEv('sw',Math.round(me.x),Math.round(me.y),Math.round(a*100),Math.round(range),arc,d.v+d.thunder,d.crit?1:0,fl,s.el,s.ep);
+  for(const m of G.mons){
+    if(m.dead||disguised(m))continue;const dx=m.rx-me.x,dy=m.ry-me.y,dist=Math.hypot(dx,dy);
+    if(dist>range+m.def.r)continue;
+    if(arc<360&&Math.abs(angDiff(Math.atan2(dy,dx),a))>(arc/2)*Math.PI/180+Math.asin(Math.min(1,m.def.r/Math.max(dist,1))))continue;
+    if(!losClear(me.x,me.y,m.rx,m.ry))continue;
+    dealMonster(m,d,s.el,s.ep);if(opt.stun)stunMon(m,opt.stun);
+  }
+}
+function useSkill(){
+  if(!G||G.me.st!=='alive'||G.done||G.stunT>0||G.drinkT>0)return;
+  const s=G.stats,sk=skillOfBase(s.wb===FIST?null:s.wb);if(!sk){flashMsg('素手ではスキルを使えない');return}
+  if(G.skCd>0){flashMsg(sk.n+' はあと '+G.skCd.toFixed(1)+'秒');return}
+  assistAim();const me=G.me,a=me.a,c=wclass(s.wb.k);G.skCd=sk.cd;G.atkCd=Math.max(G.atkCd,0.35);
+  if(c==='sword'){meleeHit(s.range*1.15,360,1.5,{col:'#fff0b0'});sfx('swing');shake(2)}
+  else if(c==='axe'){meleeHit(s.range*1.4,100,2.2,{stun:1.2,col:'#ffb070'});boom(me.x+Math.cos(a)*s.range*0.7,me.y+Math.sin(a)*s.range*0.7,40);shake(5)}
+  else if(c==='dagger'){const x0=me.x,y0=me.y;for(let i=0;i<12;i++)moveCirc(me,Math.cos(a)*11,Math.sin(a)*11,PR);G.iframe=Math.max(G.iframe,0.3);G.fx.push({t:'dash',x:x0,y:y0,x2:me.x,y2:me.y,life:0.3,max:0.3});meleeHit(s.range*1.1,110,2,{crit:1,col:'#c9b0ff'});sfx('dodge')}
+  else if(c==='spear'){meleeHit(s.range*2,16,2,{col:'#bfe8ff'});G.fx.push({t:'dash',x:me.x,y:me.y,x2:me.x+Math.cos(a)*s.range*2,y2:me.y+Math.sin(a)*s.range*2,life:0.25,max:0.25});sfx('swing')}
+  else if(c==='bow'){const p=s.proj;for(let i=-2;i<=2;i++){const aa=a+i*0.13,d=rollDmg(false),v=Math.round((d.v+d.thunder)*0.8),x=me.x+Math.cos(aa)*14,y=me.y+Math.sin(aa)*14;spawnProj({x,y,a:aa,spd:p.spd,range:p.range,dmg:v,crit:d.crit,r:p.r,pierce:p.pierce?1:0,mon:false,owner:NET.peerId,team:myTeam(),mine:true,fl:0,el:s.el,ep:s.ep});pushEv('sh',Math.round(x),Math.round(y),Math.round(aa*100),p.spd,p.range,v,d.crit?1:0,p.r,p.pierce?1:0,0,0,s.el,s.ep)}sfx('bow')}
+  else if(c==='staff'){meleeHit(150,360,1.6,{col:'#b89cff'});boom(me.x,me.y,60);sfx('magic')}
+  addText(me.x,me.y-40,sk.n,'#ffe066',true);
+}
+function useCons(){
+  if(!G||G.me.st!=='alive'||G.done||G.stunT>0)return;
+  const c=G.cons;if(!c||!c.id||c.n<=0){flashMsg('消耗品スロットが空（ロビーの装備画面でセットする）');return}
+  const me=G.me,a=me.a,id=c.id;c.n--;
+  if(id==='bomb'){let x=me.x,y=me.y;for(let i=0;i<17;i++){const nx=x+Math.cos(a)*10,ny=y+Math.sin(a)*10;if(collides(nx,ny,6))break;x=nx;y=ny}
+    boom(x,y,90);pushEv('pb',Math.round(x),Math.round(y),90);
+    for(const m of G.mons){if(m.dead||disguised(m))continue;if(Math.hypot(m.rx-x,m.ry-y)<90+m.def.r){dealMonster(m,{v:70,crit:false,thunder:0,chain:true},-1,0);stunMon(m,0.8)}}}
+  else if(id==='smoke'){G.smokeT=6;G.sneak=true;G.fx.push({t:'ring',x:me.x,y:me.y,r:120,life:0.8,max:0.8,col:'rgba(200,200,210,.8)'});if(G.isHost)dropAggro(NET.peerId);else pushEv('sm');sfx('dodge')}
+  else if(id==='whet'){G.buffD=40;sfx('equip')}
+  else if(id==='ironpill'){G.buffA=25;sfx('equip')}
+  else if(id==='swift'){G.buffS=20;sfx('dodge')}
+  else if(id==='elixir'){G.sBurn=0;G.sSlow=0;G.sPoi=0;G.sPoiN=0;me.hp=Math.min(G.stats.mhp,me.hp+30);sfx('drink')}
+  flashMsg(CONS[id].n+' を使った（残り '+c.n+'）');renderHud();
+}
+function dropAggro(peer){for(const m of G.mons){if(m.dead||m.def.rboss||m.def.dragon)continue;if(m.tgt===peer&&(m.s===1||m.s===2)){m.s=3;m.retT=0;m.tgt=null}}}
 function attack(){
   const s=G.stats,me=G.me,a=me.a;
   G.atkCd=1/s.aspdF;G.swT=now();
-  const fl=s.leg.exec?1:0;
+  const fl=(s.leg.exec?1:0)|(HEAVYW.has(s.wb.k)?4:0);
   if(s.proj){
     const d=rollDmg(false);const x=me.x+Math.cos(a)*14,y=me.y+Math.sin(a)*14;
     const p=s.proj;
@@ -3057,7 +3273,7 @@ function deathFx(m){if(m.hitMe&&G){const tn=now();G.combo=(tn-(G.lastKill||0)<4)
 function takeHit(dmg,crit,Rm,fl,srcName){
   const me=G.me;if(me.st!=='alive'||G.done)return;
   let d=dmg;if(fl&1&&me.hp<=G.stats.mhp*0.35)d*=1.6;
-  d=Math.max(1,Math.round(d*(1-G.stats.red)));
+  d=Math.max(1,Math.round(d*(1-G.stats.red)*(G.buffA>0?0.75:1)));
   me.hp-=d;G.hurt=0.25;wearArmor(d);
   if(G.recallT>0){G.recallT=0;flashMsg('攻撃を受けて帰還が中断された')}
   addText(me.x,me.y-22,'-'+d,'#ff7a63',crit);
@@ -3112,14 +3328,16 @@ function applyMc(x,y,a,range,half,dmg){
 }
 function applyMa(x,y,rad,dmg,mid){
   const me=G.me;const mm=mid!=null?G.mons[mid]:null;
-  if(me.st==='alive'&&G.iframe<=0&&Math.hypot(me.x-x,me.y-y)<rad+PR)takeHit(dmg,false,null,0,mm?mm.name:'魔物');
+  if(me.st==='alive'&&G.iframe<=0&&Math.hypot(me.x-x,me.y-y)<rad+PR){takeHit(dmg,false,null,0,mm?mm.name:'魔物');if(mm){const st=mm.wpn==='hammer'?0.7:mm.def.rboss?(mm.kind===4?0.9:mm.kind===6?0.7:0):mm.def.boss?0.5:mm.k==='brute'?0.35:0;if(st)stunMe(st)}}
 }
 function monArea(m){
   const D=m.def,c=Math.cos(m.ang),s=Math.sin(m.ang);
   if(D.rboss)return m.kind===6?[m.lx||m.x,m.ly||m.y,120]:(m.kind===0||m.kind===7)?[m.x+c*80,m.y+s*80,95]:m.kind===1?[m.x,m.y,150]:m.kind===4?[m.x+c*105,m.y+s*105,125]:[m.x,m.y,330];
   if(D.dragon)return m.kind===0?[m.x+c*68,m.y+s*68,72]:m.kind===1?[m.x-c*50,m.y-s*50,110]:[m.x,m.y,320];
   if(D.boss)return m.kind===1?[m.x,m.y,125]:[m.x+c*70,m.y+s*70,82];
-  return [m.x+c*D.range*0.5,m.y+s*D.range*0.5,D.range*0.55];
+  const R0=D.range*(m.rm||1),big=(m.elite?1.2:1)*(m.am||1);
+  if(m.wpn==='spear')return [m.x+c*R0*0.62,m.y+s*R0*0.62,R0*0.36];
+  return [m.x+c*R0*0.5,m.y+s*R0*0.5,Math.max(R0*0.55,D.r*1.5)*big];
 }
 function monAttack(m){
   const D=m.def,dmg=Math.round(D.dmg*m.dm);
@@ -3220,10 +3438,11 @@ function statusTick(m,dt){
 }
 function simMons(dt){
   const pls=[];
-  if(G.me.st==='alive'&&!G.done)pls.push({x:G.me.x,y:G.me.y,peer:NET.peerId,sn:G.sneak});
-  for(const Rm of G.remote.values()){const p=Rm.pres;if(p&&p.st==='alive')pls.push({x:Rm.x,y:Rm.y,peer:Rm.peer,sn:!!p.sn})}
+  if(G.me.st==='alive'&&!G.done&&!(G.smokeT>0))pls.push({x:G.me.x,y:G.me.y,peer:NET.peerId,sn:G.sneak});
+  for(const Rm of G.remote.values()){const p=Rm.pres;if(p&&p.st==='alive'&&!p.smk)pls.push({x:Rm.x,y:Rm.y,peer:Rm.peer,sn:!!p.sn})}
   for(const m of G.mons){
     if(m.dead)continue;const D=m.def;m.cd-=dt;statusTick(m,dt);if(m.dead)continue;
+    if(m.stunT>0){m.stunT-=dt;if(m.s===2)m.s=1;continue}
     let tg=null,td=1e9;for(const p of pls){const d=Math.hypot(p.x-m.x,p.y-m.y);if(d<td){td=d;tg=p}}
     if(D.rboss){rbossAI(m,dt,pls,tg,td);continue}
     if(m.s===0){
@@ -3253,12 +3472,18 @@ function simMons(dt){
         if((m.k==='archer'||m.k==='caster'||m.k==='shaman')&&m.gcd<=0&&d<115){m.bsT=0.28;m.gcd=2.8+Math.random()*2;continue}
         if(m.stalkT>0){m.stalkT-=dt;const a2=Math.atan2(dy,dx)+Math.PI/2*(m.sdir||1),sp2=D.spd*0.6*(m.slowT>0?0.6:1),aw=d<95?-0.7:d>150?0.5:0;moveCirc(m,(Math.cos(a2)+dx/d*aw)*sp2*dt,(Math.sin(a2)+dy/d*aw)*sp2*dt,D.r);continue}
         if(m.awayT>0){m.awayT-=dt;if(d<240){const sp2=D.spd*0.45;moveCirc(m,-dx/d*sp2*dt,-dy/d*sp2*dt,D.r)}continue}
-        const reach=D.ranged||D.charge?D.range:D.range+PR*0.6;
-        if(d<=reach&&m.cd<=0&&los){m.s=2;m.wt=D.wind;m.wStart=now();m.kind=D.boss?(((m.cnt=(m.cnt||0)+1)%3===0)?1:0):0}
+        const reach=(D.ranged||D.charge?D.range:D.range+PR*0.6)*(m.rm||1);
+        if(d<=reach&&m.cd<=0&&los){m.s=2;m.wt=D.wind*(m.wpn==='hammer'?1.3:1);m.wStart=now();m.kind=D.boss?(((m.cnt=(m.cnt||0)+1)%3===0)?1:0):0}
         else{
           let sp=D.spd*(m.spm||1)*(m.slowT>0?0.6:1),mx=dx/d,my=dy/d;
-          if(D.ranged&&d<D.keep){mx=-mx;my=-my;sp*=0.7}else if(D.ranged&&d<D.range*0.85&&los)sp=0;
-          if(!D.ranged&&!D.charge&&d<D.range*0.6)sp=0;
+          const sd=((m.id%2)?1:-1)*(Math.sin(now()*0.6+m.id*1.7)>0?1:-1);
+          if(D.ranged&&d<D.keep){mx=-mx;my=-my;sp*=0.7}
+          else if(D.ranged&&d<D.range*0.85&&los){mx=-dy/d*sd;my=dx/d*sd;sp*=0.45}          // archers & casters sidestep while waiting
+          else if(m.wpn==='spear'&&d<reach*0.6){mx=-dx/d;my=-dy/d;sp*=0.55}                  // spearmen keep their reach
+          else if(m.wpn==='spear'&&d<reach*0.98&&m.cd>0){mx=-dy/d*sd;my=dx/d*sd;sp*=0.4}
+          else if(!D.ranged&&!D.charge&&d<reach*1.3&&m.cd>0.25){mx=-dy/d*sd+(d<reach*0.7?-dx/d*0.5:0);my=dx/d*sd+(d<reach*0.7?-dy/d*0.5:0);sp*=0.5}   // circle while the attack recovers
+          else if(!D.ranged&&!D.charge&&d>reach*1.3&&d<420){const off=((m.id%3)-1)*0.6*Math.min(1,(d-reach)/220),aa=Math.atan2(dy,dx)+off;mx=Math.cos(aa);my=Math.sin(aa)}  // fan out to surround
+          if(!D.ranged&&!D.charge&&m.wpn!=='spear'&&d<D.range*0.6&&m.cd<=0)sp=0;
           if(sp)moveCirc(m,mx*sp*dt,my*sp*dt,D.r);
         }
       }else{m.wt-=dt;if(m.wt<=0){monAttack(m);m.s=1;m.cd=D.cd;if(m.dead)continue;if(m.k==='ghoul'){m.bsT=0.2;m.stalkT=0.6+Math.random()*0.9;m.sdir=Math.random()<0.5?-1:1}else if(m.k==='charger'){m.awayT=1.4}}}
@@ -3322,6 +3547,7 @@ function chestLoot(c){
   const n=c.boss?R.i(r,3,5):R.i(r,1,1+c.tier+((c.dg||0)>0.7?1:0));
   for(let i=0;i<n;i++){const l=clamp(1+Math.round((c.dg||0)*8)+R.i(r,0,1)+(c.boss?1:0)+DIFF[G.diff||0].lv,1,13);out.push({key:key+'.'+i,it:genItem(r,l,null,c.boss&&i<2?{minR:i===0?3:2}:{})})}
   if(r()<0.35)out.push({key:key+'.p',pot:1});
+  if(r()<0.14)out.push({key:key+'.cn',cn:CONS_IDS[Math.floor(r()*CONS_IDS.length)],n:1});
   out.push({key:key+'.g',gold:Math.round(R.i(r,3,11)*c.tier*(c.boss?4:1))});
   if(r()<0.05+(c.boss?0.5:0))out.push({key:key+'.xgem',mat:'gem',n:c.boss?2:1});
   if((c.dg||0)>0.7&&r()<(c.boss?0.25:0.02)*(1+0.6*(G.diff||0)))out.push({key:key+'.rk',rkey:keyRoll(r,G.diff||0)});
@@ -3376,6 +3602,7 @@ function takeLoot(e){
   if(G.taken.has(e.key))return false;
   if(e.rkey){const K=RK(e.rkey);G.keys[e.rkey]=(G.keys[e.rkey]||0)+1;banner('ボスレイドの鍵！',K.n+' '+'★'.repeat(K.star)+' · '+K.b.n,'#ffd36b');sfx('fanfare');shake(4);addFeed('★ '+K.n+'を手に入れた（脱出すれば使える）')}
   else if(e.mat){G.mats[e.mat]=(G.mats[e.mat]||0)+e.n;addText(G.me.x,G.me.y-26,MATS[e.mat].n+' +'+e.n,RAR[MATS[e.mat].r].hex);sfx('loot')}
+  else if(e.cn){if(G.cons&&G.cons.id===e.cn&&G.cons.n<5)G.cons.n++;else if(!G.cons||!G.cons.id||G.cons.n<=0)G.cons={id:e.cn,n:1};else G.consX[e.cn]=(G.consX[e.cn]||0)+1;sfx('loot');addFeed(CONS[e.cn].n+' を拾った')}
   else if(e.cos){const c=COS[COSI[e.cos]];const fresh=grantCos(e.cos);if(!fresh)G.gold+=600;persist();addFeed('★ 衣装「'+c.n+'」を手に入れた'+(fresh?'（死んでも消えない）':'（所持済みのため金貨600G）'));sfx('rare')}
   else if(e.gold){const g=Math.round(e.gold*(1+G.stats.luck/100));G.gold+=g;addText(G.me.x,G.me.y-26,'+'+g+'G','#e4b450');sfx('coin')}
   else if(e.pot){if(G.potions>=9){flashMsg('回復薬はこれ以上持てません');return false}G.potions=Math.min(9,G.potions+e.pot);sfx('loot')}
@@ -3424,6 +3651,7 @@ function renderLoot(){
     let b;
     if(e.rkey){const K=RK(e.rkey);b=document.createElement('button');b.type='button';b.className='it';b.dataset.r=Math.min(4,K.star-1);b.innerHTML='<span class="g">鍵</span><span class="lv">★'+K.star+'</span>';b.title=K.n+'（ボスレイド：'+K.b.n+'）';b.onclick=()=>{takeLoot(e);renderLoot()}}
     else if(e.mat){b=document.createElement('button');b.type='button';b.className='it';b.dataset.r=MATS[e.mat].r;b.innerHTML='<span class="g">'+MATS[e.mat].g+'</span><span class="lv">×'+e.n+'</span>';b.title=MATS[e.mat].n+' ×'+e.n+'（素材ポーチへ）';b.onclick=()=>{takeLoot(e);renderLoot()}}
+    else if(e.cn){b=document.createElement('button');b.type='button';b.className='it';b.dataset.r=1;b.innerHTML='<span class="g">'+CONS[e.cn].g+'</span><span class="lv">×'+e.n+'</span>';b.title=CONS[e.cn].n+'：'+CONS[e.cn].d;b.onclick=()=>{takeLoot(e);renderLoot()}}
     else if(e.cos){b=document.createElement('button');b.type='button';b.className='it';b.dataset.r=4;b.innerHTML='<span class="g">竜</span><span class="lv">衣</span>';b.title='衣装「'+COS[COSI[e.cos]].n+'」（拾うと永久に手に入る）';b.onclick=()=>{takeLoot(e);renderLoot()}}
     else if(e.gold||e.pot){b=document.createElement('button');b.type='button';b.className='it '+(e.gold?'gold':'pot');b.innerHTML='<span class="g">'+(e.gold?'金':'薬')+'</span><span class="lv">'+(e.gold?e.gold:e.pot)+'</span>';b.title=e.gold?'金貨 '+e.gold:'回復薬';b.onclick=()=>{takeLoot(e);renderLoot()}}
     else b=tile(lootItem(e),{drag:{c:'R',where:'loot',e},sel:i===G.loot.sel,onClick:()=>{G.loot.sel=i;renderLoot()}});
@@ -3486,7 +3714,7 @@ function renderInv(){
   }else if(sel&&sel.where==='equip'){right.innerHTML='<p class="hint">'+SLOTN[sel.slot]+'は空いています。</p>'}
   else{
     const S=G.stats;
-    right.innerHTML='<dl class="stats"><dt>最大HP</dt><dd>'+S.mhp+'</dd><dt>防御</dt><dd>'+S.arm+'（-'+Math.round(S.red*100)+'%）</dd><dt>武器</dt><dd>'+esc(S.wb.n)+' '+S.dmin+'–'+S.dmax+'</dd><dt>攻撃速度</dt><dd>'+S.aspdF.toFixed(2)+'/秒</dd><dt>会心</dt><dd>'+S.crit+'%</dd><dt>移動速度</dt><dd>'+Math.round(S.speed/1.5)+'%</dd></dl><p class="hint" style="margin-top:10px">アイテムを選ぶと詳細と操作が出ます。持ち物を開いていても敵は待ってくれません。</p>';
+    right.innerHTML='<dl class="stats"><dt>最大HP</dt><dd>'+S.mhp+'</dd><dt>防御</dt><dd>'+S.arm+'（-'+Math.round(S.red*100)+'%）</dd><dt>武器</dt><dd>'+esc(S.wb.n)+' '+S.dmin+'–'+S.dmax+'</dd><dt>攻撃速度</dt><dd>'+S.aspdF.toFixed(2)+'/秒</dd>'+(S.proj?'<dt>射程</dt><dd>'+(S.proj.range/TS).toFixed(1)+'マス</dd>':'<dt>間合い</dt><dd>'+(S.range/TS).toFixed(1)+'マス · '+S.arc+'°</dd>')+'<dt>会心</dt><dd>'+S.crit+'%</dd><dt>移動速度</dt><dd>'+Math.round(S.speed/1.5)+'%</dd></dl><p class="hint" style="margin-top:10px">アイテムを選ぶと詳細と操作が出ます。持ち物を開いていても敵は待ってくれません。</p>';
   }
   if(sel&&sel.where==='equip'){
     const slot=sel.slot,cands=[];
@@ -3538,7 +3766,7 @@ function extract(){
   let val=G.gold;const brought=[];
   for(const s of SLOTS)if(G.equip[s]){val+=value(G.equip[s])}
   for(const it of G.bag.concat(G.recovered)){brought.push(it);val+=value(it)}
-  SAVE.equip=G.equip;SAVE.stash.push(...G.bag,...G.recovered);SAVE.gold+=G.gold;SAVE.potions+=G.potions;SAVE.scrolls=(SAVE.scrolls||0)+G.scrolls;
+  SAVE.equip=G.equip;SAVE.stash.push(...G.bag,...G.recovered);SAVE.gold+=G.gold;SAVE.potions+=G.potions;if(G.cons&&G.cons.id&&G.cons.n>0)SAVE.cons[G.cons.id]=(SAVE.cons[G.cons.id]||0)+G.cons.n;if(G.consX)for(const k in G.consX)SAVE.cons[k]=(SAVE.cons[k]||0)+G.consX[k];SAVE.scrolls=(SAVE.scrolls||0)+G.scrolls;
   if(!SAVE.keys)SAVE.keys={};for(const id in G.keys)SAVE.keys[id]=(SAVE.keys[id]||0)+G.keys[id];
   let matN=0;for(const id in G.mats){SAVE.mats[id]=(SAVE.mats[id]||0)+G.mats[id];matN+=G.mats[id]}
   SAVE.st.ext++;SAVE.st.kills+=G.kills;SAVE.st.best=Math.max(SAVE.st.best||0,val);SAVE.inRaid=null;persist();
@@ -3562,7 +3790,7 @@ function bossWin(){
   for(const k in mats)if(!(mats[k]>0))delete mats[k];
   const gold=Math.round(150*st*(0.8+r()*0.4)*(wasSpec?0.6:1));
   let cos=null;if(r()<0.08*st){const pool=['a_victor','c_abyss'];cos=pool[R.i(r,0,1)];if(!grantCos(cos)){SAVE.gold+=800;cos=null}}
-  SAVE.equip=G.equip;SAVE.stash.push(...G.bag,...rewards);SAVE.gold+=G.gold+gold;SAVE.potions+=G.potions;SAVE.scrolls=(SAVE.scrolls||0)+G.scrolls;
+  SAVE.equip=G.equip;SAVE.stash.push(...G.bag,...rewards);SAVE.gold+=G.gold+gold;SAVE.potions+=G.potions;if(G.cons&&G.cons.id&&G.cons.n>0)SAVE.cons[G.cons.id]=(SAVE.cons[G.cons.id]||0)+G.cons.n;if(G.consX)for(const k in G.consX)SAVE.cons[k]=(SAVE.cons[k]||0)+G.consX[k];SAVE.scrolls=(SAVE.scrolls||0)+G.scrolls;
   for(const id in G.mats)SAVE.mats[id]=(SAVE.mats[id]||0)+G.mats[id];for(const id in mats)SAVE.mats[id]=(SAVE.mats[id]||0)+mats[id];
   SAVE.st.raidWins=(SAVE.st.raidWins||0)+1;SAVE.inRaid=null;addXp(500*st);unlockAch('raid1');if(st===5)unlockAch('rk5');persist();sendPresence();
   banner('討伐成功！',K.b.n+'を倒した','#ffd36b');sfx('fanfare');shake(8);
@@ -3629,12 +3857,15 @@ function update(dt){
     else me.a=Math.atan2(wy-me.y,wx-me.x);
     if(G.aimHold>0){G.aimHold-=dt;me.a=G.aimA}else{G.leadPt=null;G.autoTg=null}
     selfStatusTick(dt);
-    let sp=s.speed*(G.sneak?0.55:1)*(G.potT>0?0.6:1)*(G.sSlow>0?0.65:1);
+    for(const k of ['skCd','buffD','buffA','buffS','smokeT','stunT'])if(G[k]>0)G[k]-=dt;
+    if(G.smokeT<=0&&G.smokeOn){G.smokeOn=false}if(G.smokeT>0)G.smokeOn=true;
+    if(G.drinkT>0){G.drinkT-=dt;if(G.drinkT<=0){G.potT=2.5;flashMsg('回復中…（少し足が遅くなる）')}}
+    let sp=s.speed*(G.sneak?0.55:1)*(G.drinkT>0?0.45:G.potT>0?0.72:1)*(G.sSlow>0?0.65:1)*(G.buffS>0?1.25:1)*(G.stunT>0?0:1);
     if(G.dodgeT>0){moveCirc(me,G.dodgeDir[0]*s.speed*2.9*dt,G.dodgeDir[1]*s.speed*2.9*dt,PR)}
     else moveCirc(me,mx*sp*dt,my*sp*dt,PR);
     G.moving=ml>0.1;if(G.moving)G.walkPh=(G.walkPh||0)+dt*sp/11;
-    if(G.wantDodge){G.wantDodge=false;if(G.dodgeCd<=0){const back=TOUCH.active?-1:1;const l=ml>0.1?[mx,my]:[Math.cos(me.a)*back,Math.sin(me.a)*back];G.dodgeDir=l;G.dodgeT=0.22;G.iframe=0.26;G.dodgeCd=s.dodgeCd;sfx('dodge')}}
-    if((MOUSE.down||KEYS.has('KeyJ')||TOUCH.atk)&&G.atkCd<=0&&!G.inv&&G.dodgeT<=0){assistAim();attack()}
+    if(G.wantDodge){G.wantDodge=false;if(G.dodgeCd<=0&&!(G.stunT>0)){const back=TOUCH.active?-1:1;const l=ml>0.1?[mx,my]:[Math.cos(me.a)*back,Math.sin(me.a)*back];G.dodgeDir=l;G.dodgeT=0.22;G.iframe=0.26;G.dodgeCd=s.dodgeCd;sfx('dodge')}}
+    if((MOUSE.down||KEYS.has('KeyJ')||TOUCH.atk)&&G.atkCd<=0&&!G.inv&&G.dodgeT<=0&&!(G.stunT>0)&&!(G.drinkT>0)){assistAim();attack()}
     if(G.potT>0){G.potT-=dt;me.hp=Math.min(s.mhp,me.hp+18*dt)}
     if(s.regen)me.hp=Math.min(s.mhp,me.hp+s.regen*dt);
     // extract
@@ -3789,6 +4020,14 @@ const COS=[
   {id:'c_wings',s:'cape',n:'天使の翼',r:3,wing:'#f4f0e6'},
   {id:'a_ember',s:'aura',n:'残り火',r:1},{id:'a_leaf',s:'aura',n:'木の葉',r:1},{id:'a_frost',s:'aura',n:'霜',r:2},{id:'a_sakura',s:'aura',n:'桜吹雪',r:2},
   {id:'a_thunder',s:'aura',n:'雷',r:3},{id:'a_void',s:'aura',n:'深淵',r:3},
+  {id:'sk_bone',s:'skin',n:'白骨',r:0,c:['#d8d0b8']},{id:'sk_ash',s:'skin',n:'灰',r:0,c:['#5a5652']},
+  {id:'sk_ocean',s:'skin',n:'大海',r:1,c:['#2a6a9a','#bfe8ff'],pat:'stripes'},{id:'sk_moon',s:'skin',n:'月光',r:1,c:['#c8d0ff','#ffffff'],pat:'shine'},{id:'sk_forest',s:'skin',n:'迷彩',r:1,c:['#3f6a32','#9fd06a'],pat:'spots'},
+  {id:'sk_royal',s:'skin',n:'王紫',r:2,c:['#5a1a8a','#e4b450'],pat:'split'},{id:'sk_magma',s:'skin',n:'灼熱',r:2,c:['#2a1410','#ffb02a'],pat:'lava'},
+  {id:'sk_nebula',s:'skin',n:'星雲',r:3,c:['#2a0a3a','#ff9ad8'],pat:'stars'},
+  {id:'h_tricorn',s:'hat',n:'海賊帽',r:1},{id:'h_wolf',s:'hat',n:'狼の頭巾',r:2},
+  {id:'c_teal',s:'cape',n:'青緑のマント',r:0,c:'#1f5a5a'},{id:'c_gold',s:'cape',n:'金糸の外套',r:1,c:'#7a5a1a',trim:'#f1d27a'},{id:'c_frost',s:'cape',n:'氷雪の外套',r:2,c:'#5a8ab8',trim:'#e8f6ff'},
+  {id:'c_bat',s:'cape',n:'蝙蝠の翼',r:3,wing:'#2a1a2a'},
+  {id:'a_bubble',s:'aura',n:'泡',r:1},{id:'a_firefly',s:'aura',n:'蛍火',r:2},
   {id:'c_dwing',s:'cape',n:'竜の翼',r:3,wing:'#8a2a24',drop:1},
   {id:'a_victor',s:'aura',n:'覇者の光',r:3,drop:1},
   {id:'sk_veteran',s:'skin',n:'歴戦の革',r:2,c:['#5a3e24','#c9993e'],pat:'stripes',drop:1,lv:15},{id:'h_plume',s:'hat',n:'勇者の羽根飾り',r:2,drop:1,lv:25},{id:'c_lvcape',s:'cape',n:'古参の外套',r:2,c:'#24345a',trim:'#c9d6e8',drop:1,lv:35},
@@ -3844,6 +4083,8 @@ function drawHat(c,a,tn){
     case 'h_cat':for(const sg of [-1,1]){T([[-2,sg*5],[-1,sg*13],[5,sg*7]],'#3a3230');T([[-1,sg*7],[-0.5,sg*11],[3,sg*8]],'#e89aa8')}break;
     case 'h_flower':for(let i=0;i<9;i++){const an=i/9*Math.PI*2;ctx.fillStyle=['#f2d36a','#e88aa0','#a9c8f2'][i%3];ctx.beginPath();ctx.arc(Math.cos(an)*9,Math.sin(an)*9,2.4,0,Math.PI*2);ctx.fill()}ctx.fillStyle='#4f8a3a';for(let i=0;i<9;i++){const an=(i+0.5)/9*Math.PI*2;ctx.fillRect(Math.cos(an)*9-1,Math.sin(an)*9-1,2,2)}break;
     case 'h_witch':ctx.fillStyle='#231a30';ctx.beginPath();ctx.arc(0,0,13,0,Math.PI*2);ctx.fill();T([[4,-6],[4,6],[-22,2+Math.sin(tn*3)*2]],'#2e2240');ctx.fillStyle='#b88cf0';ctx.fillRect(1,-6,2,12);break;
+    case 'h_tricorn':ctx.fillStyle='#1e1a1e';T([[-11,-11],[10,0],[-11,11]],'#1e1a1e');ctx.beginPath();ctx.arc(-2,0,8,0,Math.PI*2);ctx.fill();ctx.fillStyle='#e4b450';ctx.fillRect(-3,-1.2,8,2.4);ctx.fillStyle='#f2ede0';ctx.beginPath();ctx.arc(4,0,1.8,0,Math.PI*2);ctx.fill();break;
+    case 'h_wolf':ctx.fillStyle='#6a6e74';ctx.beginPath();ctx.arc(-2,0,11.5,Math.PI*0.4,Math.PI*1.6);ctx.fill();for(const sg of [-1,1])T([[-2,sg*6],[-4,sg*15],[3,sg*9]],'#6a6e74');ctx.fillStyle='#8a8e94';ctx.beginPath();ctx.ellipse(8,0,5,4,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1a1418';ctx.beginPath();ctx.arc(12,0,1.4,0,Math.PI*2);ctx.fill();break;
     case 'h_oni':for(const sg of [-1,1])T([[3,sg*4],[12,sg*8],[1,sg*9]],'#c8342a');break;
     case 'h_crown':ctx.fillStyle='#e4b450';for(let i=0;i<8;i++){const an=i/8*Math.PI*2;T([[Math.cos(an-0.3)*8,Math.sin(an-0.3)*8],[Math.cos(an)*12,Math.sin(an)*12],[Math.cos(an+0.3)*8,Math.sin(an+0.3)*8]],'#e4b450')}ctx.strokeStyle='#e4b450';ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#d6563f';ctx.beginPath();ctx.arc(8,0,1.8,0,Math.PI*2);ctx.fill();break;
     case 'h_plume':ctx.fillStyle='#8a8f96';ctx.beginPath();ctx.arc(0,0,9,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#e04a3a';ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(2,0);ctx.quadraticCurveTo(-8,-2+Math.sin(tn*4)*2,-20,3+Math.sin(tn*4)*3);ctx.stroke();ctx.strokeStyle='#ffd36b';ctx.lineWidth=1.5;ctx.stroke();break;
@@ -3864,13 +4105,15 @@ function drawAura(c,tn,seed){
     else if(c.id==='a_star'){const rr=17+Math.sin(tn+i)*2,x=Math.cos(an)*rr,y=Math.sin(an)*rr,b=0.5+0.5*Math.sin(tn*3+i);ctx.fillStyle='rgba(255,245,200,'+b+')';ctx.beginPath();for(let k=0;k<5;k++){const q=k*Math.PI*0.8;ctx.lineTo(x+Math.cos(q)*3,y+Math.sin(q)*3)}ctx.fill()}
     else if(c.id==='a_ancient'){const x=Math.cos(an*0.6)*20,y=Math.sin(an*0.6)*20;ctx.fillStyle='rgba(120,240,220,'+(0.5+0.5*Math.sin(tn*2+i))+')';ctx.font='8px DotGothic16, monospace';ctx.textAlign='center';ctx.fillText('ᚱᚨᚾᛟᛗᛁᛋᚲ'[i%10]||'ᚱ',x,y)}
     else if(c.id==='a_victor'){if(i<6){ctx.save();ctx.rotate(tn*0.5+i/6*Math.PI*2);const g=ctx.createLinearGradient(0,0,26,0);g.addColorStop(0,'rgba(255,220,120,.5)');g.addColorStop(1,'rgba(255,220,120,0)');ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(26,-3);ctx.lineTo(26,3);ctx.closePath();ctx.fill();ctx.restore()}}
+    else if(c.id==='a_bubble'){const rr=14+ph*14,x=Math.cos(an*0.5)*rr*0.8,y=10-ph*36;ctx.strokeStyle='rgba(170,220,255,'+(0.8*(1-ph))+')';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,1.5+ph*2.5,0,Math.PI*2);ctx.stroke()}
+    else if(c.id==='a_firefly'){const x=Math.cos(an*0.9+i)*(16+Math.sin(tn+i)*5),y=Math.sin(an*1.1+i)*(14+Math.cos(tn*1.3+i)*5),b=0.4+0.6*Math.max(0,Math.sin(tn*3+i*2));const g2=ctx.createRadialGradient(x,y,0,x,y,5);g2.addColorStop(0,'rgba(230,255,140,'+b+')');g2.addColorStop(1,'rgba(230,255,140,0)');ctx.fillStyle=g2;ctx.fillRect(x-5,y-5,10,10)}
     else if(c.id==='a_void'){ctx.fillStyle='rgba(120,60,180,'+(0.55*(1-ph))+')';const rr=22-ph*14;ctx.beginPath();ctx.arc(Math.cos(an-ph*3)*rr,Math.sin(an-ph*3)*rr,2.4,0,Math.PI*2);ctx.fill()}
   }
   if(c.id==='a_void'){const g=ctx.createRadialGradient(0,0,4,0,0,24);g.addColorStop(0,'rgba(70,20,110,.35)');g.addColorStop(1,'rgba(70,20,110,0)');ctx.fillStyle=g;ctx.fillRect(-24,-24,48,48)}
 }
 const HAIR=['#2a1e16','#5a3a1e','#c8a060','#7a2a1a','#d8d0c0','#1e2438'];
 const SKINTONE=['#e8c4a0','#d8a880','#b8865e','#8a5e3e'];
-const wclass=k=>({bonecleaver:'axe',wolfbow:'bow',spiritstaff:'staff',dragonblade:'sword',fangknife:'dagger',thornspear:'spear',frostbow:'bow',thunderhammer:'axe',ashstaff:'staff',shadowblade:'sword',heavycrossbow:'bow',reaper:'axe'}[k]||k);
+const wclass=k=>({bonecleaver:'axe',wolfbow:'bow',spiritstaff:'staff',dragonblade:'sword',fangknife:'dagger',thornspear:'spear',frostbow:'bow',thunderhammer:'axe',ashstaff:'staff',shadowblade:'sword',heavycrossbow:'bow',reaper:'axe',scimitar:'sword',warhammer:'axe',rapier:'spear',halberd:'spear',shortbow:'bow',wand:'staff'}[k]||k);
 function fillSkin(c,col,tn){
   if(!c){ctx.fillStyle=col;ctx.fillRect(-14,-14,28,28);return}
   const k=c.c;ctx.fillStyle=c.pat==='rainbow'?'hsl('+((tn*80)%360)+',75%,62%)':k[0];ctx.fillRect(-14,-14,28,28);
@@ -4174,11 +4417,14 @@ function drawMon(m){
   ctx.save();ctx.translate(x,y+(moving?Math.abs(w)*-1.5:0));ctx.rotate(m.ang);if(m.elite)ctx.scale(1.22,1.22);if(D.rboss)ctx.scale(1.35,1.35);
   const f=SPR[m.f]||SPR.skel;
   f(r,m.col,awake,w,p,tn,m);
+  if(m.wpn==='spear'){ctx.strokeStyle='#5a3e24';ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(-r*0.3,r*0.55);ctx.lineTo(r*2.6+p*r*0.6,r*0.55);ctx.stroke();ctx.fillStyle='#c4cad1';ctx.beginPath();ctx.moveTo(r*2.6+p*r*0.6+8,r*0.55);ctx.lineTo(r*2.6+p*r*0.6,r*0.55-3.5);ctx.lineTo(r*2.6+p*r*0.6,r*0.55+3.5);ctx.fill()}
+  else if(m.wpn==='hammer'){const hx=r*0.9-p*r*0.4,hy=r*0.75;ctx.strokeStyle='#4a3424';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(r*0.1,r*0.5);ctx.lineTo(hx,hy);ctx.stroke();ctx.fillStyle='#6f767e';ctx.strokeStyle='#120d09';ctx.lineWidth=1.5;ctx.fillRect(hx-5,hy-8,10,16);ctx.strokeRect(hx-5,hy-8,10,16)}
   if(m.flash>0){ctx.globalCompositeOperation='lighter';ctx.globalAlpha=0.6;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,r*1.05,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over'}
   ctx.restore();
   {const tn3=now();if((m.vBurn||0)>tn3||m.burn){for(let i=0;i<4;i++){const ph=(tn3*1.6+i/4+m.ph)%1;ctx.fillStyle='rgba(255,'+(110+ph*90|0)+',40,'+(1-ph)+')';ctx.beginPath();ctx.ellipse(x+Math.sin(i*2.3+tn3*3)*r*0.6,y-ph*r*1.6,3*(1-ph)+1.5,5*(1-ph)+2,0,0,Math.PI*2);ctx.fill()}}
    if((m.vSlow||0)>tn3||m.slowT>0){ctx.strokeStyle='rgba(160,225,255,.75)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,r+4,0,Math.PI*2);ctx.stroke();for(let i=0;i<5;i++){const a=i/5*Math.PI*2+tn3*0.5;ctx.fillStyle='rgba(220,245,255,.9)';ctx.fillRect(x+Math.cos(a)*(r+4)-1.5,y+Math.sin(a)*(r+4)-1.5,3,3)}}
    if((m.vPoi||0)>tn3||m.poiT>0){for(let i=0;i<3;i++){const ph=(tn3*0.9+i/3+m.ph)%1;ctx.strokeStyle='rgba(154,224,90,'+(1-ph)+')';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x+Math.cos(i*2.1)*r*0.5,y-r*0.3-ph*r,2+ph*3,0,Math.PI*2);ctx.stroke()}}}
+  if(m.stunT>0||(m.vStun||0)>tn){for(let i=0;i<3;i++){const an=tn*4+i*2.09;ctx.fillStyle='#ffe066';ctx.font='12px serif';ctx.textAlign='center';ctx.fillText('★',x+Math.cos(an)*r*0.8,y-r-6+Math.sin(an)*4)}}
   if(m.guardT>0||(m.vGuard||0)>tn){ctx.save();ctx.translate(x,y);ctx.rotate(m.ang);ctx.fillStyle='#6f767e';ctx.strokeStyle='#120d09';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(r*0.95,0,r*0.32,r*0.95,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.strokeStyle='#c4cad1';ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(r*0.95,0,r*0.18,r*0.7,0,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#e4b450';ctx.beginPath();ctx.arc(r*0.95+2,0,2.2,0,Math.PI*2);ctx.fill();ctx.restore()}
   if(m.hp<m.mhp){ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(x-r,y-r-12,r*2,3);ctx.fillStyle=D.boss?'#c79bff':'#d6563f';ctx.fillRect(x-r,y-r-12,r*2*clamp(m.hp/m.mhp,0,1),3)}
   if(m.elite&&!D.boss){ctx.font='11px DotGothic16, monospace';ctx.textAlign='center';ctx.fillStyle='#ffc870';ctx.fillText(m.name,x,y-r-18)}
@@ -4236,6 +4482,7 @@ function render(){
   }
   if(me.st==='alive'&&!G.done&&G.dodgeCd>0){const f=1-G.dodgeCd/G.stats.dodgeCd;ctx.strokeStyle='rgba(98,184,165,.75)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(me.x,me.y,PR+6,-Math.PI/2,-Math.PI/2+Math.PI*2*f);ctx.stroke()}
   if(me.st==='alive'&&!G.done)drawPlayer(me.x,me.y,me.a,colorOf(SAVE.name),G.stats.wb.k,G.equip.weapon?G.equip.weapon.r:0,G.dodgeT>0,G.iframe>0?0.7:1,null,null,true,cosIdx(),G.moving,{el:G.stats.el,eq:eqIdx(G.equip),sw:G.swT?clamp((now()-G.swT)/0.22,0,1)%1:0,ph:G.walkPh||0});
+  drawStunMe();
   // projectiles
   for(const p of G.proj){
     if(visAt(p.x,p.y)<=0)continue;
@@ -4372,14 +4619,16 @@ function renderMini(){
   if(G.grave&&lootList({type:'grave'}).length){g.fillStyle='#e4b450';g.font='14px DotGothic16, monospace';g.textAlign='center';g.fillText('★',G.grave.x/TS*sc,G.grave.y/TS*sc+5)}
   if(G.me.st==='alive')dot(G.me.x,G.me.y,'#ffffff',3);
 }
+function drawStunMe(){if(G&&G.stunT>0){const tn=now();for(let i=0;i<3;i++){const an=tn*5+i*2.09;ctx.fillStyle='#ffe066';ctx.font='12px serif';ctx.textAlign='center';ctx.fillText('★',G.me.x+Math.cos(an)*12,G.me.y-26+Math.sin(an)*4)}}}
 function renderHud(){
   const me=G.me,s=G.stats;
   const pct=clamp(me.hp/s.mhp,0,1);$('#hpFill').style.width=(pct*100)+'%';$('#hpText').textContent=Math.max(0,Math.ceil(me.hp))+' / '+s.mhp;
-  $('#hPot').textContent=G.potions+(G.potT>0?' 回復中':'');
+  $('#hPot').textContent=G.potions+(G.drinkT>0?' 飲んでいる…':G.potT>0?' 回復中':'');
+  {const sk=skillOfBase(G.stats.wb===FIST?null:G.stats.wb);$('#hSkill').textContent=sk?sk.n+' '+(G.skCd>0?G.skCd.toFixed(1)+'秒':'OK'):'なし';const c=G.cons;$('#hCons').textContent=c&&c.id?CONS[c.id].n+'×'+c.n:'なし';if(TOUCH.skBtn){TOUCH.skBtn.textContent=G.skCd>0?G.skCd.toFixed(1):'技';TOUCH.skBtn.style.opacity=G.skCd>0?0.5:1}if(TOUCH.itBtn){TOUCH.itBtn.textContent=c&&c.id&&c.n>0?CONS[c.id].g+c.n:'道具';TOUCH.itBtn.style.opacity=c&&c.n>0?1:0.5}}
   $('#hDodge').textContent=G.dodgeCd>0?G.dodgeCd.toFixed(1)+'秒':'OK';
   $('#hGold').textContent=G.gold+'G';$('#hScroll').textContent=G.scrolls;
   if(TOUCH.dodgeBtn){TOUCH.dodgeBtn.textContent=G.dodgeCd>0?G.dodgeCd.toFixed(1):'回避';TOUCH.dodgeBtn.style.opacity=G.dodgeCd>0?0.5:1}$('#hKills').textContent=G.kills;
-  $('#hSneak').textContent=(G.mode==='boss'?' · 残機 '+'♥'.repeat(Math.max(0,BOSS_LIVES-G.deaths))+'♡'.repeat(Math.min(BOSS_LIVES,G.deaths)):'')+(G.sneak?'· 忍び足':'')+(G.sBurn>0?' · 燃焼':'')+(G.sSlow>0?' · 凍結':'')+(G.sPoi>0?' · 猛毒×'+G.sPoiN:'');
+  $('#hSneak').textContent=(G.stunT>0?' · スタン':'')+(G.buffD>0?' · 砥石'+Math.ceil(G.buffD)+'秒':'')+(G.buffA>0?' · 鉄壁'+Math.ceil(G.buffA)+'秒':'')+(G.buffS>0?' · 俊足'+Math.ceil(G.buffS)+'秒':'')+(G.smokeT>0?' · 煙'+Math.ceil(G.smokeT)+'秒':'')+(G.mode==='boss'?' · 残機 '+'♥'.repeat(Math.max(0,BOSS_LIVES-G.deaths))+'♡'.repeat(Math.min(BOSS_LIVES,G.deaths)):'')+(G.sneak?'· 忍び足':'')+(G.sBurn>0?' · 燃焼':'')+(G.sSlow>0?' · 凍結':'')+(G.sPoi>0?' · 猛毒×'+G.sPoiN:'');
   {const pb=$('#pvpBtn');const n=G.truce.size;pb.textContent=(SAVE.pvpOff?'PvP オフ':'PvP オン')+(n?' · 攻撃しない'+n+'人':'');pb.classList.toggle('on',!SAVE.pvpOff);if(G.pvpOpen)renderPvp()}
   const ab=$('#assistBtn');ab.hidden=false;ab.textContent='攻撃アシスト '+(G.assist?'ON':'OFF')+(TOUCH.active?'':'（R）');ab.classList.toggle('on',!!G.assist);if(TOUCH.aimBtn){TOUCH.aimBtn.textContent=G.assist?'狙 ON':'狙 OFF';TOUCH.aimBtn.style.borderColor=G.assist?'#e4b450':'rgba(255,255,255,.25)'}
   if(G.mode==='boss')$('#hDanger').textContent='';else{const dg=clamp(1-Math.hypot(me.x/TS-MW/2,me.y/TS-MH/2)/(MW*0.5),0,1),lv=1+Math.min(4,Math.floor(dg*5));
@@ -4428,7 +4677,8 @@ window.addEventListener('keydown',e=>{
   if(k==='Space'||k==='ShiftLeft'||k==='ShiftRight')G.wantDodge=true;
   else if(k==='KeyQ')drink();
   else if(k==='KeyE'){if(G.loot){G.loot=null;renderLoot()}else if(G.target){G.inv=false;renderInv();openLoot(G.target)}}
-  else if(k==='KeyF'){if(G.loot)lootAll()}
+  else if(k==='KeyF'){if(G.loot)lootAll();else useSkill()}
+  else if(k==='KeyG'){useCons()}
   else if(k==='Tab'||k==='KeyI'){G.inv=!G.inv;if(G.inv){G.loot=null;renderLoot()}renderInv()}
   else if(k==='KeyC'){G.sneak=!G.sneak}
   else if(k==='KeyR'){toggleAssist()}
@@ -4469,7 +4719,7 @@ function roar(dm,wake){
   sfx('roar',clamp(1.2-d/2400,0.25,1));shake(clamp(9-d/250,1.5,9));
 }
 function useScroll(){if(!G||G.me.st!=='alive'||G.done)return;if(G.mode==='boss'){flashMsg('ボスレイドでは巻物は使えない');return}if(G.recallT>0)return;if(G.scrolls<=0){flashMsg('帰還の巻物がない（工房で作れる）');return}G.scrolls--;G.recallT=10;sfx('magic');flashMsg('帰還の巻物を読んだ。10秒その場で待つ')}
-function drink(){if(G.potions>0&&G.potT<=0&&G.me.hp<G.stats.mhp){G.potions--;G.potT=2.5;sfx('drink')}else if(!G.potions)flashMsg('回復薬がない')}
+function drink(){if(G.drinkT>0||G.potT>0)return;if(G.potions>0&&G.me.hp<G.stats.mhp){G.potions--;G.drinkT=1.0;sfx('drink');flashMsg('回復薬を飲んでいる…')}else if(!G.potions)flashMsg('回復薬がない')}
 cv.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;if(e.pointerType==='mouse')TOUCH.active=false;const r=cv.getBoundingClientRect();MOUSE.x=e.clientX-r.left;MOUSE.y=e.clientY-r.top});
 cv.addEventListener('pointerdown',e=>{if(e.pointerType==='touch')return;const r=cv.getBoundingClientRect();MOUSE.x=e.clientX-r.left;MOUSE.y=e.clientY-r.top;if(e.button===0)MOUSE.down=true;if(e.button===2&&G)G.wantDodge=true;cv.focus();audioInit()});
 window.addEventListener('pointerup',e=>{if(e.button===0)MOUSE.down=false});
@@ -4496,7 +4746,8 @@ function setupTouch(){
   TOUCH.aimBtn=mk('狙',{right:'24px',bottom:'200px',width:'54px',height:'54px'},v=>{if(v)toggleAssist()});
   TOUCH.dodgeBtn=el.children[1];
   mk('持物',{right:'190px',bottom:'40px',width:'54px',height:'54px'},v=>{if(v&&G){G.inv=!G.inv;if(G.inv){G.loot=null;renderLoot()}renderInv()}});
-  {const c=el.children;TOUCH.btns={atk:c[0],dodge:c[1],heal:c[2],look:c[3],back:c[4],aim:c[5],bag:c[6]};layoutTouch();addEventListener('resize',layoutTouch);$('.hud-tl').appendChild($('#feed'))}
+  TOUCH.skBtn=mk('技',{},v=>{if(v)useSkill()});TOUCH.itBtn=mk('道具',{},v=>{if(v)useCons()});
+  {const c=el.children;TOUCH.btns={atk:c[0],dodge:c[1],heal:c[2],look:c[3],back:c[4],aim:c[5],bag:c[6],skill:c[7],item:c[8]};layoutTouch();addEventListener('resize',layoutTouch);$('.hud-tl').appendChild($('#feed'))}
   cv.addEventListener('touchstart',ev=>{ev.preventDefault();audioInit();TOUCH.active=true;
     for(const t of ev.changedTouches){if(!TOUCH.stick&&t.clientX<window.innerWidth*0.6)TOUCH.stick={id:t.identifier,x:t.clientX,y:t.clientY,cx:t.clientX,cy:t.clientY}}},{passive:false});
   cv.addEventListener('touchmove',ev=>{ev.preventDefault();const st=TOUCH.stick;if(!st)return;
@@ -4782,7 +5033,7 @@ document.addEventListener('click',e=>{
   audioInit();sfx(el.closest('#tabnav,#tabbar')?'tab':'tap');
 },true);
 /* touch pad layout scales with the screen */
-const TLAY={atk:[1.05,1.05,1.45],dodge:[2.55,0.78,1.0],heal:[1.0,2.62,0.86],look:[2.42,2.12,1.0],back:[3.62,1.72,0.8],aim:[3.68,0.68,0.8],bag:[3.42,2.78,0.8]};
+const TLAY={skill:[2.0,3.3,0.95],item:[0.95,3.72,0.78],atk:[1.05,1.05,1.45],dodge:[2.55,0.78,1.0],heal:[1.0,2.62,0.86],look:[2.42,2.12,1.0],back:[3.62,1.72,0.8],aim:[3.68,0.68,0.8],bag:[3.42,2.78,0.8]};
 function layoutTouch(){
   if(!TOUCH.btns)return;const u=clamp(Math.min(innerWidth,innerHeight)/6.6,44,70);
   for(const k in TOUCH.btns){const b=TOUCH.btns[k],[cx,cy,sz]=TLAY[k],d=Math.round(sz*u);
