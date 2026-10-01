@@ -2829,7 +2829,7 @@ function netTick(){
   const wasHost=G.isHost;
   G.isHost=host.peer===NET.peerId;G.hostPeer=host.peer;
   if(!G.isHost){const H=G.remote.get(host.peer);if(H&&H.pres&&H.pres!==G.lastHostPres){G.lastHostPres=H.pres;applyHostState(H.pres)}}
-  else if(!wasHost){for(const m of G.mons){m.x=m.rx;m.y=m.ry}}
+  else if(!wasHost){for(const m of G.mons){if(m.dead)continue;m.x=m.rx;m.y=m.ry;if(m.s===2&&!(m.wt>0))m.wt=0.3;if((m.s===4||m.s===5)&&!(m.stT>0))m.stT=1;if(!(m.cd<=3))m.cd=0.5;if(m.def&&m.def.rboss){if(!(m.heavyT>0))m.heavyT=6;if(!(m.dashT>0))m.dashT=4}}}
 }
 function applyHostState(pr){
   if(!Array.isArray(pr.m))return;
