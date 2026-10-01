@@ -327,6 +327,8 @@ details.rules ul b{color:var(--fg);font-weight:400}
 .liverow .who{flex:1;min-width:0;font-size:13px}.liverow .who b{font-family:var(--fd);font-weight:400;font-size:15px;color:#9fe8c8;margin-right:6px}
 .liverow .btn{white-space:nowrap}
 .mc-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+#updBar{position:fixed;left:50%;top:calc(8px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:90;background:rgba(40,28,8,.92);border:1px solid #c99a3e;color:#ffe9a8;border-radius:8px;padding:5px 12px;font-size:12px;pointer-events:none}#updBar[hidden]{display:none}
+.chip.oldv{border-color:#e0644c!important;color:#ffb0a0}
 .livechip.join{color:#ffe9a8;border-color:#c99a3e;background:rgba(40,28,8,.8)}
 .livechip{font-size:11px;padding:1px 8px;border-radius:10px;color:#9fe8c8;border:1px solid #3f9a7e;background:rgba(8,20,16,.7)}
 .dopt{position:relative;border:2px solid var(--line);border-radius:8px;background:var(--panel2);padding:10px;text-align:left;display:grid;gap:3px}
@@ -419,6 +421,11 @@ body.touchui .hud-br{display:none}body.touchui .hud-bl{top:calc(140px + env(safe
 #mini{width:168px;height:168px;border:1px solid var(--line);background:rgba(8,7,6,.75);image-rendering:pixelated}
 #hExits{list-style:none;margin:0;padding:0;font-size:12px;text-align:right;color:var(--acc)}
 .hud-bl{left:calc(14px + env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+#pickLog{list-style:none;margin:0 0 4px;padding:0;display:grid;gap:2px;font-size:12px;justify-items:start}
+#pickLog li{background:linear-gradient(90deg,rgba(0,0,0,.6),rgba(0,0,0,0));padding:1px 18px 1px 8px;border-left:2px solid var(--c,#c9b9a3);color:var(--c,#ddd);animation:plIn .18s ease-out;transition:opacity .5s}
+#pickLog li.out{opacity:0}
+@keyframes plIn{from{transform:translateX(-14px);opacity:0}}
+body.touchui #pickLog{font-size:11px}
 #feed{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:13px}
 #feed li{background:rgba(0,0,0,.45);padding:2px 8px}
 .hud-bc{left:50%;bottom:calc(70px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);text-align:center;display:grid;gap:6px;justify-items:center}
@@ -825,6 +832,9 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>PvP</b>：基本はオン。ロビーのスイッチでオフにすると誰も攻撃しない。レイド中は画面左上の「PvP」（<span data-kb="pvp">P</span>キー）から、近くの相手ごとに「攻撃しない」を選べる。その相手から攻撃されると自動で解除。同じチーム（パーティ）は互いに攻撃できない。</li>
         <li><b>ボスレイド</b>：報酬は一人ずつランダムに抽選。ボスと取り巻きに与えたダメージで貢献度が決まり、平均以上ならボーナス装備が1つ、1位（MVP）ならさらに1つ追加。ダンジョンでまれに手に入る鍵を使い、ホストが募集→仲間が参加して準備OK→一斉に出発。鍵ごとにボスと強さが違い、強いボスほど報酬が良い（報酬は人ごとにランダム）。制限8分。残機は3つで、倒れても時間で復活できる。3回倒れると観戦モードになり、仲間が討伐すれば少し減った報酬がもらえる。討伐すれば装備は失わない。時間切れか全員の残機が尽きると装備を失う。</li>
         <li><b>難易度</b>：普通・危険・悪夢・地獄。高いほど敵の数が増え、攻撃が速く重く、足も速くなる（HPはあまり増えない）。そのぶん装備のレベル・レア度・金貨・素材・鍵の出やすさが上がる。</li>
+        <li><b>回復薬は自分で用意</b>：最初は持っていない。商人で買うか工房で作って持ち込む。宝箱からも出る。</li>
+        <li><b>宝箱の開封</b>：調べてから少し時間がかかる（普通1.3秒・番人の宝箱3.4秒）。動いたり攻撃を受けたりすると中断する。</li>
+        <li><b>拾い物</b>：近くに倒れた魔物がいくつもあると、まとめて1つの画面で拾える。すぐ近くに落ちている素材は歩くだけで自動で拾う。拾ったものは左下に少しの間表示される。</li>
         <li><b>罠と仕掛け</b>：マップにはまれに<b>火薬樽</b>（攻撃・爆風・調べるで点火し、少し遅れて大爆発。敵も味方も吹き飛ぶ）、<b>棘の罠</b>（踏むと棘が飛び出す。しばらくすると再び作動）、<b>トラバサミ</b>（踏むと足を挟まれて少し動けない）、<b>怪しい壺</b>（調べると割れる。金貨・回復薬・毒ガスのどれか）がある。床の罠は近づくとはっきり見える。魔物も罠にかかる。</li>
         <li><b>ノックバック</b>：攻撃を当てると敵が押し返され、攻撃を受けると自分も吹き飛ぶ。槌・斧などの重い武器や大型の敵ほど強い。</li>
         <li><b>装備の出来</b>：同じレア度でも品質と効果値は大きくばらつく。鑑定に「出来 S〜D」が出る（Sは逸品、Dは凡作）。難易度が高いほど良い出来が出やすい。</li>
@@ -863,7 +873,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
   </div>
   <div class="hud" id="banner" hidden></div>
   <div class="hud" id="bossBar" hidden><span id="bbName"></span><div class="bb"><div id="bbFill"></div></div></div>
-  <div class="hud hud-bl"><ul id="feed"></ul></div>
+  <div class="hud hud-bl"><ul id="pickLog"></ul><ul id="feed"></ul></div>
   <div class="hud hud-bc"><div id="hPrompt"></div><div id="hMsg"></div></div>
   <div class="hud hud-br"><p id="keyHint"></p></div>
   <div class="hud" id="skSlot"><div class="skr" id="skRing"><b id="skNm">技</b><i id="skT"></i></div><span class="kbd" data-kb="skill">F</span></div>
@@ -1177,7 +1187,7 @@ let SAVE=null,dbRef=null,dbBusy=false,dbDirty=false;
 function emptyEquip(){return {weapon:null,head:null,chest:null,hands:null,feet:null,ring:null}}
 function starterSword(){const it=genItem(rngFrom(Date.now()>>>0),1,rid(),{b:0,rar:0});it.q=Math.max(it.q,0.9);return it}
 function newSave(){const e=emptyEquip();e.weapon=starterSword();
-  return {v:1,ts:Date.now(),name:'',gold:150,potions:2,cons:{},consSel:null,stash:[],equip:e,pouch:null,inRaid:null,lost:null,claims:[],cos:{own:[],eq:{}},mats:{},scrolls:0,keys:{},dex:{m:{},i:{},l:{}},xp:0,ach:{},prof:{plate:'np_wood',title:'t_novice'},st:{raids:0,ext:0,kills:0,deaths:0,best:0}}}
+  return {v:1,ts:Date.now(),name:'',gold:150,potions:0,cons:{},consSel:null,stash:[],equip:e,pouch:null,inRaid:null,lost:null,claims:[],cos:{own:[],eq:{}},mats:{},scrolls:0,keys:{},dex:{m:{},i:{},l:{}},xp:0,ach:{},prof:{plate:'np_wood',title:'t_novice'},st:{raids:0,ext:0,kills:0,deaths:0,best:0}}}
 function noRegen(it){if(!it||!Array.isArray(it.v))return;for(const a of it.v){if(a[0]===9){a[0]=5;a[1]=Math.max(1,Math.round(a[1]*20))}else if(a[0]===8&&!it.lsv2){a[1]=Math.max(0.2,Math.round(a[1]*4)/10)}}it.lsv2=1}
 function migrate(s){if(!s||typeof s!=='object')return newSave();try{for(const it of [...(s.stash||[]),...Object.values(s.equip||{}),s.pouch,...((s.claims||[]).flatMap(c=>c.items||[])),...((s.lost&&s.lost.items)||[])])noRegen(it)}catch(e){}s.equip=Object.assign(emptyEquip(),s.equip||{});s.stash=Array.isArray(s.stash)?s.stash:[];s.st=Object.assign({raids:0,ext:0,kills:0,deaths:0,best:0},s.st||{});if(typeof s.gold!=='number')s.gold=0;if(typeof s.potions!=='number')s.potions=0;if(!Array.isArray(s.claims))s.claims=[];if(!s.mats||typeof s.mats!=='object')s.mats={};if(!s.keys||typeof s.keys!=='object')s.keys={};if(typeof s.xp!=='number')s.xp=0;if(!s.ach)s.ach={};if(!s.prof)s.prof={plate:'np_wood',title:'t_novice'};if(!s.dex||typeof s.dex!=='object')s.dex={m:{},i:{},l:{}};if(typeof s.scrolls!=='number')s.scrolls=0;if(!s.cos||typeof s.cos!=='object')s.cos={own:[],eq:{}};if(!Array.isArray(s.cos.own))s.cos.own=[];if(!s.cos.eq)s.cos.eq={};if(s.lost===undefined)s.lost=null;if(!s.cons||typeof s.cons!=='object')s.cons={};if(s.consSel&&!CONS[s.consSel])s.consSel=null;return s}
 function checkAbandoned(){
@@ -1235,7 +1245,7 @@ const RELAY_MS=250;
    - list keys that receivers apply additively only carry their newest entries in between
    - same-raid peers get every frame (10/s once 6+ are together), everyone else 1/s
    - the host only sends each peer the monsters near that peer */
-const NSLOW=new Set(['spi','n','tm','lv','pl','ti','cs','eq','w','wr','we','po','tr','ov','mh','rid','seed','t0','jt','gr','df','mode','bk','np','ph','cp','rh','rj','rr']);
+const NSLOW=new Set(['bv','spi','n','tm','lv','pl','ti','cs','eq','w','wr','we','po','tr','ov','mh','rid','seed','t0','jt','gr','df','mode','bk','np','ph','cp','rh','rj','rr']);
 const NTAIL={tk:10,oc:8,md:16};
 const NEAR_R=1500;           // fallback relay through Supabase: at most 4 updates/sec per player
 let SB=null;
@@ -1636,7 +1646,7 @@ async function joinParty(){
 function myPeer(){if(!NET.ch)return '~me';const p=NET.ch.peers().find(x=>x.sameTab);return p?p.peer:'~me'}
 function buildPresence(){
   progEnsure();
-  const p={n:SAVE.name||'冒険者',tm:+$('#inTeam').value||0,ph:'lobby',lv:lvInfo(SAVE.xp).l,pl:curPlate().id,ti:curTitle().id};
+  const p={bv:BUILD,n:SAVE.name||'冒険者',tm:+$('#inTeam').value||0,ph:'lobby',lv:lvInfo(SAVE.xp).l,pl:curPlate().id,ti:curTitle().id};
   if(!G){p.cs=cosIdx();p.eq=eqIdx(SAVE.equip);p.w=SAVE.equip.weapon?BASES[SAVE.equip.weapon.b].k:'fist';p.wr=SAVE.equip.weapon?SAVE.equip.weapon.r:0}
   if(!G||G.me.st==='out'){if(BR.host)p.rh={id:BR.host.id,k:BR.host.key};if(BR.join){p.rj=BR.join;p.rr=BR.ready?1:0}}
   if(G&&G.me.st!=='out'){
@@ -1659,6 +1669,24 @@ function buildPresence(){
   }
   return p;
 }
+/* ---------- version check: everyone in a room should run the same build ---------- */
+const BUILD='2026.10.01.2230';
+const UPD={newer:null,t:0,going:false};
+async function checkUpdate(force){
+  if(!/^https?:$/.test(location.protocol))return;const t=Date.now();if(!force&&t-UPD.t<45000)return;UPD.t=t;
+  try{const r=await fetch('index.html?v='+t,{cache:'no-store'});if(!r.ok)return;const m=(await r.text()).match(/const BUILD='([^']+)'/);
+    if(m&&m[1]>BUILD){UPD.newer=m[1];if(G)showUpdBar();else doUpdateReload()}}catch(e){}
+}
+function showUpdBar(){let b=$('#updBar');if(!b){b=document.createElement('div');b.id='updBar';document.body.appendChild(b)}b.textContent='新しいバージョンがあります — レイドが終わると自動で更新します';b.hidden=false}
+async function doUpdateReload(){
+  if(UPD.going)return;UPD.going=true;toast('新しいバージョンに更新します…');
+  try{if(typeof persist==='function')persist();if(AUTH&&AUTH.user)await Promise.race([flushDbNow(),new Promise(r=>setTimeout(r,2500))])}catch(e){}
+  try{if(navigator.serviceWorker){const rg=await navigator.serviceWorker.getRegistration();if(rg)await rg.update()}}catch(e){}
+  setTimeout(()=>location.reload(),600);
+}
+addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkUpdate(true)});
+setInterval(()=>checkUpdate(false),90000);setTimeout(()=>checkUpdate(true),6000);
+const bvDiff=pr=>!!(pr&&(pr.bv||'')!==BUILD);
 function sendPresence(){
   const ch=NET.ch;if(!ch)return;
   const p=buildPresence();
@@ -2142,9 +2170,10 @@ function buy(w){
   sfx('coin');persist();renderLobby();
 }
 function freeKit(){
-  const it=starterSword();SAVE.stash.push(it);SEL={where:'stash',i:SAVE.stash.length-1};SAVE.potions=Math.max(SAVE.potions,1);persist();renderLobby();toast('支給品の長剣を受け取りました');
+  const it=starterSword();SAVE.stash.push(it);SEL={where:'stash',i:SAVE.stash.length-1};persist();renderLobby();toast('支給品の長剣を受け取りました');
 }
 function renderLobby(){
+  if(UPD.newer&&!G&&!UPD.going){doUpdateReload()}{const ub=$('#updBar');if(ub&&!G)ub.hidden=true}
   if(!SAVE)return;
   processClaims();
   progEnsure();if(SAVE.gold>=10000)unlockAch('rich');
@@ -2683,7 +2712,7 @@ const DIFFDESC=['いつもの黄泉','敵が増え攻撃が速く重い · 装�
 function liveRaids(){
   const raids=new Map();
   for(const p of partyPeers()){const pr=p.presence;if(pr.ph!=='raid'||!pr.rid||typeof pr.t0!=='number'||pr.mode==='boss')continue;
-    if(!raids.has(pr.rid))raids.set(pr.rid,{rid:pr.rid,seed:pr.seed>>>0,t0:pr.t0,gr:pr.gr?1:0,df:clamp(pr.df|0,0,3),b:(pr.seed>>>0)%BIOMES.length,names:[]});
+    if(!raids.has(pr.rid))raids.set(pr.rid,{rid:pr.rid,seed:pr.seed>>>0,t0:pr.t0,gr:pr.gr?1:0,df:clamp(pr.df|0,0,3),b:(pr.seed>>>0)%BIOMES.length,names:[],bv:pr.bv||''});
     raids.get(pr.rid).names.push(String(pr.n).slice(0,10)+(pr.st==='dead'?'（死亡）':''))}
   return [...raids.values()].filter(r=>r.t0+RAID_MS-Date.now()>0);
 }
@@ -2700,7 +2729,7 @@ function paintPick(){
   if(here.length){const h=document.createElement('div');h.className='lvh';h.textContent=(PICK.b<0?'「'+DIFF[PICK.d].n+'」':'「'+BIOMES[PICK.b].n+'・'+DIFF[PICK.d].n+'」')+'で進行中のレイド — 合流するとその場所に入れる';box.appendChild(h);
     for(const r of here){const left=r.t0+RAID_MS-Date.now();const row=document.createElement('div');row.className='liverow';
       const who=document.createElement('div');who.className='who';who.innerHTML='<b>'+esc(BIOMES[r.b].n)+'</b>'+esc((r.gr?'回収ラン · ':'')+'残り '+fmtTime(left)+' · '+r.names.join('、'));
-      const bt=document.createElement('button');bt.type='button';bt.className='btn primary';bt.textContent=left>JOIN_MIN?'合流する':'終盤のため不可';bt.disabled=left<=JOIN_MIN;bt.onclick=()=>joinLive(r);
+      const bt=document.createElement('button');bt.type='button';bt.className='btn primary';const vd=r.bv!==BUILD;bt.textContent=vd?'バージョン違い':left>JOIN_MIN?'合流する':'終盤のため不可';bt.disabled=vd||left<=JOIN_MIN;if(vd)bt.title='相手とゲームのバージョンが違うため合流できません。両方ページを再読み込みしてください';bt.onclick=()=>joinLive(r);
       row.append(who,bt);box.appendChild(row)}}
 }
 function openMapPick(){
@@ -2868,6 +2897,7 @@ function partyFollow(){
   for(const p of partyPeers()){const pr=p.presence;
     if(pr.ph!=='raid'||pr.mode==='boss'||(+pr.tm||0)!==myTm||!pr.rid||typeof pr.t0!=='number')continue;
     if(Date.now()-pr.t0>20000||PF_SEEN.has(pr.rid))continue;
+    if(bvDiff(pr)){PF_SEEN.add(pr.rid);toast('⚠ '+String(pr.n).slice(0,10)+' とゲームのバージョンが違うので一緒に出撃できません。両方とも再読み込みしてください');if((pr.bv||'')>BUILD)checkUpdate(true);continue}
     PF_SEEN.add(pr.rid);toast('チーム'+'ABCD'[myTm-1]+'の '+String(pr.n).slice(0,10)+' が出撃！一緒に出発する');
     audioInit();autoFull();startRaid(pr.rid,pr.seed>>>0,pr.t0,{gr:pr.gr?1:0,diff:clamp(pr.df|0,0,3)});return;
   }
@@ -2880,7 +2910,7 @@ function renderParty(){
   renderBossRaid();
   const box=$('#party');box.innerHTML='';
   const peers=partyPeers();
-  for(const p of peers){const c=document.createElement('span');c.className='chip'+(p.presence.ph==='raid'?' raid':'');c.textContent=String(p.presence.n).slice(0,10)+(p.presence.ph==='raid'?' · レイド中':'')+(p.via==='relay'?' · 中継':'');box.appendChild(c)}
+  for(const p of peers){const c=document.createElement('span');c.className='chip'+(p.presence.ph==='raid'?' raid':'');c.textContent=String(p.presence.n).slice(0,10)+(p.presence.ph==='raid'?' · レイド中':'')+(p.via==='relay'?' · 中継':'')+(bvDiff(p.presence)?((p.presence.bv||'')<BUILD?' · ⚠古い版':' · ⚠新しい版'):'');if(bvDiff(p.presence)){c.classList.add('oldv');c.title='この人とゲームのバージョンが違います。両方とも最新に更新してください（ページを再読み込み）'}box.appendChild(c);if((p.presence.bv||'')>BUILD)checkUpdate(false)}
   renderNet();
   const L=liveRaids(),n=L.reduce((a,r)=>a+r.names.length,0),lc=$('#mcLive');
   if(lc){const df0=+$('#inDiff').value||0,T=+$('#inBiome').value<0?randomJoinTarget(df0):null;lc.hidden=!n;lc.textContent=T?'👥 '+T.names.length+'人に合流（出撃で自動）':'👥 '+n+'人が潜行中';lc.classList.toggle('join',!!T)}
@@ -3328,6 +3358,17 @@ function renderMapImage(map){
     }
    }
   }
+  // outline where walls meet the ground so the walkable edge is easy to read
+  {const rim={forest:'rgba(200,230,180,.6)',swamp:'rgba(190,220,170,.55)',crypt:'rgba(205,200,235,.6)',mine:'rgba(240,200,150,.6)'}[bio]||'rgba(238,218,180,.6)';
+   const sh=new Path2D(),ln=new Path2D();
+   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!isOpen(x,y))continue;const px=x*TS,py=y*TS;
+     if(isWall(x,y-1)){ln.moveTo(px,py+0.75);ln.lineTo(px+TS,py+0.75);sh.rect(px,py,TS,4)}
+     if(isWall(x,y+1)){ln.moveTo(px,py+TS-0.75);ln.lineTo(px+TS,py+TS-0.75);sh.rect(px,py+TS-4,TS,4)}
+     if(isWall(x-1,y)){ln.moveTo(px+0.75,py);ln.lineTo(px+0.75,py+TS);sh.rect(px,py,4,TS)}
+     if(isWall(x+1,y)){ln.moveTo(px+TS-0.75,py);ln.lineTo(px+TS-0.75,py+TS);sh.rect(px+TS-4,py,4,TS)}}
+   g.fillStyle='rgba(0,0,0,.32)';g.fill(sh);
+   g.strokeStyle='rgba(0,0,0,.85)';g.lineWidth=3.2;g.lineCap='square';g.stroke(ln);
+   g.strokeStyle=rim;g.lineWidth=1.6;g.stroke(ln);}
   return c;
 }
 /* =========================================================
@@ -3417,7 +3458,7 @@ function startRaid(raidId,seed,t0,opts={}){
   if(map.arena)addFeed('ボスレイド開始 · '+map.arena.b.n+'を8分以内に倒せ');else addFeed('レイド開始 · 脱出地点：'+map.exts.map(e=>e.n).join('、'));
   sendPresence();sfx('start');
 }
-function randomJoinTarget(df){const now0=Date.now();return liveRaids().filter(r=>r.df===df&&!r.gr&&r.t0+RAID_MS-now0>JOIN_MIN).sort((a,b)=>b.names.length-a.names.length||b.t0-a.t0)[0]||null}
+function randomJoinTarget(df){const now0=Date.now();return liveRaids().filter(r=>r.df===df&&!r.gr&&r.bv===BUILD&&r.t0+RAID_MS-now0>JOIN_MIN).sort((a,b)=>b.names.length-a.names.length||b.t0-a.t0)[0]||null}
 function newRaid(){setTimeout(()=>{if(G)PF_SEEN.add(G.rid)},0);
   {const b0=+($('#inBiome')?$('#inBiome').value:-1),df0=+$('#inDiff').value||0;if(b0<0){const T=randomJoinTarget(df0);if(T){toast('ランダム：'+T.names.length+'人が潜っている「'+BIOMES[T.b].n+'・'+DIFF[T.df].n+'」に合流します');startRaid(T.rid,T.seed,T.t0,{gr:0,diff:T.df});return}}}
   let seed=(Math.random()*4294967296)>>>0;const b=+($('#inBiome')?$('#inBiome').value:-1);if(b>=0)seed=(seed-(seed%BIOMES.length)+b)>>>0;lsSet('meikutsu-biome',String(b));const df=+$('#inDiff').value||0;lsSet('meikutsu-diff',String(df));startRaid(rid(6),seed,Date.now(),{diff:df})}
@@ -3440,6 +3481,8 @@ function pushEv(...a){
   const t=Math.round(performance.now());G.seq++;G.myEv.push([G.seq,t,...a]);
   while(G.myEv.length&&(t-G.myEv[0][1]>1200||G.myEv.length>14))G.myEv.shift();
 }
+function pickLog(txt,col){const ul=$('#pickLog');if(!ul)return;const li=document.createElement('li');li.textContent='+ '+txt;if(col)li.style.setProperty('--c',col);ul.appendChild(li);while(ul.children.length>6)ul.firstChild.remove();setTimeout(()=>li.classList.add('out'),2600);setTimeout(()=>li.remove(),3200)}
+function lootLogText(e){if(e.mat)return [MATS[e.mat].n+' ×'+e.n,RAR[MATS[e.mat].r].hex];if(e.gold)return ['金貨 '+Math.round(e.gold*(1+(G.stats.luck||0)/100))+'G','#e4b450'];if(e.pot)return ['回復薬 ×'+e.pot,'#e2675a'];if(e.cn)return [CONS[e.cn].n,'#9fd2c0'];if(e.rkey)return [RK(e.rkey).n,'#ffd36b'];if(e.cos)return ['衣装','#f3a63d'];const it=lootItem(e);return it?[itemName(it),RAR[it.r].hex]:['アイテム','#ddd']}
 function addFeed(s){G.feed.push({s,t:now()});if(G.feed.length>6)G.feed.shift()}
 function addText(x,y,s,col,big){G.texts.push({x,y,s:String(s),col,big,t:0})}
 
@@ -4101,11 +4144,13 @@ function lootList(src){
   if(src.type==='chest')l=chestLoot(src.c);
   else if(src.type==='mon')l=monLoot(src.m);
   else if(src.type==='grave'){const L=G.grave;if(!L)return [];l=L.items.map(it=>({key:'g.'+it.id,it,grave:1}));if(L.gold)l.push({key:'g.g',gold:L.gold,grave:1});if(L.potions)l.push({key:'g.p',pot:L.potions,grave:1});if(L.mats)for(const id in L.mats)if(L.mats[id]>0)l.push({key:'g.x'+id,mat:id,n:L.mats[id]})}
+  else if(src.type==='multi'){for(const s2 of src.subs)l=l.concat(lootList(s2));return l}
   else if(src.type==='corpse'){const Rm=G.remote.get(src.peer);if(!Rm||!Rm.pres||!Rm.pres.cp)return [];l=corpseLoot(src.peer,Rm.pres.cp)}
   return l.filter(e=>!G.taken.has(e.key));
 }
 function lootItem(e){return e.it||(e.enc?(e.dec||(e.dec=decItem(e.enc))):null)}
-function takeLoot(e){
+function takeLoot(e){const tx=G.taken.has(e.key)?null:lootLogText(e);const ok=takeLoot0(e);if(ok&&tx)pickLog(tx[0],tx[1]);return ok}
+function takeLoot0(e){
   if(G.taken.has(e.key))return false;
   if(e.rkey){const K=RK(e.rkey);G.keys[e.rkey]=(G.keys[e.rkey]||0)+1;banner('ボスレイドの鍵！',K.n+' '+'★'.repeat(K.star)+' · '+K.b.n,'#ffd36b');sfx('fanfare');shake(4);addFeed('★ '+K.n+'を手に入れた（脱出すれば使える）')}
   else if(e.mat){G.mats[e.mat]=(G.mats[e.mat]||0)+e.n;addText(G.me.x,G.me.y-26,MATS[e.mat].n+' +'+e.n,RAR[MATS[e.mat].r].hex);sfx('loot')}
@@ -4123,10 +4168,17 @@ function takeLoot(e){
   G.taken.add(e.key);G.myTaken.push(e.key);return true;
 }
 function flashMsg(s){$('#hMsg').textContent=s;clearTimeout(flashMsg.h);flashMsg.h=setTimeout(()=>{$('#hMsg').textContent=''},2200)}
+function nearbyDrops(x,y){const out=[];for(const m of G.mons){if(!m.dead||Math.hypot(m.x-x,m.y-y)>120)continue;const s2={type:'mon',m,x:m.x,y:m.y};if(lootList(s2).length)out.push(s2)}
+  for(const c of G.map.chests){if(c.mimId!=null||!G.opened.has(c.id)||Math.hypot(c.x-x,c.y-y)>120)continue;const s2={type:'chest',c,x:c.x,y:c.y};if(lootList(s2).length)out.push(s2)}return out}
+/* materials on the ground right next to you are picked up automatically */
+function autoMats(){const me=G.me;if(me.st!=='alive'||G.done)return;
+  for(const m of G.mons){if(!m.dead||Math.hypot(m.x-me.x,m.y-me.y)>70)continue;for(const e of lootList({type:'mon',m}))if(e.mat)takeLoot(e)}
+  for(const c of G.map.chests){if(c.mimId!=null||!G.opened.has(c.id)||Math.hypot(c.x-me.x,c.y-me.y)>70)continue;for(const e of lootList({type:'chest',c}))if(e.mat)takeLoot(e)}}
 function findInteract(){
   const me=G.me;let best=null,bd=56;
   for(const c of G.map.chests){const d=Math.hypot(c.x-me.x,c.y-me.y);if(c.mimId!=null){if(d<bd&&disguised(G.mons[c.mimId])){bd=d;best={type:'chest',c,x:c.x,y:c.y,label:'宝箱'}}continue}if(d<bd&&(!G.opened.has(c.id)||lootList({type:'chest',c}).length)){bd=d;best={type:'chest',c,x:c.x,y:c.y,label:c.boss?'番人の宝箱':'宝箱'}}}
   for(const m of G.mons){if(!m.dead)continue;const d=Math.hypot(m.x-me.x,m.y-me.y);if(d<bd&&lootList({type:'mon',m}).length){bd=d;best={type:'mon',m,x:m.x,y:m.y,label:m.name+'の遺物'}}}
+  if(best&&best.type==='mon'){const subs=nearbyDrops(best.x,best.y);if(subs.length>1)best={type:'multi',subs,x:best.x,y:best.y,label:'周りの遺物（'+subs.length+'か所まとめて）'}}
   trapList().forEach((T,i)=>{if((T.k!=='keg'&&T.k!=='urn')||trapS(i).st)return;const d=Math.hypot(T.x-me.x,T.y-me.y);if(d<bd){bd=d;best={type:'trap',i,x:T.x,y:T.y,label:T.k==='keg'?'火薬樽に火をつける（離れろ！）':'怪しい壺を割る'}}});
   if(G.map.altar&&!G.altarDone){const d=Math.hypot(G.map.altar.x-me.x,G.map.altar.y-me.y);if(d<bd){bd=d;best={type:'altar',x:G.map.altar.x,y:G.map.altar.y,label:'古の祭壇'}}}
   if(G.grave){const d=Math.hypot(G.grave.x-me.x,G.grave.y-me.y);if(d<bd&&lootList({type:'grave'}).length){bd=d;best={type:'grave',x:G.grave.x,y:G.grave.y,label:'あなたの死体'}}}
@@ -4139,6 +4191,7 @@ function wakeMimic(m){
   if(G.isHost)m.tgt=NET.peerId;else pushEv('mw',m.id);
 }
 function openLoot(src){
+  if(src.type==='chest'&&!src.now&&(src.c.mimId==null||!disguised(G.mons[src.c.mimId]))&&!G.opened.has(src.c.id)){if(G.opening&&G.opening.src.c===src.c)return;const me=G.me;G.opening={src,t:0,dur:src.c.boss?3.4:1.3,x:me.x,y:me.y,hp:me.hp};G.loot=null;renderLoot();sfx('equip',0.7);return}
   if(src.type==='trap'){trapFire(src.i,NET.peerId);G.target=null;return}
   if(src.type==='altar'){G.altarDone=true;sfx('magic');shake(3);for(let i=0;i<30;i++)G.fx.push({t:'bit',x:src.x,y:src.y,vx:R.f(Math.random,-120,120),vy:R.f(Math.random,-200,0),life:1.1,max:1.1,col:'#7cf0dc'});if(SAVE.ach&&SAVE.ach.altar){addXp(300);flashMsg('祭壇がかすかに応えた（経験値+300）')}else{unlockAch('altar');banner('古の祭壇','封じられた灯があなたに宿った','#7cf0dc')}return}
   if(src.type==='chest'&&src.c.mimId!=null){const mm=G.mons[src.c.mimId];if(disguised(mm)){wakeMimic(mm);return}}
@@ -4358,6 +4411,8 @@ function update(dt){
   const camX=G.camX||me.x,camY=G.camY||me.y;
   const wx=camX+(MOUSE.x*DPR-CW/2)/S,wy=camY+(MOUSE.y*DPR-CH/2)/S;
   trapTick(dt);
+  if(G.opening){const o=G.opening,me=G.me;if(me.st!=='alive'||G.done||Math.hypot(me.x-o.x,me.y-o.y)>14||me.hp<o.hp-0.5||G.stunT>0){G.opening=null;if(me.st==='alive')flashMsg('開封を中断した')}else{o.t+=dt;if(G.opened.has(o.src.c.id))o.t=o.dur;if(o.t>=o.dur){G.opening=null;openLoot(Object.assign({},o.src,{now:1}))}}}
+  G.amT=(G.amT||0)-dt;if(G.amT<=0){G.amT=0.2;autoMats()}
   if(me.st==='alive'&&!G.done){
     let mx=0,my=0;
     if(kbDown('up'))my-=1;if(kbDown('down'))my+=1;
@@ -4981,6 +5036,7 @@ function render(){
     ctx.font='13px DotGothic16, monospace';ctx.textAlign='center';ctx.fillStyle='#bfeee2';ctx.fillText(e.n,e.x,e.y-64);
   }
   drawTraps(tn,x0,y0,x0+vw,y0+vh);
+  if(G.opening){const o=G.opening,c=o.src.c,f=clamp(o.t/o.dur,0,1);ctx.save();ctx.lineWidth=4;ctx.strokeStyle='rgba(0,0,0,.6)';ctx.beginPath();ctx.arc(c.x,c.y-30,13,0,Math.PI*2);ctx.stroke();ctx.strokeStyle=c.boss?'#ffd36b':'#e4c890';ctx.beginPath();ctx.arc(c.x,c.y-30,13,-Math.PI/2,-Math.PI/2+Math.PI*2*f);ctx.stroke();ctx.font='11px DotGothic16, monospace';ctx.textAlign='center';ctx.fillStyle='#f0e0c0';ctx.fillText(c.boss?'番人の宝箱を開封中…':'開封中…',c.x,c.y-50);ctx.restore()}
   // chests
   for(const c of G.map.chests){
     if(c.mimId!=null&&!disguised(G.mons[c.mimId]))continue;
@@ -5686,7 +5742,7 @@ function toggleBigMap(force){
   document.addEventListener('visibilitychange',musicSync);
   setInterval(musicSync,1000);
   applyOpt();renderPwaTip();
-  if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+  if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{});
   initNet();
 })();
 </script>

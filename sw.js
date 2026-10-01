@@ -1,6 +1,7 @@
 // 黄泉潜り — service worker: lets the game open as an app and start even on a flaky connection.
-// The game page itself is always fetched fresh first (so updates arrive right away); the cached copy is a fallback.
-const CACHE = 'yomi-v1';
+// The game page itself is always fetched fresh from the network (bypassing every cache) so updates arrive right away;
+// the cached copy is only used when offline.
+const CACHE = 'yomi-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(() => {})); });
 self.addEventListener('activate', e => {
@@ -11,8 +12,11 @@ self.addEventListener('fetch', e => {
   if (r.method !== 'GET') return;
   const u = new URL(r.url);
   if (u.origin === location.origin) {
-    e.respondWith(fetch(r).then(res => { const cp = res.clone(); caches.open(CACHE).then(c => c.put(r, cp)); return res; })
-      .catch(() => caches.match(r).then(m => m || caches.match('./index.html'))));
+    const page = r.mode === 'navigate' || u.pathname.endsWith('/') || u.pathname.endsWith('.html');
+    e.respondWith(fetch(r, page ? { cache: 'no-store' } : {}).then(res => {
+      if (res.ok && !u.search) { const cp = res.clone(); caches.open(CACHE).then(c => c.put(r, cp)); }
+      return res;
+    }).catch(() => caches.match(r, { ignoreSearch: true }).then(m => m || caches.match('./index.html'))));
     return;
   }
   if (u.hostname === 'cdn.jsdelivr.net' || u.hostname === 'unpkg.com' || u.hostname === 'fonts.googleapis.com' || u.hostname === 'fonts.gstatic.com') {
