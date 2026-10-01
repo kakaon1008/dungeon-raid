@@ -570,6 +570,10 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
 .optline .tog{flex:none;transform:scale(.8)}
 .bulkprev{max-height:220px;overflow:auto;margin:6px 0}
 .bulkgo{width:100%;padding:12px!important;font-size:15px}
+.it .durb{position:absolute;left:4px;right:4px;bottom:2px;height:3px;background:rgba(0,0,0,.6);border-radius:2px;overflow:hidden}
+.it .durb i{display:block;height:100%}
+.it .brk{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--fd);font-size:20px;color:#ff6a50;background:rgba(40,8,4,.55);text-shadow:0 0 4px #000;border-radius:3px}
+#repAllBtn{justify-self:start}
 </style>
 
 </head>
@@ -616,6 +620,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
   <section class="pane" id="paneGear">
     <h2>装備</h2>
     <div class="eqgrid" id="equipGrid"></div>
+    <button class="btn" id="repAllBtn" type="button">装備をまとめて修復</button>
     <dl class="stats" id="statList"></dl>
     <div>
       <h3>セーフポーチ</h3>
@@ -885,14 +890,14 @@ const AFF=[
   {k:'hp',n:'最大HP',f:'+%v',r:[6,28],s:'head chest hands feet ring',pre:'頑健な',w:10,scale:1},
   {k:'arm',n:'防御',f:'+%v',r:[3,12],s:'head chest hands feet ring',pre:'堅牢な',w:8,scale:1},
   {k:'move',n:'移動速度',f:'+%v%',r:[2,9],s:'feet ring chest',pre:'軽やかな',w:6},
-  {k:'ls',n:'吸血',f:'%v%',r:[1,5],s:'weapon ring',pre:'吸血の',w:5},
+  {k:'ls',n:'吸血',f:'%v%',r:[0.4,2],s:'weapon ring',pre:'吸血の',w:4,dec:1},
   {k:'regen',n:'HP再生',f:'+%v/秒',r:[0.2,1.2],s:'chest head ring',pre:'再生の',w:0,dec:1},
   {k:'luck',n:'金運',f:'+%v%',r:[5,25],s:'head ring hands feet',pre:'黄金の',w:5},
   {k:'dodge',n:'回避の再使用',f:'-%v%',r:[5,20],s:'feet chest',pre:'身軽な',w:5},
 ];
 const LEG=[
   {k:'thunder',n:'雷鳴',d:'攻撃の25%で落雷。攻撃力の80%を追加で与える'},
-  {k:'vamp',n:'血の契約',d:'吸血+8%。ただし最大HP-15'},
+  {k:'vamp',n:'血の契約',d:'吸血+3%。ただし最大HP-15'},
   {k:'exec',n:'処刑人',d:'HP35%以下の相手へのダメージ+60%'},
   {k:'undying',n:'不死鳥',d:'レイド中に1回だけ、致命傷をHP30%で耐える'},
   {k:'gale',n:'疾風',d:'移動速度+15%、回避の再使用-30%'},
@@ -913,7 +918,7 @@ function genItem(r,l,id,o={}){
   if(o.b!=null)bi=o.b;
   else{const slot=o.slot||SLOTS[R.w(r,[30,14,17,13,13,13])];const c=[];BASES.forEach((b,i)=>{if(b.s===slot&&!b.craft)c.push(i)});bi=R.pick(r,c)}
   const bst=1+(l-1)*0.15;
-  let rar=o.rar!=null?o.rar:R.w(r,[600,260,72*bst,16*bst,2.6*bst*bst]);
+  let rar=o.rar!=null?o.rar:R.w(r,[650,250,48*bst,9*bst,1.2*bst*bst]);
   if(o.minR)rar=Math.max(rar,o.minR);
   const q=Math.round(R.f(r,0.55,1.45)*100)/100;
   const slot=BASES[bi].s;
@@ -927,7 +932,7 @@ function genItem(r,l,id,o={}){
     let val=R.f(r,a.r[0],a.r[1])*sc;val=a.dec?Math.round(val*10)/10:Math.max(1,Math.round(val));
     v.push([ai,val]);n--;
   }
-  const out={id:id||rid(),b:bi,r:rar,l,q,v,x:rar===4?R.i(r,0,LEG.length-1):-1};
+  const out={id:id||rid(),b:bi,r:rar,l,q,v,x:rar===4?R.i(r,0,LEG.length-1):-1,lsv2:1};
   if(slot==='weapon'){const e=o.elem!=null?o.elem:(r()<0.05+0.03*rar?R.i(r,0,ELM.length-1):-1);if(e>=0){out.e=e;out.ep=Math.round(R.f(r,10,35)*(1+0.03*(l-1)))}}
   return out;
 }
@@ -947,7 +952,8 @@ function power(it){
   if(it.e>=0)p+=it.ep*1.2;
   return Math.max(1,Math.round(p));
 }
-const value=it=>Math.round((4+power(it)*0.5*Math.pow(RAR[it.r].val,0.55))*0.6);
+const valueFull=it=>Math.round((4+power(it)*0.5*Math.pow(RAR[it.r].val,0.55))*0.42);
+const value=it=>Math.max(1,Math.round(valueFull(it)*(0.35+0.65*durFrac(it))));
 function itemName(it){
   const b=BASES[it.b];
   const ep=it.e>=0?ELM[it.e].pre:'';
@@ -960,15 +966,16 @@ const affText=(ai,v)=>AFF[ai].f.replace('%v',v);
 function calcStats(eq){
   const s={mhp:100,arm:0,move:0,atkp:0,flat:0,crit:5,critd:50,aspd:0,ls:0,regen:0,luck:0,dodge:0,hp:0,leg:{}};
   for(const sl of SLOTS){
-    const it=eq[sl];if(!it)continue;
+    const it=eq[sl];if(!it||isBroken(it))continue;
     const bv=baseVals(it);if(bv.arm)s.arm+=bv.arm;if(bv.mv)s.move+=bv.mv;
     for(const [ai,v] of it.v)s[AFF[ai].k]+=v;
     if(it.x>=0)s.leg[LEG[it.x].k]=1;
   }
   s.mhp+=s.hp;
-  if(s.leg.vamp){s.ls+=8;s.mhp-=15}
+  if(s.leg.vamp){s.ls+=3;s.mhp-=15}
+  s.ls=Math.min(4,Math.round(s.ls*10)/10);
   if(s.leg.gale){s.move+=15;s.dodge+=30}
-  const w=eq.weapon,wb=w?BASES[w.b]:FIST,wv=w?baseVals(w):{dmin:3,dmax:5};
+  const w=eq.weapon&&!isBroken(eq.weapon)?eq.weapon:null,wb=w?BASES[w.b]:FIST,wv=w?baseVals(w):{dmin:3,dmax:5};
   s.wb=wb;s.dmin=wv.dmin;s.dmax=wv.dmax;s.el=w&&w.e>=0?w.e:-1;s.ep=w&&w.ep||0;
   s.aspdF=wb.aspd*(1+s.aspd/100);s.range=wb.range;s.arc=wb.arc;s.proj=wb.proj;
   s.speed=Math.max(80,150*(1+s.move/100));
@@ -978,8 +985,14 @@ function calcStats(eq){
   s.mhp=Math.max(30,Math.round(s.mhp));
   return s;
 }
-const encItem=it=>[it.b,it.r,it.l,Math.round(it.q*100),it.x,it.e>=0?it.e:-1,it.ep||0].concat(...it.v);
-function decItem(a){const v=[];for(let i=7;i+1<a.length;i+=2)v.push([a[i],a[i+1]]);const o={id:rid(),b:a[0],r:a[1],l:a[2],q:a[3]/100,x:a[4],v};if(a[5]>=0){o.e=a[5];o.ep=a[6]}return o}
+/* durability: every item wears out; at 0 it's broken and gives nothing until repaired */
+const DURMAX=[160,200,250,320,400];
+const maxDur=it=>DURMAX[clamp(it.r|0,0,4)]+(BASES[it.b]&&BASES[it.b].craft?60:0);
+const durOf=it=>it.du==null?maxDur(it):it.du;
+const isBroken=it=>!!it&&durOf(it)<=0;
+const durFrac=it=>clamp(durOf(it)/maxDur(it),0,1);
+const encItem=it=>[it.b,it.r,it.l,Math.round(it.q*100),it.x,it.e>=0?it.e:-1,it.ep||0].concat(...it.v,[Math.round(durOf(it))]);
+function decItem(a){const v=[];for(let i=7;i+1<a.length;i+=2)v.push([a[i],a[i+1]]);const o={id:rid(),b:a[0],r:a[1],l:a[2],q:a[3]/100,x:a[4],v};if(a[5]>=0){o.e=a[5];o.ep=a[6]}if((a.length-7)%2===1)o.du=+a[a.length-1];o.lsv2=1;return o}
 
 /* =========================================================
    save — personal stash (db when available, browser copy as backup)
@@ -990,7 +1003,7 @@ function emptyEquip(){return {weapon:null,head:null,chest:null,hands:null,feet:n
 function starterSword(){const it=genItem(rngFrom(Date.now()>>>0),1,rid(),{b:0,rar:0});it.q=Math.max(it.q,0.9);return it}
 function newSave(){const e=emptyEquip();e.weapon=starterSword();
   return {v:1,ts:Date.now(),name:'',gold:150,potions:2,stash:[],equip:e,pouch:null,inRaid:null,lost:null,claims:[],cos:{own:[],eq:{}},mats:{},scrolls:0,keys:{},dex:{m:{},i:{},l:{}},xp:0,ach:{},prof:{plate:'np_wood',title:'t_novice'},st:{raids:0,ext:0,kills:0,deaths:0,best:0}}}
-function noRegen(it){if(!it||!Array.isArray(it.v))return;for(const a of it.v)if(a[0]===9){a[0]=5;a[1]=Math.max(1,Math.round(a[1]*20))}}
+function noRegen(it){if(!it||!Array.isArray(it.v))return;for(const a of it.v){if(a[0]===9){a[0]=5;a[1]=Math.max(1,Math.round(a[1]*20))}else if(a[0]===8&&!it.lsv2){a[1]=Math.max(0.2,Math.round(a[1]*4)/10)}}it.lsv2=1}
 function migrate(s){if(!s||typeof s!=='object')return newSave();try{for(const it of [...(s.stash||[]),...Object.values(s.equip||{}),s.pouch,...((s.claims||[]).flatMap(c=>c.items||[])),...((s.lost&&s.lost.items)||[])])noRegen(it)}catch(e){}s.equip=Object.assign(emptyEquip(),s.equip||{});s.stash=Array.isArray(s.stash)?s.stash:[];s.st=Object.assign({raids:0,ext:0,kills:0,deaths:0,best:0},s.st||{});if(typeof s.gold!=='number')s.gold=0;if(typeof s.potions!=='number')s.potions=0;if(!Array.isArray(s.claims))s.claims=[];if(!s.mats||typeof s.mats!=='object')s.mats={};if(!s.keys||typeof s.keys!=='object')s.keys={};if(typeof s.xp!=='number')s.xp=0;if(!s.ach)s.ach={};if(!s.prof)s.prof={plate:'np_wood',title:'t_novice'};if(!s.dex||typeof s.dex!=='object')s.dex={m:{},i:{},l:{}};if(typeof s.scrolls!=='number')s.scrolls=0;if(!s.cos||typeof s.cos!=='object')s.cos={own:[],eq:{}};if(!Array.isArray(s.cos.own))s.cos.own=[];if(!s.cos.eq)s.cos.eq={};if(s.lost===undefined)s.lost=null;return s}
 function checkAbandoned(){
   if(SAVE.inRaid){
@@ -1001,7 +1014,7 @@ function checkAbandoned(){
   }
 }
 const INS_MS=3*60*1000;
-const insCost=it=>Math.max(80,Math.ceil(value(it)*1.5));
+const insCost=it=>Math.max(120,Math.ceil(valueFull(it)*1.9));
 function processClaims(){
   if(!SAVE||!SAVE.claims.length)return false;
   const t=Date.now(),ready=SAVE.claims.filter(c=>c.at<=t);
@@ -1029,7 +1042,7 @@ function startGraveRun(){
   SAVE.lost=null;
   startRaid(rid(6),L.seed>>>0,Date.now(),{gr:1,grave:L});
 }
-const STASH_BASE=80,STASH_STEP=20,STASH_COST=[2500,5000,9000,15000,24000,36000];
+const STASH_BASE=80,STASH_STEP=20,STASH_COST=[4000,8000,14000,23000,36000,54000];
 const stashLv=()=>clamp(SAVE&&SAVE.stashLv|0,0,STASH_COST.length);
 const stashCap=()=>STASH_BASE+STASH_STEP*stashLv();
 function expandStash(){const lv=stashLv();if(lv>=STASH_COST.length){toast('倉庫はこれ以上広げられません');return}const c=STASH_COST[lv];if(SAVE.gold<c){toast('金貨が足りません（'+c.toLocaleString()+'G）');return}SAVE.gold-=c;SAVE.stashLv=lv+1;persist();renderLobby();sfx('fanfare',0.6);toast('倉庫を拡張した！ '+stashCap()+'枠になった')}
@@ -1714,7 +1727,7 @@ function drawItemArt0(g,k,r,e,leg,V){
 
 function tile(it,o={}){
   const b=document.createElement('button');b.type='button';b.className='it';
-  if(it){b.dataset.r=it.r;b.innerHTML=(it.ins?'<span class="ins">保</span>':'')+itemIconHTML(it)+'<span class="lv">'+it.l+'</span>';b.title=itemName(it)+'（'+RAR[it.r].n+'）'}
+  if(it){b.dataset.r=it.r;b.innerHTML=(it.ins?'<span class="ins">保</span>':'')+itemIconHTML(it)+'<span class="lv">'+it.l+'</span>'+(durFrac(it)<1?'<span class="durb"><i style="width:'+Math.round(durFrac(it)*100)+'%;background:'+(durFrac(it)<=0.15?'#e0644c':durFrac(it)<0.5?'#e4b450':'#7cc47f')+'"></i></span>':'')+(isBroken(it)?'<span class="brk">壊</span>':'');b.title=itemName(it)+'（'+RAR[it.r].n+'）'}
   else{b.classList.add('empty');if(o.label)b.innerHTML='<span class="sl">'+esc(o.label)+'</span>';b.tabIndex=-1}
   if(o.sel)b.classList.add('sel');
   if(o.drag&&it)b._ds=o.drag;if(o.drop){b._dt=o.drop;b.dataset.drop='1'}
@@ -1751,6 +1764,7 @@ function inspector(el,it,acts,cmp,cmpLabel){
     lines+=b.proj?'<li><span>射程</span><b>'+Math.round(b.proj.range/TS)+'マス · 飛び道具'+(b.proj.pierce?' · 貫通':'')+'</b></li>':'<li><span>間合い</span><b>'+(b.range/TS).toFixed(1)+'マス · '+b.arc+'°</b></li>';
   }
   if(bv.arm)lines+='<li><span>防御</span><b>'+bv.arm+'</b></li>';
+  {const fr=durFrac(it);lines+='<li><span>耐久</span><b style="color:'+(fr<=0?'#e0644c':fr<=0.15?'#ff9a6a':fr<0.5?'#e4b450':'inherit')+'">'+(fr<=0?'壊れている':Math.round(durOf(it))+' / '+maxDur(it))+'</b></li>'}
   if(bv.mv)lines+='<li><span>移動速度</span><b class="neg">'+bv.mv+'%</b></li>';
   for(const [ai,v] of it.v)lines+='<li class="aff"><span>'+AFF[ai].n+'</span><b>'+affText(ai,v)+'</b></li>';
   let diff='';
@@ -1775,6 +1789,44 @@ function selItem(){
   if(SEL.where==='pouch')return SAVE.pouch;
   return null;
 }
+const WOODW=new Set(['bow','staff','wolfbow','spiritstaff','frostbow','ashstaff','heavycrossbow']);
+const CLOTHA=new Set(['hood','tunic','leather','gloves','boots','beastboots','trollhide','soulhood','nightgloves','galeboots']);
+function repairCost(it){
+  const mx=maxDur(it),f=clamp((mx-durOf(it))/mx,0,1);if(f<=0)return null;
+  const r=it.r|0,b=BASES[it.b],m={};
+  const gold=Math.ceil(valueFull(it)*f*[0.6,1.1,2,3.6,6.5][r]+f*40);
+  const n=Math.ceil(f*[2,3,5,8,12][r]);
+  if(b.s==='ring')m.gem=Math.ceil(n/3);
+  else if(b.s==='weapon'){if(WOODW.has(b.k))m.wood=n;else m.iron=n}
+  else if(CLOTHA.has(b.k)){m.fur=Math.ceil(n/2);m.cloth=Math.ceil(n/2)}
+  else m.iron=n;
+  if(r>=3)m.core=Math.ceil(f*(r===4?2:1));
+  if(r===4)m.sigil=1;
+  return {gold,m,f};
+}
+function canPay(c){return c&&SAVE.gold>=c.gold&&Object.entries(c.m).every(([k,n])=>(SAVE.mats[k]||0)>=n)}
+function costText(c){return c.gold.toLocaleString()+'G・'+Object.entries(c.m).map(([k,n])=>MATS[k].n+'×'+n).join('・')}
+function repairItem(it,silent){
+  const c=repairCost(it);if(!c)return false;
+  if(!canPay(c)){if(!silent)toast('修復に必要なもの：'+costText(c));return false}
+  SAVE.gold-=c.gold;for(const [k,n] of Object.entries(c.m))SAVE.mats[k]-=n;it.du=maxDur(it);
+  if(!silent){persist();renderLobby();sfx('equip');toast(itemName(it)+' を修復した')}
+  return true;
+}
+function repairAll(){
+  const list=SLOTS.map(s=>SAVE.equip[s]).filter(it=>it&&repairCost(it));
+  if(!list.length){toast('修復が必要な装備はありません');return}
+  let n=0;for(const it of list)if(repairItem(it,true))n++;
+  persist();renderLobby();if(n)sfx('equip');toast(n?n+'点を修復した'+(n<list.length?'（'+(list.length-n)+'点は素材か金貨が足りない）':''):'素材か金貨が足りません');
+}
+function wearItem(it,amt){
+  if(!it||isBroken(it))return;const before=durFrac(it);
+  it.du=Math.max(0,durOf(it)-amt);
+  if(it.du<=0){restat();addFeed('✖ '+itemName(it)+' が壊れた！（修復するまで効果なし）');flashMsg(itemName(it)+' が壊れた！');sfx('hurt')}
+  else if(before>0.15&&durFrac(it)<=0.15)addFeed('⚠ '+itemName(it)+' の耐久が残りわずか');
+}
+function wearWeapon(){if(!G)return;const t=now();if(t-(G.wearT||0)<0.18)return;G.wearT=t;wearItem(G.equip.weapon,1)}
+function wearArmor(d){if(!G)return;const pool=['head','chest','hands','feet'].map(s=>G.equip[s]).filter(it=>it&&!isBroken(it));if(!pool.length)return;wearItem(pool[Math.floor(Math.random()*pool.length)],d>=30?2:1);if(Math.random()<0.12&&G.equip.ring)wearItem(G.equip.ring,1)}
 function lobbyAct(kind){
   const it=selItem();if(!it)return;
   const slot=BASES[it.b].s;
@@ -1797,16 +1849,18 @@ function lobbyAct(kind){
   }else if(kind==='insure'){
     const c=insCost(it);if(SAVE.gold<c){toast('金貨が足りません');return}
     SAVE.gold-=c;it.ins=1;toast('保険をかけました（'+c+'G）');sfx('coin');
+  }else if(kind==='repair'){
+    repairItem(it);return;
   }else if(kind==='sell'){
     sellUndoable([{c:'L',where:SEL.where,i:SEL.i,slot:slot}]);return;
   }
   persist();renderLobby();
 }
 const SHOP=[
-  {k:'pot',t:'回復薬',d:'2.5秒かけてHP45回復。持ち込みは5本まで',p:45},
-  {k:'box1',t:'補給箱',d:'ランダムな装備 1品（Lv1–2）',p:110},
-  {k:'box2',t:'鍛冶屋の木箱',d:'アンコモン以上 1品（Lv4–5）',p:480},
-  {k:'box3',t:'封印の櫃',d:'レア以上 1品（Lv7–8）',p:1600},
+  {k:'pot',t:'回復薬',d:'2.5秒かけてHP45回復。持ち込みは5本まで',p:70},
+  {k:'box1',t:'補給箱',d:'ランダムな装備 1品（Lv1–2）',p:170},
+  {k:'box2',t:'鍛冶屋の木箱',d:'アンコモン以上 1品（Lv4–5）',p:720},
+  {k:'box3',t:'封印の櫃',d:'レア以上 1品（Lv7–8）',p:2400},
 ];
 function buy(w){
   if(SAVE.gold<w.p){toast('金貨が足りません');return}
@@ -1875,6 +1929,7 @@ function renderLobby(){
     else if(SEL.where==='equip'){acts.push({label:'外す',fn:()=>lobbyAct('unequip')});acts.push({label:'ポーチへ',fn:()=>lobbyAct('pouch')});acts.push({label:'売却 '+value(it)+'G',fn:()=>lobbyAct('sell'),cls:'danger'})}
     else{acts.push({label:'装備する',fn:()=>lobbyAct('equip'),cls:'primary'});acts.push({label:'倉庫へ',fn:()=>lobbyAct('topouchout')});acts.push({label:'売却 '+value(it)+'G',fn:()=>lobbyAct('sell'),cls:'danger'})}
     if(SEL.where!=='pouch'&&!it.ins)acts.splice(1,0,{label:'保険 '+insCost(it)+'G',fn:()=>lobbyAct('insure')});
+    {const rc=repairCost(it);if(rc)acts.unshift({label:'修復（'+costText(rc)+'）',fn:()=>lobbyAct('repair'),cls:canPay(rc)?(isBroken(it)?'primary':''):''})}
     inspector(ins,it,acts,SEL.where==='equip'?undefined:SAVE.equip[slot],'装備中');
     if(it.ins){const n=document.createElement('p');n.className='hint';n.style.color='var(--acc)';n.textContent='保険付き：死んでも持ち去られなければ3分後に倉庫へ戻る';ins.querySelector('.pw').after(n)}
   }else if(SEL&&SEL.where==='equip'){ins.innerHTML='<p class="hint">'+SLOTN[SEL.slot]+'は空いています。</p>'}
@@ -1907,43 +1962,43 @@ function renderLoss(){
   }else cb.hidden=true;
 }
 const RECIPES=[
-  {g:'装備',id:'r_wpn',n:'鍛冶：武器',d:'ランダムな武器 Lv6・レア以上',m:{bone:6,iron:4},gold:150,out:{kind:'gear',slot:'weapon',l:6,minR:2}},
-  {g:'装備',id:'r_arm',n:'仕立て：防具',d:'ランダムな頭・胴・手・足 Lv6・レア以上',m:{fur:5,cloth:5,iron:3},gold:150,out:{kind:'gear',slots:['head','chest','hands','feet'],l:6,minR:2}},
-  {g:'装備',id:'r_ring',n:'彫金：指輪',d:'ランダムな指輪 Lv7・レア以上',m:{gem:2,soul:3},gold:200,out:{kind:'gear',slot:'ring',l:7,minR:2}},
-  {g:'装備',id:'r_epic',n:'名工の逸品',d:'ランダムな装備 Lv9・エピック以上',m:{gem:4,core:2,iron:8},gold:600,out:{kind:'gear',l:9,minR:3}},
-  {g:'限定武器',id:'c_cleaver',n:'骨断ちの大鉈',d:'巨大な刃で広く薙ぐ。ダメージ24–36・間合い140°',m:{bone:20,iron:8,claw:6},gold:400,out:{kind:'gear',b:'bonecleaver',l:8,minR:2}},
-  {g:'限定武器',id:'c_wolfbow',n:'狼牙の連弓',d:'速射の弓。攻撃速度2.0回/秒',m:{fur:12,wood:10,claw:4},gold:400,out:{kind:'gear',b:'wolfbow',l:8,minR:2}},
-  {g:'限定武器',id:'c_spirit',n:'霊魂の錫杖',d:'大きな貫通弾を放つ杖。闇属性つき',m:{soul:12,wood:6,gem:2},gold:500,out:{kind:'gear',b:'spiritstaff',l:8,minR:2,elem:4}},
-  {g:'限定防具',id:'c_ghost',n:'亡霊の鎖衣',d:'鎖帷子並みの防御で移動速度が落ちない胴',m:{soul:10,cloth:10,iron:6},gold:500,out:{kind:'gear',b:'ghostmail',l:8,minR:2}},
-  {g:'限定防具',id:'c_boots',n:'獣皮の長靴',d:'移動速度の効果が必ず付く靴',m:{fur:10,moss:6},gold:300,out:{kind:'gear',b:'beastboots',l:8,minR:2,force:['move']}},
-  {g:'限定装飾',id:'c_king',n:'王の指輪',d:'番人の証から作る指輪。エピック以上',m:{sigil:1,gem:4},gold:800,out:{kind:'gear',b:'kingring',l:10,minR:3}},
-  {g:'限定武器',id:'c_dblade',n:'竜牙の刀',d:'竜の素材から打つ刀。炎属性・エピック以上・Lv10',m:{scale:6,heart:1,iron:10},gold:1500,out:{kind:'gear',b:'dragonblade',l:10,minR:3,elem:0}},
-  {g:'限定防具',id:'c_dplate',n:'竜鱗の鎧',d:'最高の防御を持つ鎧。エピック以上・Lv10',m:{scale:10,iron:12,core:2},gold:1500,out:{kind:'gear',b:'dragonplate',l:10,minR:3}},
-  {g:'限定武器',id:'c_fang',n:'牙の双刃',d:'獣の牙を削った双剣。攻撃速度3.0回/秒の超連撃',m:{claw:14,fur:6,iron:4},gold:350,out:{kind:'gear',b:'fangknife',l:7,minR:2}},
-  {g:'限定武器',id:'c_thorn',n:'茨の魔槍',d:'間合い3.4マスの長い槍。毒属性つき',m:{moss:10,wood:8,iron:4},gold:450,out:{kind:'gear',b:'thornspear',l:8,minR:2,elem:3}},
-  {g:'限定武器',id:'c_frost',n:'霜月の長弓',d:'弾が速く遠くまで届く弓。氷属性つき',m:{wood:12,soul:6,gem:1},gold:500,out:{kind:'gear',b:'frostbow',l:8,minR:2,elem:1}},
-  {g:'限定武器',id:'c_hammer',n:'雷神の大槌',d:'一撃26–40の超重量級。間合い150°。雷属性つき',m:{iron:16,core:2,gem:1},gold:900,out:{kind:'gear',b:'thunderhammer',l:9,minR:2,elem:2}},
-  {g:'限定武器',id:'c_ash',n:'灰燼の杖',d:'巨大な貫通火球を放つ杖。炎属性つき',m:{wood:8,soul:8,core:1},gold:700,out:{kind:'gear',b:'ashstaff',l:9,minR:2,elem:0}},
-  {g:'限定武器',id:'c_shadow',n:'影縫いの刃',d:'速くて軽い剣。闇属性で吸命する',m:{soul:14,iron:6,gem:1},gold:800,out:{kind:'gear',b:'shadowblade',l:9,minR:2,elem:4}},
-  {g:'限定武器',id:'c_xbow',n:'竜骨の重弩',d:'一撃24–34・貫通。連射は遅いが最強の射程',m:{bone:20,iron:10,scale:1},gold:1200,out:{kind:'gear',b:'heavycrossbow',l:10,minR:3}},
-  {g:'限定武器',id:'c_reaper',n:'死神の大鎌',d:'周囲210°をまとめて刈る大鎌。エピック以上',m:{soul:16,bone:12,sigil:1},gold:1500,out:{kind:'gear',b:'reaper',l:10,minR:3}},
-  {g:'限定防具',id:'c_troll',n:'トロル革の胴',d:'厚い革鎧。最大HPの効果が必ず付く',m:{moss:12,fur:10},gold:400,out:{kind:'gear',b:'trollhide',l:8,minR:2,force:['hp']}},
-  {g:'限定防具',id:'c_shood',n:'霊布の頭巾',d:'軽い頭巾。会心率の効果が必ず付く',m:{cloth:12,soul:6},gold:350,out:{kind:'gear',b:'soulhood',l:8,minR:2,force:['crit']}},
-  {g:'限定防具',id:'c_shelm',n:'竜鱗の兜',d:'頭防具で最高の防御。エピック以上',m:{scale:3,iron:8},gold:1200,out:{kind:'gear',b:'scalehelm',l:10,minR:3}},
-  {g:'限定防具',id:'c_core',n:'魔核の籠手',d:'攻撃力の効果が必ず付く籠手',m:{core:2,iron:8},gold:700,out:{kind:'gear',b:'corefist',l:9,minR:2,force:['atkp']}},
-  {g:'限定防具',id:'c_night',n:'夜影の手袋',d:'攻撃速度の効果が必ず付く手袋',m:{cloth:8,soul:8},gold:500,out:{kind:'gear',b:'nightgloves',l:8,minR:2,force:['aspd']}},
-  {g:'限定防具',id:'c_gale',n:'疾風の靴',d:'回避の再使用が短くなる効果が必ず付く',m:{fur:8,cloth:6,soul:4},gold:450,out:{kind:'gear',b:'galeboots',l:8,minR:2,force:['dodge']}},
-  {g:'限定防具',id:'c_sgreave',n:'竜鱗の脚甲',d:'足防具で最高の防御。エピック以上',m:{scale:2,iron:6},gold:1000,out:{kind:'gear',b:'scalegreaves',l:10,minR:3}},
-  {g:'限定装飾',id:'c_soulr',n:'魂喰らいの指輪',d:'吸血の効果が必ず付く指輪',m:{soul:10,gem:2},gold:600,out:{kind:'gear',b:'soulring',l:8,minR:2,force:['ls']}},
-  {g:'限定装飾',id:'c_charm',n:'黄金の護符',d:'金運の効果が必ず付く護符',m:{gem:3,iron:4},gold:500,out:{kind:'gear',b:'goldcharm',l:8,minR:2,force:['luck']}},
-  {g:'限定装飾',id:'c_deye',n:'竜眼の指輪',d:'会心率と会心ダメージが必ず付く。エピック以上',m:{scale:2,heart:1,gem:2},gold:2000,out:{kind:'gear',b:'dragoneye',l:10,minR:3,force:['crit','critd']}},
+  {g:'装備',id:'r_wpn',n:'鍛冶：武器',d:'ランダムな武器 Lv6・レア以上',m:{bone:6,iron:4},gold:220,out:{kind:'gear',slot:'weapon',l:6,minR:2}},
+  {g:'装備',id:'r_arm',n:'仕立て：防具',d:'ランダムな頭・胴・手・足 Lv6・レア以上',m:{fur:5,cloth:5,iron:3},gold:220,out:{kind:'gear',slots:['head','chest','hands','feet'],l:6,minR:2}},
+  {g:'装備',id:'r_ring',n:'彫金：指輪',d:'ランダムな指輪 Lv7・レア以上',m:{gem:2,soul:3},gold:300,out:{kind:'gear',slot:'ring',l:7,minR:2}},
+  {g:'装備',id:'r_epic',n:'名工の逸品',d:'ランダムな装備 Lv9・エピック以上',m:{gem:4,core:2,iron:8},gold:900,out:{kind:'gear',l:9,minR:3}},
+  {g:'限定武器',id:'c_cleaver',n:'骨断ちの大鉈',d:'巨大な刃で広く薙ぐ。ダメージ24–36・間合い140°',m:{bone:20,iron:8,claw:6},gold:600,out:{kind:'gear',b:'bonecleaver',l:8,minR:2}},
+  {g:'限定武器',id:'c_wolfbow',n:'狼牙の連弓',d:'速射の弓。攻撃速度2.0回/秒',m:{fur:12,wood:10,claw:4},gold:600,out:{kind:'gear',b:'wolfbow',l:8,minR:2}},
+  {g:'限定武器',id:'c_spirit',n:'霊魂の錫杖',d:'大きな貫通弾を放つ杖。闇属性つき',m:{soul:12,wood:6,gem:2},gold:750,out:{kind:'gear',b:'spiritstaff',l:8,minR:2,elem:4}},
+  {g:'限定防具',id:'c_ghost',n:'亡霊の鎖衣',d:'鎖帷子並みの防御で移動速度が落ちない胴',m:{soul:10,cloth:10,iron:6},gold:750,out:{kind:'gear',b:'ghostmail',l:8,minR:2}},
+  {g:'限定防具',id:'c_boots',n:'獣皮の長靴',d:'移動速度の効果が必ず付く靴',m:{fur:10,moss:6},gold:450,out:{kind:'gear',b:'beastboots',l:8,minR:2,force:['move']}},
+  {g:'限定装飾',id:'c_king',n:'王の指輪',d:'番人の証から作る指輪。エピック以上',m:{sigil:1,gem:4},gold:1200,out:{kind:'gear',b:'kingring',l:10,minR:3}},
+  {g:'限定武器',id:'c_dblade',n:'竜牙の刀',d:'竜の素材から打つ刀。炎属性・エピック以上・Lv10',m:{scale:6,heart:1,iron:10},gold:2250,out:{kind:'gear',b:'dragonblade',l:10,minR:3,elem:0}},
+  {g:'限定防具',id:'c_dplate',n:'竜鱗の鎧',d:'最高の防御を持つ鎧。エピック以上・Lv10',m:{scale:10,iron:12,core:2},gold:2250,out:{kind:'gear',b:'dragonplate',l:10,minR:3}},
+  {g:'限定武器',id:'c_fang',n:'牙の双刃',d:'獣の牙を削った双剣。攻撃速度3.0回/秒の超連撃',m:{claw:14,fur:6,iron:4},gold:520,out:{kind:'gear',b:'fangknife',l:7,minR:2}},
+  {g:'限定武器',id:'c_thorn',n:'茨の魔槍',d:'間合い3.4マスの長い槍。毒属性つき',m:{moss:10,wood:8,iron:4},gold:680,out:{kind:'gear',b:'thornspear',l:8,minR:2,elem:3}},
+  {g:'限定武器',id:'c_frost',n:'霜月の長弓',d:'弾が速く遠くまで届く弓。氷属性つき',m:{wood:12,soul:6,gem:1},gold:750,out:{kind:'gear',b:'frostbow',l:8,minR:2,elem:1}},
+  {g:'限定武器',id:'c_hammer',n:'雷神の大槌',d:'一撃26–40の超重量級。間合い150°。雷属性つき',m:{iron:16,core:2,gem:1},gold:1350,out:{kind:'gear',b:'thunderhammer',l:9,minR:2,elem:2}},
+  {g:'限定武器',id:'c_ash',n:'灰燼の杖',d:'巨大な貫通火球を放つ杖。炎属性つき',m:{wood:8,soul:8,core:1},gold:1050,out:{kind:'gear',b:'ashstaff',l:9,minR:2,elem:0}},
+  {g:'限定武器',id:'c_shadow',n:'影縫いの刃',d:'速くて軽い剣。闇属性で吸命する',m:{soul:14,iron:6,gem:1},gold:1200,out:{kind:'gear',b:'shadowblade',l:9,minR:2,elem:4}},
+  {g:'限定武器',id:'c_xbow',n:'竜骨の重弩',d:'一撃24–34・貫通。連射は遅いが最強の射程',m:{bone:20,iron:10,scale:1},gold:1800,out:{kind:'gear',b:'heavycrossbow',l:10,minR:3}},
+  {g:'限定武器',id:'c_reaper',n:'死神の大鎌',d:'周囲210°をまとめて刈る大鎌。エピック以上',m:{soul:16,bone:12,sigil:1},gold:2250,out:{kind:'gear',b:'reaper',l:10,minR:3}},
+  {g:'限定防具',id:'c_troll',n:'トロル革の胴',d:'厚い革鎧。最大HPの効果が必ず付く',m:{moss:12,fur:10},gold:600,out:{kind:'gear',b:'trollhide',l:8,minR:2,force:['hp']}},
+  {g:'限定防具',id:'c_shood',n:'霊布の頭巾',d:'軽い頭巾。会心率の効果が必ず付く',m:{cloth:12,soul:6},gold:520,out:{kind:'gear',b:'soulhood',l:8,minR:2,force:['crit']}},
+  {g:'限定防具',id:'c_shelm',n:'竜鱗の兜',d:'頭防具で最高の防御。エピック以上',m:{scale:3,iron:8},gold:1800,out:{kind:'gear',b:'scalehelm',l:10,minR:3}},
+  {g:'限定防具',id:'c_core',n:'魔核の籠手',d:'攻撃力の効果が必ず付く籠手',m:{core:2,iron:8},gold:1050,out:{kind:'gear',b:'corefist',l:9,minR:2,force:['atkp']}},
+  {g:'限定防具',id:'c_night',n:'夜影の手袋',d:'攻撃速度の効果が必ず付く手袋',m:{cloth:8,soul:8},gold:750,out:{kind:'gear',b:'nightgloves',l:8,minR:2,force:['aspd']}},
+  {g:'限定防具',id:'c_gale',n:'疾風の靴',d:'回避の再使用が短くなる効果が必ず付く',m:{fur:8,cloth:6,soul:4},gold:680,out:{kind:'gear',b:'galeboots',l:8,minR:2,force:['dodge']}},
+  {g:'限定防具',id:'c_sgreave',n:'竜鱗の脚甲',d:'足防具で最高の防御。エピック以上',m:{scale:2,iron:6},gold:1500,out:{kind:'gear',b:'scalegreaves',l:10,minR:3}},
+  {g:'限定装飾',id:'c_soulr',n:'魂喰らいの指輪',d:'吸血の効果が必ず付く指輪',m:{soul:10,gem:2},gold:900,out:{kind:'gear',b:'soulring',l:8,minR:2,force:['ls']}},
+  {g:'限定装飾',id:'c_charm',n:'黄金の護符',d:'金運の効果が必ず付く護符',m:{gem:3,iron:4},gold:750,out:{kind:'gear',b:'goldcharm',l:8,minR:2,force:['luck']}},
+  {g:'限定装飾',id:'c_deye',n:'竜眼の指輪',d:'会心率と会心ダメージが必ず付く。エピック以上',m:{scale:2,heart:1,gem:2},gold:3000,out:{kind:'gear',b:'dragoneye',l:10,minR:3,force:['crit','critd']}},
   {g:'消耗品',id:'k_pot',n:'回復薬 ×3',d:'2.5秒かけてHP45回復',m:{moss:2,claw:2},gold:0,out:{kind:'pot',n:3}},
   {g:'消耗品',id:'k_scroll',n:'帰還の巻物',d:'レイド中に10秒動かずにいると、その場から脱出できる。3枚まで持ち込み',m:{soul:3,cloth:2},gold:100,out:{kind:'scroll',n:1}},
-  {g:'交易品',id:'t_bone',n:'骨細工の装飾品',d:'作るとすぐ商人が買い取る',m:{bone:10},gold:0,out:{kind:'gold',n:110}},
-  {g:'交易品',id:'t_fur',n:'毛皮の外套',d:'作るとすぐ商人が買い取る',m:{fur:8,cloth:4},gold:0,out:{kind:'gold',n:160}},
-  {g:'交易品',id:'t_gem',n:'宝石細工',d:'作るとすぐ商人が買い取る',m:{gem:3},gold:0,out:{kind:'gold',n:270}},
-  {g:'交易品',id:'t_sigil',n:'番人の証の献上',d:'作るとすぐ商人が買い取る',m:{sigil:1},gold:0,out:{kind:'gold',n:540}},
-  {g:'交易品',id:'t_dragon',n:'竜鱗の宝飾',d:'作るとすぐ商人が買い取る',m:{scale:4,gem:2},gold:0,out:{kind:'gold',n:1300}},
+  {g:'交易品',id:'t_bone',n:'骨細工の装飾品',d:'作るとすぐ商人が買い取る',m:{bone:10},gold:0,out:{kind:'gold',n:80}},
+  {g:'交易品',id:'t_fur',n:'毛皮の外套',d:'作るとすぐ商人が買い取る',m:{fur:8,cloth:4},gold:0,out:{kind:'gold',n:115}},
+  {g:'交易品',id:'t_gem',n:'宝石細工',d:'作るとすぐ商人が買い取る',m:{gem:3},gold:0,out:{kind:'gold',n:190}},
+  {g:'交易品',id:'t_sigil',n:'番人の証の献上',d:'作るとすぐ商人が買い取る',m:{sigil:1},gold:0,out:{kind:'gold',n:380}},
+  {g:'交易品',id:'t_dragon',n:'竜鱗の宝飾',d:'作るとすぐ商人が買い取る',m:{scale:4,gem:2},gold:0,out:{kind:'gold',n:900}},
 ];
 let CRAFTTAB='装備';const CRAFTTABS=['装備','限定武器','限定防具','限定装飾','消耗品','交易品'];
 const canCraft=rc=>SAVE.gold>=rc.gold&&Object.entries(rc.m).every(([id,n])=>(SAVE.mats[id]||0)>=n);
@@ -2363,11 +2418,11 @@ function renderParty(){
 const TS=32,MW=84,MH=84,PR=12,RAID_MS=15*60*1000,JOIN_MIN=4*60*1000,BOSS_MS=8*60*1000;
 const DIFF=[{n:'普通',hp:1,dmg:1,el:0,lv:0,col:'#9fd26b'},{n:'危険',hp:1.6,dmg:1.3,el:0.1,lv:1,col:'#e4b450'},{n:'悪夢',hp:2.4,dmg:1.7,el:0.2,lv:2,col:'#ff8a5a'},{n:'地獄',hp:3.5,dmg:2.2,el:0.3,lv:3,col:'#ff4d5a'}];
 const RKEYS=[
-  {id:'rk1',n:'錆びた鍵',star:1,b:{n:'屍の巨人',f:'ogre',col:'#7a8a6a',hp:3600,dmg:30,biome:0,add:'skel',r:32}},
-  {id:'rk2',n:'苔むした鍵',star:2,b:{n:'覚醒せし古樹',f:'treant',col:'#5a8a3a',hp:5400,dmg:36,biome:1,add:'ghoul',r:32}},
-  {id:'rk3',n:'焦げた鍵',star:3,b:{n:'真・灰の王',f:'ashKing',col:'#e0743a',hp:8000,dmg:42,biome:2,add:'skel',r:32}},
-  {id:'rk4',n:'竜紋の鍵',star:4,b:{n:'黒鱗の古竜',f:'dragon',col:'#2e2a36',br:'190,90,255',hp:11500,dmg:46,biome:0,add:'caster',breath:1,r:36}},
-  {id:'rk5',n:'深淵の鍵',star:5,b:{n:'深淵の王',f:'ogre',col:'#3a1a5a',hp:16500,dmg:52,biome:2,add:'charger',r:34}},
+  {id:'rk1',n:'錆びた鍵',star:1,b:{n:'屍の巨人',f:'ogre',col:'#7a8a6a',hp:2900,dmg:34,biome:0,add:'skel',r:32}},
+  {id:'rk2',n:'苔むした鍵',star:2,b:{n:'覚醒せし古樹',f:'treant',col:'#5a8a3a',hp:4300,dmg:41,biome:1,add:'ghoul',r:32}},
+  {id:'rk3',n:'焦げた鍵',star:3,b:{n:'真・灰の王',f:'ashKing',col:'#e0743a',hp:6400,dmg:48,biome:2,add:'skel',r:32}},
+  {id:'rk4',n:'竜紋の鍵',star:4,b:{n:'黒鱗の古竜',f:'dragon',col:'#2e2a36',br:'190,90,255',hp:9200,dmg:53,biome:0,add:'caster',breath:1,r:36}},
+  {id:'rk5',n:'深淵の鍵',star:5,b:{n:'深淵の王',f:'ogre',col:'#3a1a5a',hp:13000,dmg:60,biome:2,add:'charger',r:34}},
 ];
 const RK=id=>RKEYS.find(k=>k.id===id)||RKEYS[0];
 function keyRoll(r,bias){const w=[50-8*bias,30,14+4*bias,5+3*bias,1+1.5*bias].map(x=>Math.max(1,x));return RKEYS[R.w(r,w)].id}
@@ -2389,7 +2444,7 @@ const MON={
   dragon:{n:'竜',hp:2400,dmg:24,spd:92,r:34,range:330,wind:1.0,cd:1.7,aggro:380,dragon:1,col:'#c8452f'},
 };
 /* harder world: normal monsters hit harder, take more to kill and notice you from further away */
-for(const k in MON){const D=MON[k];if(D.rboss||D.dragon)continue;D.hp=Math.round(D.hp*1.2);D.dmg=Math.round(D.dmg*1.3);D.aggro=Math.round(D.aggro*1.15);D.cd=+(D.cd*0.92).toFixed(2)}
+for(const k in MON){const D=MON[k];if(D.rboss||D.dragon)continue;D.hp=Math.round(D.hp*1.4);D.dmg=Math.round(D.dmg*1.5);D.aggro=Math.round(D.aggro*1.25);D.cd=+(D.cd*0.86).toFixed(2);D.spd=Math.round(D.spd*1.06)}
 const BIOMES=[
   {k:'dungeon',n:'冥窟',sub:'石造りの地下迷宮',fog:[7,5,4]},
   {k:'forest',n:'黒き森',sub:'霧と古樹の森',fog:[4,9,7]},
@@ -2442,9 +2497,19 @@ function genMap(seed){
     const carve=(x0,y0,x1,y1)=>{
       const hl=(xa,xb,y)=>{for(let x=Math.min(xa,xb);x<=Math.max(xa,xb)+1;x++){set(x,y,1);set(x,y+1,1)}};
       const vl=(ya,yb,x)=>{for(let y=Math.min(ya,yb);y<=Math.max(ya,yb)+1;y++){set(x,y,1);set(x+1,y,1)}};
-      if(r()<0.5){hl(x0,x1,y0);vl(y0,y1,x1)}else{vl(y0,y1,x0);hl(x0,x1,y1)}
+      // winding corridors: go through 1–2 random waypoints instead of one straight L
+      const pts=[[x0,y0]];const nw=R.i(r,1,2);for(let i=1;i<=nw;i++){const f=i/(nw+1);pts.push([Math.round(x0+(x1-x0)*f+R.i(r,-6,6)),Math.round(y0+(y1-y0)*f+R.i(r,-6,6))])}pts.push([x1,y1]);
+      for(let i=0;i+1<pts.length;i++){const [ax,ay]=pts[i],[bx,by]=pts[i+1];const X=clamp(bx,2,MW-4),Y=clamp(by,2,MH-4);if(r()<0.5){hl(ax,X,ay);vl(ay,Y,X)}else{vl(ay,Y,ax);hl(ax,X,Y)}pts[i+1]=[X,Y]}
     };
     for(const [a,b] of edges)carve(rooms[a].cx|0,rooms[a].cy|0,rooms[b].cx|0,rooms[b].cy|0);
+    // maze bits: narrow side passages that wander off and often dead-end
+    const inRm=(x,y)=>rooms.some(o=>x>=o.x-1&&x<=o.x+o.w&&y>=o.y-1&&y<=o.y+o.h);
+    for(let k=0;k<26;k++){
+      let x=R.i(r,3,MW-4),y=R.i(r,3,MH-4),tries=0;while((get(x,y)!==1||inRm(x,y))&&tries++<60){x=R.i(r,3,MW-4);y=R.i(r,3,MH-4)}
+      if(get(x,y)!==1||inRm(x,y))continue;
+      let dir=R.i(r,0,3);const L=R.i(r,8,22);
+      for(let i=0;i<L;i++){const D=[[1,0],[-1,0],[0,1],[0,-1]][dir];x+=D[0];y+=D[1];if(x<2||y<2||x>MW-3||y>MH-3)break;set(x,y,1);if(r()<0.22)dir=R.i(r,0,3)}
+    }
     for(const o of rooms){
       if(o.boss){for(const [px,py] of [[3,3],[o.w-4,3],[3,o.h-4],[o.w-4,o.h-4]])set(o.x+px,o.y+py,0);continue}
       if(o.w<9||o.h<8)continue;
@@ -2462,6 +2527,7 @@ function genMap(seed){
       const nx=-(Bb.cy-A.cy)/L,ny=(Bb.cx-A.cx)/L;
       for(let i=0;i<=steps;i++){const f=i/steps,w=Math.sin(f*Math.PI*2+ph)*amp*Math.sin(f*Math.PI);brush(A.cx+(Bb.cx-A.cx)*f+nx*w,A.cy+(Bb.cy-A.cy)*f+ny*w,1.2)}
     }
+    for(let k=0;k<14;k++){const o=rooms[R.i(r,1,rooms.length-1)];let x=o.cx,y=o.cy,a=r()*6.28;const L=R.i(r,10,24);for(let i=0;i<L;i++){a+=R.f(r,-0.6,0.6);x+=Math.cos(a)*1.1;y+=Math.sin(a)*1.1;if(x<3||y<3||x>MW-4||y>MH-4)break;brush(x,y,0.9)}}
     for(const o of rooms){
       if(o.boss)continue;
       const nt=R.i(r,1,4);
@@ -2491,6 +2557,7 @@ function genMap(seed){
     }
     const inRoom=(x,y,m)=>rooms.some(o=>x>=o.x-1-m&&x<=o.x+o.w+m&&y>=o.y-1-m&&y<=o.y+o.h+m);
     for(let k=0;k<170;k++){const x=R.i(r,2,MW-3),y=R.i(r,2,MH-3);if(inRoom(x,y,1))continue;set(x,y,0);if(r()<0.5)set(x+(r()<0.5?1:0),y+(r()<0.5?0:1),0)}
+    for(let k=0;k<34;k++){let x=R.i(r,3,MW-4),y=R.i(r,3,MH-4);const hz=r()<0.5,L=R.i(r,4,10);for(let i=0;i<L;i++){if(!inRoom(x,y,0))set(x,y,0);if(hz)x++;else y++}}
   }
   for(const o of rooms){const x=o.cx|0,y=o.cy|0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)set(x+dx,y+dy,1)}
   // connectivity repair: join every floor pocket to the region around the boss room
@@ -2522,12 +2589,12 @@ function genMap(seed){
   const exts=exRooms.map((o,i)=>{const a=Math.atan2(o.cy-cy,o.cx-cx);const di=((Math.round(a/(Math.PI/4))%8)+8)%8;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)usedT.add(((o.cy|0)+dy)*MW+(o.cx|0)+dx);return {x:(o.cx|0)*TS+TS/2,y:(o.cy|0)*TS+TS/2,n:DIRS[di]+'の'+EXN[bk][(i+R.i(r,0,4))%EXN[bk].length]}});
   for(const o of rooms){
     const dg=o.boss?1:clamp(1-Math.hypot(o.cx-cx,o.cy-cy)/(MW*0.5),0,1);o.dg=dg;
-    let nc=o.boss?3:o.spawn?R.i(r,0,1):R.i(r,0,1)+Math.round(dg*2.6);
+    let nc=o.boss?2:o.spawn?R.i(r,0,1):R.i(r,0,1)+Math.round(dg*2.6);if(!o.boss)nc=r()<0.5?Math.floor(nc/2):Math.ceil(nc/2);
     for(let k=0;k<nc;k++){const p=floorIn(o,usedT);if(p)chests.push({id:cid++,x:p.x,y:p.y,tier:o.tier,dg,boss:0})}
     if(o.boss){const bx=o.cx|0,by=o.y+2;set(bx,by,1);chests.push({id:cid++,x:bx*TS+TS/2,y:by*TS+TS/2,tier:3,dg:1,boss:1})}
     if(o.spawn)continue;
     const ri=rooms.indexOf(o);
-    const M=(k,p,extra)=>mons.push(Object.assign({id:mid++,k,x:p.x,y:p.y,tier:dg>0.66?3:dg>0.33?2:1,dg,room:ri,elite:r()<0.04+0.24*Math.pow(dg,1.5)?1:0},extra||{}));
+    const M=(k,p,extra)=>mons.push(Object.assign({id:mid++,k,x:p.x,y:p.y,tier:dg>0.66?3:dg>0.33?2:1,dg,room:ri,elite:r()<0.06+0.3*Math.pow(dg,1.5)?1:0},extra||{}));
     if(o.lair){mons.push({id:mid++,k:'dragon',x:(o.cx|0)*TS+16,y:(o.cy|0)*TS+16,tier:3,dg:1,room:ri,lv:o.lv,el:o.el});const p=floorIn(o,usedT);if(p)chests.push({id:cid++,x:p.x,y:p.y,tier:3,dg:1,boss:0});continue}
     if(o.boss){mons.push({id:mid++,k:'boss',x:(o.cx|0)*TS,y:(o.cy|0)*TS+TS,tier:3,dg:1,room:ri});for(let k=0;k<3;k++){const p=floorIn(o,usedT);if(p)M(k?'caster':'brute',p,{elite:1})}continue}
     if(!o.ext&&r()<0.04){o.horde=1;const nh=R.i(r,8,13);for(let k=0;k<nh;k++){const p=floorIn(o,usedT);if(p)M('swarm',p,{elite:0})}const p=floorIn(o,usedT);if(p)M(r()<0.5?'brute':'charger',p,{elite:1});continue}
@@ -2754,7 +2821,7 @@ function startRaid(raidId,seed,t0,opts={}){
     exT:0,loot:null,inv:false,invSel:null,corpse:null,done:false,startT:Date.now()};
   const fc=document.createElement('canvas');fc.width=MW;fc.height=MH;G.fogC=fc;G.fogCtx=fc.getContext('2d');G.fogImg=G.fogCtx.createImageData(MW,MH);
   for(const m of G.mons){const src=map.mons[m.id];if(m.k==='dragon'){m.lv=src.lv;m.el=src.el;const hm=(1+0.55*(src.lv-1))*(gr?1.2:1);m.mhp=m.hp=Math.round(MON.dragon.hp*hm);m.dm=(1+0.25*(src.lv-1))*(gr?1.25:1);m.name=dragonName(src.lv,src.el);m.col=ELEM[src.el].col;m.br=ELEM[src.el].br}if(m.k==='mimic')m.chest=src.chest}
-  if(boss){const K=map.arena,bm=G.mons[0];bm.mhp=bm.hp=Math.round(K.b.hp*(1+0.6*((opts.np||1)-1)));bm.dm=K.b.dmg;bm.br=K.b.br||'255,120,40';bm.star=K.star;bm.def=Object.assign({},MON.rboss,{r:K.b.r,breath:K.b.breath?1:0});bm.name=K.b.n}
+  if(boss){const K=map.arena,bm=G.mons[0];bm.mhp=bm.hp=Math.round(K.b.hp*(1+0.5*((opts.np||1)-1)));bm.dm=K.b.dmg;bm.br=K.b.br||'255,120,40';bm.star=K.star;bm.def=Object.assign({},MON.rboss,{r:K.b.r,breath:K.b.breath?1:0});bm.name=K.b.n}
   const fc3=map.B.fog;for(let i=0;i<MW*MH;i++){G.fogImg.data[i*4]=fc3[0];G.fogImg.data[i*4+1]=fc3[1];G.fogImg.data[i*4+2]=fc3[2]}
   // spawn far from other players
   const others=[];for(const p of partyPeers()){const pr=p.presence;if(pr.ph==='raid'&&pr.rid===raidId&&pr.st==='alive')others.push(pr)}
@@ -2863,6 +2930,8 @@ function processEv(e,Rm){
     const [,, ,x,y,rad,dmg]=e;boom(x,y,rad);applyMa(x,y,rad,dmg);
   }else if(ty==='ml'){
     const [,, ,x0,y0,x1,y1,w,dmg]=e;G.fx.push({t:'dash',x:x0,y:y0,x2:x1,y2:y1,life:0.35,max:0.35});applyMl(x0,y0,x1,y1,w,dmg);
+  }else if(ty==='tg'){
+    const [,, ,x,y,rad,ms]=e;G.fx.push({t:'warn',x,y,r:rad,life:ms/1000,max:ms/1000});
   }else if(ty==='or'){
     const [,, ,x,y,n,spd,dmg,ph100]=e;const bm=G.mons.find(q=>q.def.rboss);orbRing(x,y,n,spd,dmg,ph100/100,bm&&bm.br);
   }else if(ty==='hl'){
@@ -2965,11 +3034,12 @@ function dealMonster(m,d,el,ep){
   if(el>=0)elemHit(m.rx,m.ry,el);
   if(G.mode==='boss'){if(m.def.rboss)G.bossDmg=(G.bossDmg||0)+v;else if(m.sl)G.bossDmg=(G.bossDmg||0)+v*0.5}
   if(el===2&&!d.chain){let n=0;const near=G.mons.filter(o=>o!==m&&!o.dead&&!disguised(o)&&Math.hypot(o.rx-m.rx,o.ry-m.ry)<160).sort((a,b)=>Math.hypot(a.rx-m.rx,a.ry-m.ry)-Math.hypot(b.rx-m.rx,b.ry-m.ry));for(const o of near){if(n++>=2)break;G.fx.push({t:'zap',x:m.rx,y:m.ry,x2:o.rx,y2:o.ry,life:0.3,max:0.3});dealMonster(o,{v:Math.round(d.v*0.5),crit:false,thunder:0,chain:1},-1,0)}}
-  if(el===4)G.me.hp=Math.min(G.stats.mhp,G.me.hp+v*(ep||0)/250);
+  if(el===4)G.me.hp=Math.min(G.stats.mhp,G.me.hp+Math.min(v*(ep||0)/600,G.stats.mhp*0.02));
   if(el===0)m.vBurn=now()+3;if(el===1)m.vSlow=now()+2;if(el===3)m.vPoi=now()+5;
   addText(m.rx,m.ry-m.def.r-6,v,d.crit?'#ffd36b':'#f4ece0',d.crit);m.hitMe=true;if(d.crit)shake(2.5);
   if(d.thunder)G.fx.push({t:'bolt',x:m.rx,y:m.ry,life:0.25,max:0.25});
-  if(G.stats.ls)G.me.hp=Math.min(G.stats.mhp,G.me.hp+v*G.stats.ls/100);
+  if(G.stats.ls)G.me.hp=Math.min(G.stats.mhp,G.me.hp+Math.min(v*G.stats.ls/100,G.stats.mhp*0.025));
+  if(!d.chain)wearWeapon();
   m.flash=0.12;
   if(G.isHost)hitMonster(m.id,v,NET.peerId,d.chain?-1:el);
   else{m.hp-=v;pushEv('mh',m.id,v,d.chain?-1:el)}
@@ -2988,7 +3058,7 @@ function takeHit(dmg,crit,Rm,fl,srcName){
   const me=G.me;if(me.st!=='alive'||G.done)return;
   let d=dmg;if(fl&1&&me.hp<=G.stats.mhp*0.35)d*=1.6;
   d=Math.max(1,Math.round(d*(1-G.stats.red)));
-  me.hp-=d;G.hurt=0.25;
+  me.hp-=d;G.hurt=0.25;wearArmor(d);
   if(G.recallT>0){G.recallT=0;flashMsg('攻撃を受けて帰還が中断された')}
   addText(me.x,me.y-22,'-'+d,'#ff7a63',crit);
   sfx('hurt');
@@ -3046,7 +3116,7 @@ function applyMa(x,y,rad,dmg,mid){
 }
 function monArea(m){
   const D=m.def,c=Math.cos(m.ang),s=Math.sin(m.ang);
-  if(D.rboss)return m.kind===0?[m.x+c*80,m.y+s*80,95]:m.kind===1?[m.x,m.y,150]:m.kind===4?[m.x+c*105,m.y+s*105,125]:[m.x,m.y,330];
+  if(D.rboss)return m.kind===6?[m.lx||m.x,m.ly||m.y,120]:(m.kind===0||m.kind===7)?[m.x+c*80,m.y+s*80,95]:m.kind===1?[m.x,m.y,150]:m.kind===4?[m.x+c*105,m.y+s*105,125]:[m.x,m.y,330];
   if(D.dragon)return m.kind===0?[m.x+c*68,m.y+s*68,72]:m.kind===1?[m.x-c*50,m.y-s*50,110]:[m.x,m.y,320];
   if(D.boss)return m.kind===1?[m.x,m.y,125]:[m.x+c*70,m.y+s*70,82];
   return [m.x+c*D.range*0.5,m.y+s*D.range*0.5,D.range*0.55];
@@ -3055,10 +3125,12 @@ function monAttack(m){
   const D=m.def,dmg=Math.round(D.dmg*m.dm);
   if(D.rboss){
     if(m.kind===3){const d2=Math.round(dmg*1.1);G.fx.push({t:'breath',x:m.x,y:m.y,a:m.ang,range:330,br:m.br,life:0.6,max:0.6});pushEv('mc',Math.round(m.x),Math.round(m.y),Math.round(m.ang*100),330,50,d2,m.id);applyMc(m.x,m.y,m.ang,330,0.5,d2);shake(4);return}
+    if(m.kind===6){let x=m.lx,y=m.ly;if(x==null||collides(x,y,D.r)){x=m.x;y=m.y}m.x=x;m.y=y;m.rx=x;m.ry=y;const rad=120,d2=Math.round(dmg*1.6);boom(x,y,rad*0.9);G.fx.push({t:'ring',x,y,r:rad,life:0.5,max:0.5,col:'#ff6a3a'});pushEv('ma',Math.round(x),Math.round(y),rad,d2);applyMa(x,y,rad,d2);shake(8);return}
     if(m.kind===4){const [x,y,rad]=monArea(m);const d2=Math.round(dmg*2.3);boom(x,y,rad*0.9);G.fx.push({t:'ring',x,y,r:rad,life:0.6,max:0.6,col:'#ff4d3a'});pushEv('ma',Math.round(x),Math.round(y),Math.round(rad),d2);applyMa(x,y,rad,d2);shake(9);sfx('boom');return}
     if(m.kind===5){const c=Math.cos(m.ang),s2=Math.sin(m.ang);let ex=m.x,ey=m.y;for(let i=0;i<34;i++){const nx=ex+c*10,ny=ey+s2*10;if(collides(nx,ny,D.r))break;ex=nx;ey=ny}const x0=m.x,y0=m.y,d2=Math.round(dmg*1.3);m.x=ex;m.y=ey;G.fx.push({t:'dash',x:x0,y:y0,x2:ex,y2:ey,life:0.4,max:0.4});pushEv('ml',Math.round(x0),Math.round(y0),Math.round(ex),Math.round(ey),D.r+10,d2);applyMl(x0,y0,ex,ey,D.r+10,d2);shake(5);return}
+    if(m.kind===2&&m.hp<m.mhp*0.5){const n=m.enr?12:10,ph=Math.random()*6.28,d2=Math.round(dmg*0.42);orbRing(m.x,m.y,n,210,d2,ph,m.br);pushEv('or',Math.round(m.x),Math.round(m.y),n,210,d2,Math.round(ph*100));const ph2=ph+Math.PI/n;orbRing(m.x,m.y,n,140,d2,ph2,m.br);pushEv('or',Math.round(m.x),Math.round(m.y),n,140,d2,Math.round(ph2*100));return}
     if(m.kind===2){const n=m.enr?13:10,ph=Math.random()*6.28,d2=Math.round(dmg*0.45);orbRing(m.x,m.y,n,210,d2,ph,m.br);pushEv('or',Math.round(m.x),Math.round(m.y),n,210,d2,Math.round(ph*100));return}
-    const [x,y,rad]=monArea(m);const d2=Math.round(dmg*(m.kind===0?1.2:1));boom(x,y,rad*0.6);G.fx.push({t:'ring',x,y,r:rad,life:0.4,max:0.4,col:'#ff8c6b'});pushEv('ma',Math.round(x),Math.round(y),Math.round(rad),d2);applyMa(x,y,rad,d2);return;
+    const [x,y,rad]=monArea(m);const d2=Math.round(dmg*(m.kind===0?1.2:m.kind===7?0.95:1));boom(x,y,rad*0.6);G.fx.push({t:'ring',x,y,r:rad,life:0.4,max:0.4,col:'#ff8c6b'});pushEv('ma',Math.round(x),Math.round(y),Math.round(rad),d2);applyMa(x,y,rad,d2);return;
   }
   if(D.dragon&&m.kind===2){
     const d2=Math.round(dmg*1.15);G.fx.push({t:'breath',x:m.x,y:m.y,a:m.ang,range:320,br:m.br,life:0.6,max:0.6});
@@ -3091,7 +3163,7 @@ function monAttack(m){
     applyMa(x,y,rad,dmg,m.id);
   }
 }
-const RBW=[0.75,0.95,1.1,1.25,1.7,0.95];   // wind-up per attack (also used to draw the warning)
+const RBW=[0.75,0.95,1.1,1.25,1.7,0.95,1.15,0.42];   // wind-up per attack (also used to draw the warning)
 function rbossAI(m,dt,pls,tg,td){
   const D=m.def;
   if(Date.now()-G.t0<4000)return;
@@ -3105,12 +3177,13 @@ function rbossAI(m,dt,pls,tg,td){
   let p=pls.find(q=>q.peer===m.tgt);if(!p||Math.random()<dt*0.15){p=pls.length?pls[Math.floor(Math.random()*pls.length)]:tg;if(p)m.tgt=p.peer}
   if(!p)return;
   const dx=p.x-m.x,dy=p.y-m.y,d=Math.hypot(dx,dy)||1,ta=Math.atan2(dy,dx),df=angDiff(ta,m.ang),ad=Math.abs(df);
-  m.cd-=dt*(m.enr?1.25:1);m.heavyT-=dt;m.dashT-=dt;
+  m.cd-=dt*(m.enr?1.25:1);m.heavyT-=dt;m.dashT-=dt;if(m.leapT!=null)m.leapT-=dt;
   if(m.s===1){
     m.ang+=clamp(df,-2.4*dt,2.4*dt);
     let k=-1;
     if(m.cd<=0&&ad<1.0){
       if(m.heavyT<=0&&d<280){k=4;m.heavyT=(m.enr?8:11)+Math.random()*3}
+      else if((m.leapT=(m.leapT==null?7:m.leapT))<=0&&d>170&&d<460&&los2(m,p)){k=6;m.leapT=8+Math.random()*4;m.lx=p.x;m.ly=p.y;pushEv('tg',Math.round(p.x),Math.round(p.y),120,Math.round(RBW[6]*(m.enr?0.85:1)*1000));G.fx.push({t:'warn',x:p.x,y:p.y,r:120,life:RBW[6]*(m.enr?0.85:1),max:RBW[6]*(m.enr?0.85:1)})}
       else if(m.dashT<=0&&d>190&&ad<0.35){k=5;m.dashT=6+Math.random()*4}
       else if(D.breath&&d>130&&d<340&&ad<0.4&&m.lastK!==3&&Math.random()<0.55)k=3;
       else if(d<145)k=(m.lastK===0&&Math.random()<0.65)?1:0;
@@ -3129,10 +3202,12 @@ function rbossAI(m,dt,pls,tg,td){
     if(m.wt<=0){
       monAttack(m);
       if(m.kind===4){m.s=5;m.stT=2.4}
-      else{m.s=1;m.cd=D.cd*(m.enr?0.8:1)*(m.kind===2?1.4:1)}
+      else if((m.kind===0||m.kind===7)&&(m.combo|0)<(m.enr?3:m.hp<m.mhp*0.5?2:1)&&d<190){m.combo=(m.combo|0)+1;m.ang=ta;moveCirc(m,Math.cos(ta)*26,Math.sin(ta)*26,D.r);m.s=2;m.kind=7;m.wt=RBW[7];m.wStart=now()}
+      else{m.combo=0;m.s=1;m.cd=D.cd*(m.enr?0.8:1)*(m.kind===2?1.4:m.kind===7?1.25:1)}
     }
   }
 }
+function los2(m,p){try{return losClear(m.x,m.y,p.x,p.y)}catch(e){return true}}
 function bossBack(m,x,y){return Math.abs(angDiff(Math.atan2(y-m.ry,x-m.rx),m.ang))>2.0}
 function bossDownFx(m){if(!G)return;banner('ダウン！','いまがチャンス — ダメージ2倍','#ffe066');sfx('rare');shake(5);addFeed('★ '+(m.name||'ボス')+' がダウンした！')}
 function alertRoom(m,tgt){for(const o of G.mons){if(o===m||o.dead||o.s!==0||o.k==='mimic'||o.sl||o.room==null||o.room!==m.room)continue;if(Math.hypot(o.x-m.x,o.y-m.y)<420){o.s=1;o.tgt=tgt;o.lost=0}}}
@@ -3247,8 +3322,8 @@ function chestLoot(c){
   const n=c.boss?R.i(r,3,5):R.i(r,1,1+c.tier+((c.dg||0)>0.7?1:0));
   for(let i=0;i<n;i++){const l=clamp(1+Math.round((c.dg||0)*8)+R.i(r,0,1)+(c.boss?1:0)+DIFF[G.diff||0].lv,1,13);out.push({key:key+'.'+i,it:genItem(r,l,null,c.boss&&i<2?{minR:i===0?3:2}:{})})}
   if(r()<0.35)out.push({key:key+'.p',pot:1});
-  out.push({key:key+'.g',gold:Math.round(R.i(r,5,18)*c.tier*(c.boss?4:1))});
-  if(r()<0.07+(c.boss?0.6:0))out.push({key:key+'.xgem',mat:'gem',n:c.boss?2:1});
+  out.push({key:key+'.g',gold:Math.round(R.i(r,3,11)*c.tier*(c.boss?4:1))});
+  if(r()<0.05+(c.boss?0.5:0))out.push({key:key+'.xgem',mat:'gem',n:c.boss?2:1});
   if((c.dg||0)>0.7&&r()<(c.boss?0.25:0.02)*(1+0.6*(G.diff||0)))out.push({key:key+'.rk',rkey:keyRoll(r,G.diff||0)});
   G.lootCache.set(key,out);return out;
 }
@@ -3256,7 +3331,7 @@ function monLoot(m){
   const key='m'+m.id;if(G.lootCache.has(key))return G.lootCache.get(key);
   const out0=monLootBase(m,key);
   const r2=rngFrom((G.lseed^Math.imul(m.id+977,2246822519))>>>0);
-  for(const [id,a,b,ch] of (MDROP[m.f]||[])){if(r2()<Math.min(1,ch*(m.elite?1.6:1))){const n=R.i(r2,a,b)+(m.tier>=3&&r2()<0.5?1:0)+(m.elite?1:0)+((G.diff||0)>=2?1:0);out0.push({key:key+'.x'+id,mat:id,n})}}
+  for(const [id,a,b,ch] of (MDROP[m.f]||[])){if(r2()<Math.min(1,ch*0.75*(m.elite?1.6:1))){const n=R.i(r2,a,b)+(m.tier>=3&&r2()<0.5?1:0)+(m.elite?1:0)+((G.diff||0)>=2?1:0);out0.push({key:key+'.x'+id,mat:id,n})}}
   G.lootCache.set(key,out0);return out0;
 }
 function monLootBase(m,key){
@@ -3265,7 +3340,7 @@ function monLootBase(m,key){
   if(m.k==='mimic'){const c=G.map.chests[m.chest];const base=c?chestLoot(c).slice():[];base.push({key:key+'.b',it:genItem(r,clamp(m.tier*3+1,1,10),null,{minR:1})});return base}
   if(m.k==='dragon'){
     const lv=m.lv||1;for(let i=0;i<2+Math.ceil(lv/2);i++)out.push({key:key+'.'+i,it:genItem(r,10,null,{minR:i===0?(lv>=4?4:3):2})});
-    out.push({key:key+'.p',pot:2});out.push({key:key+'.g',gold:R.i(r,120,240)*lv});
+    out.push({key:key+'.p',pot:2});out.push({key:key+'.g',gold:R.i(r,70,150)*lv});
     if(r()<0.08+0.05*lv)out.push({key:key+'.cos',cos:r()<0.5?'c_dwing':'h_dhorn'});
     if(r()<0.3)out.push({key:key+'.rk',rkey:r()<0.7?'rk4':'rk5'});
     return out;
@@ -3276,7 +3351,7 @@ function monLootBase(m,key){
   const kch=(boss?0.3:m.elite?0.04:0)*(1+0.6*(G.diff||0));
   for(let i=0;i<n;i++){const l=clamp(1+Math.round((m.dg||0)*8)+R.i(r,0,1)+(m.elite?2:0)+DIFF[G.diff||0].lv,1,13);out.push({key:key+'.'+i,it:genItem(r,boss?10:l,null,boss?{minR:i===0?3:i===1?2:0}:m.elite&&i===0?{minR:1}:{})})}
   if(r()<0.15)out.push({key:key+'.p',pot:1});
-  const g=Math.round((boss?R.i(r,120,240):R.i(r,0,7)*m.tier)*(1+0.5*(G.diff||0)));if(g>0)out.push({key:key+'.g',gold:g});
+  const g=Math.round((boss?R.i(r,70,150):R.i(r,0,4)*m.tier)*(1+0.5*(G.diff||0)));if(g>0)out.push({key:key+'.g',gold:g});
   if(kch&&r()<kch)out.push({key:key+'.rk',rkey:keyRoll(r,(G.diff||0)+(boss?1:0))});
   return out;
 }
@@ -3485,7 +3560,7 @@ function bossWin(){
   const mats={sigil:st+(bonus.length?1:0),gem:2*st+R.i(r,0,2),core:st,iron:3+st*2};if(st>=4){mats.scale=3*st;mats.heart=1}
   if(wasSpec)for(const k in mats)mats[k]=Math.max(k==='sigil'||k==='heart'?1:0,Math.floor(mats[k]*0.6));
   for(const k in mats)if(!(mats[k]>0))delete mats[k];
-  const gold=Math.round(240*st*(0.8+r()*0.4)*(wasSpec?0.6:1));
+  const gold=Math.round(150*st*(0.8+r()*0.4)*(wasSpec?0.6:1));
   let cos=null;if(r()<0.08*st){const pool=['a_victor','c_abyss'];cos=pool[R.i(r,0,1)];if(!grantCos(cos)){SAVE.gold+=800;cos=null}}
   SAVE.equip=G.equip;SAVE.stash.push(...G.bag,...rewards);SAVE.gold+=G.gold+gold;SAVE.potions+=G.potions;SAVE.scrolls=(SAVE.scrolls||0)+G.scrolls;
   for(const id in G.mats)SAVE.mats[id]=(SAVE.mats[id]||0)+G.mats[id];for(const id in mats)SAVE.mats[id]=(SAVE.mats[id]||0)+mats[id];
@@ -4173,6 +4248,7 @@ function render(){
     const k=f.life/f.max;
     if(f.t==='sw'&&f.el>=0){const E=ELM[f.el];ctx.save();ctx.globalCompositeOperation='lighter';const a0=f.a-f.arc/2*Math.PI/180,a1=f.a+f.arc/2*Math.PI/180;ctx.strokeStyle='rgba('+E.rgb+','+(k*0.55)+')';ctx.lineWidth=14*k+4;ctx.beginPath();ctx.arc(f.x,f.y,f.range*(0.72+0.25*(1-k)),a0,a1);ctx.stroke();ctx.strokeStyle='rgba(255,255,255,'+(k*0.7)+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(f.x,f.y,f.range*(0.75+0.25*(1-k)),a0,a1);ctx.stroke();ctx.restore()}
     else if(f.t==='sw'){ctx.strokeStyle=f.col;ctx.globalAlpha=k*0.8;ctx.lineWidth=3;const a0=f.a-f.arc/2*Math.PI/180,a1=f.a+f.arc/2*Math.PI/180;ctx.beginPath();ctx.arc(f.x,f.y,f.range*(0.75+0.25*(1-k)),a0,a1);ctx.stroke();ctx.globalAlpha=1}
+    else if(f.t==='warn'){const p=1-k,pu=0.5+0.5*Math.sin(now()*20);ctx.fillStyle='rgba(255,50,30,'+(0.1+p*0.25)+')';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(255,'+(90+pu*110|0)+',60,.95)';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.stroke();ctx.lineWidth=2;ctx.beginPath();ctx.arc(f.x,f.y,f.r*p,0,Math.PI*2);ctx.stroke();ctx.font='bold 26px DotGothic16, monospace';ctx.textAlign='center';ctx.fillStyle='rgba(255,230,120,'+(0.5+pu*0.5)+')';ctx.fillText('！',f.x,f.y+9)}
     else if(f.t==='ring'){ctx.strokeStyle=f.col;ctx.globalAlpha=k;ctx.lineWidth=4;ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1}
     else if(f.t==='bit'){ctx.fillStyle=f.col;ctx.globalAlpha=k;ctx.fillRect(f.x-2,f.y-2,4,4);ctx.globalAlpha=1}
     else if(f.t==='spark'){ctx.fillStyle='rgba(255,230,180,'+k+')';ctx.beginPath();ctx.arc(f.x,f.y,3+3*(1-k),0,Math.PI*2);ctx.fill()}
@@ -4756,7 +4832,7 @@ function toggleBigMap(force){
   $('#acctChip').onclick=()=>{if(!AUTH.ready)return;$('#hideout').dataset.tab='prof';SEL=null;renderLobby()};
   $('#impGo').onclick=importCode;$('#expGo').onclick=copyExport;
   setInterval(renderAcct,2000);
-  $('#bulkBtn').onclick=openBulk;$('#bulkClose').onclick=()=>{$('#bulkModal').hidden=true};$('#expandBtn').onclick=expandStash;
+  $('#repAllBtn').onclick=repairAll;$('#bulkBtn').onclick=openBulk;$('#bulkClose').onclick=()=>{$('#bulkModal').hidden=true};$('#expandBtn').onclick=expandStash;
   $('#optBtn').onclick=openOpt;$('#optBtnR').onclick=openOpt;$('#optClose').onclick=()=>{$('#optModal').hidden=true};
   $('#musBtn').onclick=()=>{audioInit();OPT.bgm=!OPT.bgm;saveOpt()};
   $('#oBgm').onclick=()=>{audioInit();OPT.bgm=!OPT.bgm;saveOpt()};$('#oSfx').onclick=()=>{OPT.sfx=!OPT.sfx;saveOpt()};$('#oAuto').onclick=()=>{OPT.autofs=!OPT.autofs;saveOpt()};
