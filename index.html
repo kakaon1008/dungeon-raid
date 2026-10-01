@@ -307,6 +307,7 @@ details.rules ul b{color:var(--fg);font-weight:400}
 .deploybtn:hover{filter:brightness(1.08)}
 @keyframes sweep{0%,55%{left:-80px}100%{left:110%}}
 .lb-hint{position:absolute;left:16px;bottom:16px;z-index:3;display:flex;gap:8px}
+.verTag{align-self:center;font-size:10.5px;color:rgba(235,224,204,.45);font-family:var(--fd);letter-spacing:.03em;pointer-events:none;white-space:nowrap}
 .linkbtn{border:1px solid rgba(255,255,255,.14);background:rgba(16,13,11,.8);border-radius:20px;padding:6px 14px;font-size:13px}
 #stageName{position:absolute;left:50%;transform:translateX(-50%);z-index:2;pointer-events:none;width:min(300px,70vw)}
 .modal{position:fixed;inset:0;z-index:60;background:rgba(6,5,4,.78);display:grid;place-items:center;padding:16px}
@@ -710,7 +711,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
       </div>
     </aside>
     <aside class="lb-right"><div class="lcard"><div class="bossbox" id="bossBox"></div></div></aside>
-    <div class="lb-hint"><button class="linkbtn" id="howBtn" type="button">遊び方</button><button class="linkbtn" id="rerollBtn" type="button">景色を変える</button></div>
+    <div class="lb-hint"><button class="linkbtn" id="howBtn" type="button">遊び方</button><button class="linkbtn" id="rerollBtn" type="button">景色を変える</button><span class="verTag" id="verTag"></span></div>
     <div class="lb-bottom">
       <button class="mapcard" id="mapCard" type="button"><canvas id="mapThumb" width="240" height="132"></canvas><span class="mc-t"><small>マップ</small><b id="mcName"></b><span class="mc-row"><span id="mcDiff" class="dchip"></span><span id="mcLive" class="livechip" hidden></span></span></span><span class="mc-ch">変更</span></button>
       <button class="deploybtn" id="btnNew" type="button"><span class="db-main">出撃</span><span class="db-sub" id="carryNote"></span></button>
@@ -899,6 +900,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
     <div class="optrow" id="oAutoRow"><span>出撃時に自動で全画面</span><button class="tog" id="oAuto" type="button"></button></div>
     <div class="optcol"><b>📱 アプリとして遊ぶ（URLバーを消す）</b><p class="hint" id="oInstHint"></p><button class="btn primary" id="oInst" type="button" hidden>ホーム画面に追加</button></div>
     <p class="hint">ミニマップはタップ（クリック）で大きく表示できます。</p>
+    <p class="hint verOpt" id="verOpt"></p>
     <div class="optcol" id="kbBox"><b>⌨ キー設定</b><p class="hint">変えたい操作のキー欄をクリックして、新しいキーを押す。Escでやめる・BackSpaceで空にする。1つの操作に2つまでキーを割り当てられる。</p><div class="kbgrid" id="kbList"></div><button class="btn" type="button" id="kbReset">初期設定に戻す</button></div>
   </div>
 </div>
@@ -1670,7 +1672,7 @@ function buildPresence(){
   return p;
 }
 /* ---------- version check: everyone in a room should run the same build ---------- */
-const BUILD='2026.10.01.2230';
+const BUILD='2026.10.01.2245';
 const UPD={newer:null,t:0,going:false};
 async function checkUpdate(force){
   if(!/^https?:$/.test(location.protocol))return;const t=Date.now();if(!force&&t-UPD.t<45000)return;UPD.t=t;
@@ -1686,6 +1688,8 @@ async function doUpdateReload(){
 }
 addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkUpdate(true)});
 setInterval(()=>checkUpdate(false),90000);setTimeout(()=>checkUpdate(true),6000);
+function showVer(){const t='ver '+BUILD;const a=$('#verTag');if(a)a.textContent=t;const b=$('#verOpt');if(b)b.textContent='バージョン：'+BUILD+'（新しい版が出ると自動で更新されます）'}
+setTimeout(showVer,0);
 const bvDiff=pr=>!!(pr&&(pr.bv||'')!==BUILD);
 function sendPresence(){
   const ch=NET.ch;if(!ch)return;
