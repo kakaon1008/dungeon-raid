@@ -835,7 +835,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>難易度</b>：普通・危険・悪夢・地獄。高いほど敵の数が増え、攻撃が速く重く、足も速くなる（HPはあまり増えない）。そのぶん装備のレベル・レア度・金貨・素材・鍵の出やすさが上がる。</li>
         <li><b>回復薬は自分で用意</b>：最初は持っていない。商人で買うか工房で作って持ち込む。宝箱からも出る。</li>
         <li><b>宝箱の開封</b>：調べてから少し時間がかかる（普通1.3秒・番人の宝箱3.4秒）。動いたり攻撃を受けたりすると中断する。</li>
-        <li><b>拾い物</b>：近くに倒れた魔物がいくつもあると、まとめて1つの画面で拾える。すぐ近くに落ちている素材は歩くだけで自動で拾う。拾ったものは左下に少しの間表示される。</li>
+        <li><b>拾い物</b>：近くに倒れた魔物がいくつもあると、まとめて1つの画面で拾える。すぐ近くに落ちている素材と金貨は歩くだけで自動で拾う。拾ったものは左下に少しの間表示される。</li>
         <li><b>罠と仕掛け</b>：マップにはまれに<b>火薬樽</b>（攻撃・爆風・調べるで点火し、少し遅れて大爆発。敵も味方も吹き飛ぶ）、<b>棘の罠</b>（踏むと棘が飛び出す。しばらくすると再び作動）、<b>トラバサミ</b>（踏むと足を挟まれて少し動けない）、<b>怪しい壺</b>（調べると割れる。金貨・回復薬・毒ガスのどれか）がある。床の罠は近づくとはっきり見える。魔物も罠にかかる。</li>
         <li><b>ノックバック</b>：攻撃を当てると敵が押し返され、攻撃を受けると自分も吹き飛ぶ。槌・斧などの重い武器や大型の敵ほど強い。</li>
         <li><b>装備の出来</b>：同じレア度でも品質と効果値は大きくばらつく。鑑定に「出来 S〜D」が出る（Sは逸品、Dは凡作）。難易度が高いほど良い出来が出やすい。</li>
@@ -1672,7 +1672,7 @@ function buildPresence(){
   return p;
 }
 /* ---------- version check: everyone in a room should run the same build ---------- */
-const BUILD='2026.10.01.2245';
+const BUILD='2026.10.01.2300';
 const UPD={newer:null,t:0,going:false};
 async function checkUpdate(force){
   if(!/^https?:$/.test(location.protocol))return;const t=Date.now();if(!force&&t-UPD.t<45000)return;UPD.t=t;
@@ -4176,8 +4176,8 @@ function nearbyDrops(x,y){const out=[];for(const m of G.mons){if(!m.dead||Math.h
   for(const c of G.map.chests){if(c.mimId!=null||!G.opened.has(c.id)||Math.hypot(c.x-x,c.y-y)>120)continue;const s2={type:'chest',c,x:c.x,y:c.y};if(lootList(s2).length)out.push(s2)}return out}
 /* materials on the ground right next to you are picked up automatically */
 function autoMats(){const me=G.me;if(me.st!=='alive'||G.done)return;
-  for(const m of G.mons){if(!m.dead||Math.hypot(m.x-me.x,m.y-me.y)>70)continue;for(const e of lootList({type:'mon',m}))if(e.mat)takeLoot(e)}
-  for(const c of G.map.chests){if(c.mimId!=null||!G.opened.has(c.id)||Math.hypot(c.x-me.x,c.y-me.y)>70)continue;for(const e of lootList({type:'chest',c}))if(e.mat)takeLoot(e)}}
+  for(const m of G.mons){if(!m.dead||Math.hypot(m.x-me.x,m.y-me.y)>70)continue;for(const e of lootList({type:'mon',m}))if(e.mat||e.gold)takeLoot(e)}
+  for(const c of G.map.chests){if(c.mimId!=null||!G.opened.has(c.id)||Math.hypot(c.x-me.x,c.y-me.y)>70)continue;for(const e of lootList({type:'chest',c}))if(e.mat||e.gold)takeLoot(e)}}
 function findInteract(){
   const me=G.me;let best=null,bd=56;
   for(const c of G.map.chests){const d=Math.hypot(c.x-me.x,c.y-me.y);if(c.mimId!=null){if(d<bd&&disguised(G.mons[c.mimId])){bd=d;best={type:'chest',c,x:c.x,y:c.y,label:'宝箱'}}continue}if(d<bd&&(!G.opened.has(c.id)||lootList({type:'chest',c}).length)){bd=d;best={type:'chest',c,x:c.x,y:c.y,label:c.boss?'番人の宝箱':'宝箱'}}}
