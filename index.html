@@ -188,7 +188,7 @@ b,.num{font-variant-numeric:tabular-nums}
 .pmem .ldr{color:#ffd36b;font-size:11px;margin-left:4px}.pmem .st{font-size:10px;color:var(--mute)}
 .pbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:space-between}.pbar .btn{padding:4px 10px;font-size:12px}
 .onlList{display:grid;gap:4px;max-height:220px;overflow:auto}
-.onlrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center}
+.onlrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center}
 .onlrow .nplate{min-height:30px;padding:1px 8px}.onlrow .nplate .lvb{min-width:22px;height:22px;font-size:11px;border-width:1px}.onlrow .nplate .pn b{font-size:12px}.onlrow .nplate .pn i{font-size:9.5px}
 .onlrow .btn{padding:3px 9px;font-size:11px}
 #invModal .mbox,#eqvModal .mbox{width:min(420px,100%)}
@@ -553,7 +553,10 @@ body.touchui #skSlot{display:none}
 .qempty{grid-column:1/-1;padding:18px;text-align:center;color:var(--mute);border:1px dashed var(--line);border-radius:8px}
 #paneQuest .qempty{background:rgba(239,226,194,.9);color:#3a2e20;border:0;transform:rotate(-1deg)}
 .pingtag{font-size:11px;white-space:nowrap;margin-left:4px}
-#hPing{font-size:11px;opacity:.9;min-height:0}
+#hPing{font-size:13px;font-weight:bold;min-height:0;text-shadow:0 1px 2px #000}
+.pickping{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;margin:-2px 0 2px}
+.pchip{font-size:11px;white-space:nowrap;padding:1px 7px;border-radius:10px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.08)}
+
 /* ---- settings ---- */
 .optbox{width:min(460px,100%)}
 .optrow{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:8px 0}
@@ -885,6 +888,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
 <div class="modal" id="mapPick" hidden>
   <div class="mbox">
     <h2><span>マップと難易度</span><button class="btn" type="button" id="mapClose">× 閉じる</button></h2>
+    <div class="pickping" id="pickPing"></div>
     <h3>難易度 <span class="hint" id="pickLiveHint"></span></h3>
     <div class="dgrid" id="diffGrid"></div>
     <h3>マップ</h3>
@@ -923,6 +927,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>ダンジョンの広さ</b>：入るたびに広さが変わる（小〜特大）。広いほど脱出口が増えやすい。画面右上の難易度の下に表示される。たまに監獄・小屋・墓地・野営地・祠・洞窟の草原などの珍しい場所がある。</li>
         <li><b>依頼</b>：「依頼」タブの掲示板に6〜10件の依頼が並ぶ（人ごとに内容も数も違う。討伐・納品・探索・脱出・人に会う・宝箱）。報告した依頼は消え、3時間ごとに新しく入れ替わる。同時に3件まで受注でき、★が多いほど報酬が良い。</li>
         <li><b>3D表示</b>：ダンジョンは少し斜めから見下ろす3D表示になっている（壁に高さと影、松明の明かり、立体のキャラ・魔物・宝箱）。壁の手前に立つと壁が透けて自分が見える。設定の「ダンジョンの表示」で真上からの2D表示に戻せる。端末が重いときは自動で2D表示に切り替わる。</li>
+        <li><b>ホストとPING</b>：マルチでは魔物の動きを1人が「ホスト」として計算する。レイド中は通信状況（PING）と端末の重さを見て、一番快適な人に自動でホストが移る（頻繁には交代しない）。PINGはマップ選択画面・オンライン一覧・プレイ中の画面右上に表示される。緑は快適、黄は少し遅延、赤はラグが出やすい。</li>
         <li><b>人命救助</b>：まれにダンジョンのどこかで、魔物に襲われている遭難者がいる。近づくと「助けて！」という声が聞こえ、見えないときは画面の端に<b>悲鳴の方角</b>が出る。周りの魔物を倒してから話しかけると救出成功で、金貨・回復薬・経験値（ときどき装備）がもらえる。遅いと力尽きてしまう。</li>
         <li><b>素材の売却</b>：倉庫の素材を押すと商人に売れる。単価は安め（品位が高いほど高い）。</li>
         <li><b>ボスレイドをソロで</b>：鍵の横の「ソロで挑む」で、募集せずに一人で挑める。</li>
@@ -1779,7 +1784,7 @@ function buildPresence(){
   if(!G||G.me.st==='out'){if(BR.host)p.rh={id:BR.host.id,k:BR.host.key};if(BR.join){p.rj=BR.join;p.rr=BR.ready?1:0}}
   if(G&&G.me.st!=='out'){
     const m=G.me;
-    Object.assign(p,{ph:'raid',rid:G.rid,seed:G.seed,t0:G.t0,jt:G.jt,gr:G.gr,df:G.diff,mode:G.mode,bk:G.key,np:G.np,x:Math.round(m.x),y:Math.round(m.y),a:Math.round(m.a*100),
+    Object.assign(p,{nq:G.nq|0,hd:G.hd||null,ph:'raid',rid:G.rid,seed:G.seed,t0:G.t0,jt:G.jt,gr:G.gr,df:G.diff,mode:G.mode,bk:G.key,np:G.np,x:Math.round(m.x),y:Math.round(m.y),a:Math.round(m.a*100),
       hp:Math.ceil(m.hp),mh:G.stats.mhp,cs:cosIdx(),eq:eqIdx(G.equip),we:G.stats.el,po:SAVE.pvpOff?1:0,tr:[...G.truce].slice(0,12),ov:[...G.ov].slice(0,12),st:m.st,w:G.stats.wb.k,wr:G.equip.weapon?G.equip.weapon.r:0,dg:G.dodgeT>0?1:0,sn:G.sneak?1:0,
       ev:G.myEv,tk:G.myTaken.slice(G.trim?-25:-80),oc:G.myOpened.slice(-40)});
     if(G.mode==='boss'){p.bd=Math.round(G.bossDmg||0);if(G.spec)p.sp=1}
@@ -1798,7 +1803,7 @@ function buildPresence(){
   return p;
 }
 /* ---------- version check: everyone in a room should run the same build ---------- */
-const BUILD='2026.10.02.1700';
+const BUILD='2026.10.03.0400';
 const UPD={newer:null,t:0,going:false};
 async function checkUpdate(force){
   if(!/^https?:$/.test(location.protocol))return;const t=Date.now();if(!force&&t-UPD.t<45000)return;UPD.t=t;
@@ -2960,6 +2965,7 @@ function paintPick(){
   [...mg.children].forEach(c=>{const b=+c.dataset.b;c.classList.toggle('on',b===PICK.b);let t=c.querySelector('.live');const n=cnt(b,PICK.d);if(n){if(!t){t=document.createElement('span');t.className='live';c.appendChild(t)}badge(t,n,best(b,PICK.d))}else if(t)t.remove()});
   [...dg.children].forEach(c=>{const d=+c.dataset.d;c.classList.toggle('on',d===PICK.d);let t=c.querySelector('.live');const n=cnt(-1,d);if(n){if(!t){t=document.createElement('span');t.className='live';c.appendChild(t)}badge(t,n,best(-1,d))}else if(t)t.remove()});
   const tot=L.reduce((a,r)=>a+r.names.length,0);$('#pickLiveHint').textContent=tot?'👥 = 今そこに潜っている人数 · ms = 通信の遅さ（PING。緑は快適、黄は少し遅延、赤はラグが出やすい）':'今は誰も潜っていない';
+  {const pp=$('#pickPing'),ps=partyPeers();if(!ps.length)pp.innerHTML='<span class="hint">ほかにオンラインの人はいない（ソロ）</span>';else pp.innerHTML='<b>通信状況</b> '+ps.slice(0,8).map(p=>{const pg=pingTo(p.peer);return '<span class="pchip" style="color:'+pingCol(pg&&pg.ms)+'">'+esc(String(p.presence.n).slice(0,8))+' '+pingTxt(pg)+'</span>'}).join('')}
   const box=$('#liveBox');box.innerHTML='';
   const here=L.filter(r=>r.df===PICK.d&&(PICK.b<0||r.b===PICK.b)).sort((a,b)=>b.names.length-a.names.length);
   if(here.length){const h=document.createElement('div');h.className='lvh';h.textContent=(PICK.b<0?'「'+DIFF[PICK.d].n+'」':'「'+BIOMES[PICK.b].n+'・'+DIFF[PICK.d].n+'」')+'で進行中のレイド — 合流するとその場所に入れる';box.appendChild(h);
@@ -3190,7 +3196,7 @@ function renderPartyBox(){
   const ol=$('#onlList');if(!ol)return;ol.innerHTML='';const all=partyPeers();$('#onlN').textContent=all.length+'人';
   if(!all.length){ol.innerHTML='<p class="hint" style="margin:0">ほかにオンラインの人はいない。</p>';return}
   for(const p of all){const pr=p.presence,same=PARTY.id&&pr.tm===PARTY.id;const row=document.createElement('div');row.className='onlrow';
-    row.innerHTML=plateHTML(String(pr.n).slice(0,12),pr.lv||1,titleName(pr.ti)+(pr.ph==='raid'?' · レイド中':''),pr.pl||'np_wood',true);
+    {const pg=pingTo(p.peer);row.innerHTML=plateHTML(String(pr.n).slice(0,12),pr.lv||1,titleName(pr.ti)+(pr.ph==='raid'?' · レイド中':''),pr.pl||'np_wood',true)+'<span class="pchip" style="color:'+pingCol(pg&&pg.ms)+'">'+(pg?pg.ms+'ms':'…')+'</span>'}
     const b=document.createElement('button');b.type='button';b.className='btn';
     if(same){b.textContent='仲間';b.disabled=true}
     else if(PARTY.inv&&PARTY.inv.to===p.peer&&Date.now()-PARTY.inv.t<30000){b.textContent='招待中';b.disabled=true}
@@ -3928,10 +3934,31 @@ function netTick(){
     }
   }
   for(const k of [...G.remote.keys()])if(!seen.has(k))G.remote.delete(k);
+  host=pickNetHost(host,seen);
   const wasHost=G.isHost;
+  if(G.hostPeer&&host.peer!==G.hostPeer&&G.sawOthers){const nm=host.peer===NET.peerId?'あなた':(G.remote.get(host.peer)||{}).name||'？';if(G.hdFeed!==host.peer){G.hdFeed=host.peer;addFeed('ホストが'+nm+'に交代した（通信の良い人が担当）')}}
   G.isHost=host.peer===NET.peerId;G.hostPeer=host.peer;
   if(!G.isHost){const H=G.remote.get(host.peer);if(H&&H.pres&&H.pres!==G.lastHostPres){G.lastHostPres=H.pres;applyHostState(H.pres)}}
   else if(!wasHost){for(const m of G.mons){if(m.dead)continue;m.x=m.rx;m.y=m.ry;if(m.s===2&&!(m.wt>0))m.wt=0.3;if((m.s===4||m.s===5)&&!(m.stT>0))m.stT=1;if(!(m.cd<=3))m.cd=0.5;if(m.def&&m.def.rboss){if(!(m.heavyT>0))m.heavyT=6;if(!(m.dashT>0))m.dashT=4}}}
+}
+// The earliest joiner acts as referee: it names the player with the best connection as host (with hysteresis so it doesn't flap),
+// everyone else follows the referee's choice. If the referee leaves, the next earliest keeps the same choice.
+function netScore(){
+  let sum=0,n=0;for(const k of G.remote.keys()){const pg=pingTo(k);sum+=pg?pg.ms+(pg.via==='relay'?150:0):260;n++}
+  const fr=Math.max(0,(G.ftAvg||16)-20)*4;return n?Math.round(sum/n+fr):Math.round(fr)}
+function pickNetHost(arb,seen){
+  const tn=Date.now();
+  if(!G.nqAt||tn-G.nqAt>1000){G.nqAt=tn;G.nq=netScore()}
+  const valid=id=>id===NET.peerId||seen.has(id);
+  if(arb.peer===NET.peerId){
+    let cur=G.hd&&valid(G.hd)?G.hd:arb.peer;const nqOf=id=>id===NET.peerId?G.nq:(()=>{const R=G.remote.get(id),v=R&&R.pres&&R.pres.nq;return typeof v==='number'?v:9999})();
+    let best=cur,bv=nqOf(cur);for(const id of [NET.peerId,...seen]){const v=nqOf(id);if(v<bv-0.5){bv=v;best=id}}
+    const cv=nqOf(cur);
+    if(best!==cur&&bv<cv-50&&bv<cv*0.75){if(G.hdCand!==best){G.hdCand=best;G.hdCandT=tn}if(tn-G.hdCandT>6000&&tn-(G.hdAt||0)>30000){cur=best;G.hdAt=tn;G.hdCand=null}}
+    else G.hdCand=null;
+    G.hd=cur;
+  }else{const A=G.remote.get(arb.peer),hd=A&&A.pres&&A.pres.hd;G.hd=typeof hd==='string'&&valid(hd)?hd:arb.peer}
+  return {peer:G.hd&&valid(G.hd)?G.hd:arb.peer}
 }
 function applyHostState(pr){
   if(!Array.isArray(pr.m))return;
@@ -6069,7 +6096,7 @@ function v3Anchor(x,y,z){const a=v3Proj(x,y,z),b=v3Proj(x+10,y,z);const k=Math.h
 /* ---------- 3D view (tilted camera). The world is still drawn by the 2D renderer into a texture laid on the
    ground; walls are raised as real boxes and lit. Falls back to the flat 2D view when WebGL is missing or slow. ---------- */
 const V3={ok:null,gl:null,cv:null,c:null,g:null,tw:0,th:0,mapRef:null,nWall:0,vp:null,cam:null,bb:null,tint:[1,1,1],slowT:0,ft:[],noAuto:false,
-  TILT:56*Math.PI/180,FOV:38*Math.PI/180,ZOOM:1.08,WH:TS*1.1};
+  PD:11,TILT:56*Math.PI/180,FOV:38*Math.PI/180,ZOOM:1.08,WH:TS*1.1};
 function v3Want(){return OPT.v3!==false}
 function v3Active(){return !!(G&&v3Want()&&v3Init())}
 function v3Init(){
@@ -6089,9 +6116,9 @@ precision highp float;
 #else
 precision mediump float;
 #endif
-varying vec3 vP;uniform sampler2D uWorld,uWall;uniform vec4 uBB;uniform vec3 uTint;uniform float uMS;
+varying vec3 vP;uniform sampler2D uWorld,uWall;uniform vec4 uBB;uniform vec3 uTint;uniform float uMS,uTime;
       float wa(vec2 t){return texture2D(uWall,(t+.5)/uMS).r;}
-      void main(){vec3 c=texture2D(uWorld,(vP.xy-uBB.xy)/uBB.zw).rgb;
+      void main(){vec2 tw=floor(vP.xy/${TS}.);float isW=texture2D(uWall,(tw+.5)/uMS).g;if(vP.z>-1.&&isW>.5)discard;vec3 c=texture2D(uWorld,(vP.xy-uBB.xy)/uBB.zw).rgb;if(vP.z<-1.)c=c*vec3(.72,.82,.9)+vec3(.0,.02,.04)*(.6+.4*sin(vP.x*.07+vP.y*.05+uTime*1.5));
         vec2 tp=vP.xy/${TS}.,ti=floor(tp),f=tp-ti;float o=0.;
         o=max(o,wa(ti+vec2(-1,0))*smoothstep(.42,0.,f.x));o=max(o,wa(ti+vec2(1,0))*smoothstep(.42,0.,1.-f.x));
         o=max(o,wa(ti+vec2(0,-1))*smoothstep(.5,0.,f.y));o=max(o,wa(ti+vec2(0,1))*smoothstep(.3,0.,1.-f.y));
@@ -6149,20 +6176,29 @@ function v3Tex(t,src,lin){const gl=V3.gl;gl.bindTexture(gl.TEXTURE_2D,t);gl.pixe
   const f=lin?gl.LINEAR:gl.NEAREST;gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,f);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,f);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)}
 // build the wall boxes for this raid's map (only walls near open floor; deep rock stays dark anyway)
 function v3Map(){
-  const gl=V3.gl,t=G.map.t,H=V3.WH,v=[],fl=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&t[y*MW+x]===1;
+  const gl=V3.gl,t=G.map.t,H=V3.WH,v=[],pv=[],fl=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&t[y*MW+x]!==0,wt=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&t[y*MW+x]===2,PD=V3.PD;
   const near=(x,y)=>{for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++)if(fl(x+dx,y+dy))return true;return false};
+  // water and holes: a basin below floor level, lined on every edge that isn't more water
+  const pq=(a,b,c,d,n)=>{for(const p of [a,b,c,a,c,d])pv.push(p[0],p[1],p[2],n[0],n[1],n[2])};
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(t[y*MW+x]!==2)continue;const X=x*TS,Y=y*TS,X1=X+TS,Y1=Y+TS;
+    if(!wt(x,y+1))v.push(...[[X,Y1,-PD],[X1,Y1,-PD],[X1,Y1,0],[X,Y1,-PD],[X1,Y1,0],[X,Y1,0]].flatMap(p=>[...p,0,-1,0]));
+    if(!wt(x,y-1))v.push(...[[X1,Y,-PD],[X,Y,-PD],[X,Y,0],[X1,Y,-PD],[X,Y,0],[X1,Y,0]].flatMap(p=>[...p,0,1,0]));
+    if(!wt(x+1,y))v.push(...[[X1,Y1,-PD],[X1,Y,-PD],[X1,Y,0],[X1,Y1,-PD],[X1,Y,0],[X1,Y1,0]].flatMap(p=>[...p,-1,0,0]));
+    if(!wt(x-1,y))v.push(...[[X,Y,-PD],[X,Y1,-PD],[X,Y1,0],[X,Y,-PD],[X,Y1,0],[X,Y,0]].flatMap(p=>[...p,1,0,0]));
+    pq([X,Y,-PD],[X1,Y,-PD],[X1,Y1,-PD],[X,Y1,-PD],[0,0,1])}
   const q=(a,b,c,d,n)=>{for(const p of [a,b,c,a,c,d])v.push(p[0],p[1],p[2],n[0],n[1],n[2])};
-  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(t[y*MW+x]===1||!near(x,y))continue;const X=x*TS,Y=y*TS,X1=X+TS,Y1=Y+TS;
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(t[y*MW+x]!==0||!near(x,y))continue;const X=x*TS,Y=y*TS,X1=X+TS,Y1=Y+TS;
     q([X,Y,H],[X1,Y,H],[X1,Y1,H],[X,Y1,H],[0,0,1]);
     if(fl(x,y+1))q([X,Y1,0],[X1,Y1,0],[X1,Y1,H],[X,Y1,H],[0,1,0]);
     if(fl(x,y-1))q([X1,Y,0],[X,Y,0],[X,Y,H],[X1,Y,H],[0,-1,0]);
     if(fl(x+1,y))q([X1,Y1,0],[X1,Y,0],[X1,Y,H],[X1,Y1,H],[1,0,0]);
     if(fl(x-1,y))q([X,Y,0],[X,Y1,0],[X,Y1,H],[X,Y,H],[-1,0,0]);}
   gl.bindBuffer(gl.ARRAY_BUFFER,V3.bWall);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(v),gl.STATIC_DRAW);V3.nWall=v.length/6;
+  if(!V3.bPit)V3.bPit=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,V3.bPit);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(pv.length?pv:[0,0,0,0,0,1]),gl.STATIC_DRAW);V3.nPit=pv.length/6;
   // map art (scaled down if the device can't hold it in one texture)
   const mx=gl.getParameter(gl.MAX_TEXTURE_SIZE);let src=G.img;if(G.img.width>mx){const c=document.createElement('canvas');c.width=c.height=mx;c.getContext('2d').drawImage(G.img,0,0,mx,mx);src=c}
   v3Tex(V3.tMap,src,true);
-  const wc=document.createElement('canvas');wc.width=MW;wc.height=MH;const wg=wc.getContext('2d'),id=wg.createImageData(MW,MH);for(let i=0;i<MW*MH;i++){const w=t[i]===1?0:255;id.data[i*4]=w;id.data[i*4+3]=255}wg.putImageData(id,0,0);v3Tex(V3.tWall,wc,false);
+  const wc=document.createElement('canvas');wc.width=MW;wc.height=MH;const wg=wc.getContext('2d'),id=wg.createImageData(MW,MH);for(let i=0;i<MW*MH;i++){id.data[i*4]=t[i]===0?255:0;id.data[i*4+1]=t[i]===2?255:0;id.data[i*4+3]=255}wg.putImageData(id,0,0);v3Tex(V3.tWall,wc,false);
   V3.mapRef=G.map;
 }
 const m4=(a,b)=>{const o=new Float32Array(16);for(let i=0;i<4;i++)for(let j=0;j<4;j++){let s=0;for(let k=0;k<4;k++)s+=a[k*4+j]*b[i*4+k];o[i*4+j]=s}return o};
@@ -6205,7 +6241,8 @@ function v3Draw(){
   gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,V3.tWorld);gl.uniform1i(P.u.uWorld,0);
   gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,V3.tWall);gl.uniform1i(P.u.uWall,3);gl.uniform1f(P.u.uMS,MW);
   gl.uniform4f(P.u.uBB,B.x0,B.y0,B.x1-B.x0,B.y1-B.y0);
-  gl.drawArrays(gl.TRIANGLES,0,6);
+  gl.uniform1f(P.u.uTime,now()%1000);gl.drawArrays(gl.TRIANGLES,0,6);
+  if(V3.nPit){bind(P,V3.bPit);gl.drawArrays(gl.TRIANGLES,0,V3.nPit)}
   // walls
   const Q=V3.pw;bind(Q,V3.bWall);
   gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,V3.tMap);gl.uniform1i(Q.u.uMap,1);
@@ -6327,8 +6364,9 @@ function drawStunMe(){if(G&&G.stunT>0){const tn=now();for(let i=0;i<3;i++){const
 function renderHud(){
   const me=G.me,s=G.stats;
   {const hp=$('#hPing');let t='',c='';const mates=[...G.remote.keys()];
-    if(!G.isHost&&G.hostPeer){const pg=pingTo(G.hostPeer);t='PING '+pingTxt(pg);c=pingCol(pg&&pg.ms)}
-    else if(mates.length){let w=null,rl=false;for(const k of mates){const pg=pingTo(k);if(pg&&(w==null||pg.ms>w)){w=pg.ms;rl=pg.via==='relay'}}t='ホスト · PING 最大 '+(w==null?'測定中':w+'ms'+(rl?'（中継）':''));c=pingCol(w)}
+    if(!G.isHost&&G.hostPeer){const pg=pingTo(G.hostPeer);t='📶 PING '+pingTxt(pg);c=pingCol(pg&&pg.ms)}
+    else if(mates.length){let w=null,rl=false;for(const k of mates){const pg=pingTo(k);if(pg&&(w==null||pg.ms>w)){w=pg.ms;rl=pg.via==='relay'}}t='📶 あなたがホスト · 最大 '+(w==null?'測定中':w+'ms'+(rl?'（中継）':''));c=pingCol(w)}
+    else{t='📶 ソロ';c='#9a8f80'}
     if(hp.textContent!==t){hp.textContent=t;hp.style.color=c}}
   const pct=clamp(me.hp/s.mhp,0,1);$('#hpFill').style.width=(pct*100)+'%';$('#hpText').textContent=Math.max(0,Math.ceil(me.hp))+' / '+s.mhp;
   $('#hPot').textContent=G.potions+(G.drinkT>0?' 飲んでいる…':G.potT>0?' 回復中':'');
@@ -6359,7 +6397,7 @@ function renderHud(){
 function frame(ts){
   requestAnimationFrame(frame);if(KICKED)return;
   if(!G)return;
-  const t=ts/1000;const dt=Math.min(0.05,G.lastT?t-G.lastT:0.016);G.lastT=t;G.lastDt=dt;
+  const t=ts/1000;if(G.lastT){const fm=(t-G.lastT)*1000;if(fm<1000)G.ftAvg=G.ftAvg?G.ftAvg*0.95+fm*0.05:fm}const dt=Math.min(0.05,G.lastT?t-G.lastT:0.016);G.lastT=t;G.lastDt=dt;
   try{
     netTick();
     update(dt);
