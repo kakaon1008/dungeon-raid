@@ -552,7 +552,8 @@ body.touchui #skSlot{display:none}
 #pwaTip{background:rgba(16,13,11,.9);border:1px solid var(--acc);border-radius:8px;padding:8px 10px;font-size:12px;display:flex;gap:8px;align-items:center}
 #pwaTip[hidden]{display:none}
 #pwaTip span{flex:1;min-width:0}
-.kitgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.it.tool{position:relative;display:grid;place-items:center;align-content:center;gap:0}.it.tool .g{font-size:20px}.it.tool .tn{position:absolute;bottom:1px;left:1px;right:1px;font-size:8.5px;line-height:1.1;color:var(--mute);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.it.tool.pot .g{color:#e2675a}
+.kitgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:6px}
 .kitc{display:grid;justify-items:center;gap:2px;padding:6px 2px;border:1px solid var(--line);border-radius:6px;background:var(--panel2);color:var(--fg);font-size:10px;min-height:52px;align-content:center}
 .kitc b{font-family:var(--fd);font-size:18px;color:var(--gold)}.kitc.empty{border-style:dashed;color:var(--mute);opacity:.6}.kitc.use{border-color:var(--acc)}
 .kitc span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
@@ -560,11 +561,18 @@ body.touchui #skSlot{display:none}
 #hideout:is([data-tab="home"],[data-tab="stash"],[data-tab="craft"],[data-tab="gear"],[data-tab="cook"]) .tabnav [data-t="base"]{color:var(--gold);background:rgba(228,180,80,.08);box-shadow:inset 0 -2px 0 var(--gold)}
 #hideout[data-tab="home"] #paneHome{display:grid;grid-row:2;grid-column:1/-1}
 #hideout[data-tab="cook"] #paneCook{display:grid;grid-row:2;grid-column:1/-1;align-content:start}
+.cookTop{display:grid;grid-template-columns:240px 1fr;gap:12px;align-items:stretch}.potWrap{position:relative;border-radius:12px;background:radial-gradient(#2a2018,#120e0a);border:2px dashed transparent;display:grid;place-items:center;padding:4px}.potWrap.over{border-color:var(--gold)}.potWrap canvas{width:240px;max-width:100%;height:auto}.potWrap canvas.plop{animation:plop .3s}@keyframes plop{50%{transform:scale(1.06)}}.potHint{position:absolute;bottom:4px;font-size:11px;color:var(--mute)}
+.cookSide{display:grid;gap:8px;align-content:start}.potbtns{display:flex;gap:8px;margin-left:auto}.btn.big{font-size:16px;padding:10px 22px}
+.potout{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;border:1px solid #3a2e22;border-radius:10px;background:rgba(255,176,74,.06)}.potout b{color:#ffb04a;font-size:17px}
+.inggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}.ingc{position:relative;display:grid;justify-items:center;gap:1px;padding:8px 4px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04);color:var(--ink);cursor:pointer;font-family:inherit}.ingc:hover:not(:disabled){border-color:#ffb04a;background:rgba(255,176,74,.1)}.ingc b{font-size:22px;color:#ffb04a}.ingc .in{font-size:13px}.ingc .ic{font-size:10px;color:var(--mute)}.ingc .cnt{font-size:12px;color:var(--gold)}.ingc:disabled{opacity:.4;cursor:default}.ingc.inpot{border-color:#ffb04a}.ingc .ip{position:absolute;top:3px;right:5px;background:#ffb04a;color:#2a1a08;font-style:normal;font-size:11px;font-weight:bold;border-radius:999px;padding:0 6px}
+.rcprow{display:flex;flex-wrap:wrap;gap:6px}.rcpc{display:grid;gap:1px;text-align:left;padding:6px 10px;border:1px solid #5a4a2a;border-radius:8px;background:rgba(228,180,80,.08);color:var(--ink);cursor:pointer;font-family:inherit}.rcpc b{font-size:13px}.rcpc span{font-size:11px;color:var(--mute)}.rcpc.lack{opacity:.5}
+@media (max-width:640px){.cookTop{grid-template-columns:1fr}.potWrap canvas{width:200px}.inggrid{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}}
 .potrow{display:grid;grid-template-columns:200px 1fr;gap:10px;align-items:center}.potrow canvas{width:200px;height:150px;background:radial-gradient(#2a2018,#120e0a);border-radius:8px}
 .potslots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.potout{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;border:1px solid #3a2e22;border-radius:8px;background:rgba(255,176,74,.06)}.potout b{color:#ffb04a;font-size:15px}
 .conschip.food b{color:#ffb04a}.dexc.dish .dishic{font-size:34px;display:grid;place-items:center;min-height:70px}
 @media (max-width:560px){.potrow{grid-template-columns:1fr}.potrow canvas{width:min(100%,240px);height:auto;justify-self:center}}
-.subnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:-2px 0 6px;position:sticky;top:0;z-index:5;padding:4px 0;background:var(--panel)}.subnav button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);border-radius:10px;padding:6px 8px;font-size:14px;cursor:pointer}.subnav button svg{width:20px;height:20px;flex:none}.subnav button:hover{border-color:var(--gold)}.subnav button.on{color:#1a1208;background:var(--gold);border-color:var(--gold);font-weight:bold}@media (max-width:560px){.subnav button{flex-direction:column;gap:2px;font-size:11px;min-height:52px}}
+.topbar{flex-wrap:wrap}.basebar{display:none;order:99;flex-basis:100%;grid-template-columns:repeat(4,minmax(0,170px));gap:8px;padding:2px 0 4px}#hideout:is([data-tab="home"],[data-tab="stash"],[data-tab="craft"],[data-tab="gear"],[data-tab="cook"]) .basebar{display:grid}.basebar button{display:flex;align-items:center;justify-content:center;gap:6px;height:42px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);border-radius:10px;padding:0 8px;font-size:14px;cursor:pointer;white-space:nowrap;overflow:hidden}.basebar button svg{width:18px;height:18px;flex:none}.basebar button.on{color:#1a1208;background:var(--gold);border-color:var(--gold);font-weight:bold}@media (max-width:640px){.basebar{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.basebar button{height:40px;font-size:12px;gap:3px;padding:0 4px}.basebar button svg{width:15px;height:15px}}
+.subnav{display:none}.subnav button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);border-radius:10px;padding:6px 8px;font-size:14px;cursor:pointer}.subnav button svg{width:20px;height:20px;flex:none}.subnav button:hover{border-color:var(--gold)}.subnav button.on{color:#1a1208;background:var(--gold);border-color:var(--gold);font-weight:bold}@media (max-width:560px){.subnav button{flex-direction:column;gap:2px;font-size:11px;min-height:52px}}
 .hshort{display:grid;gap:8px;align-content:start}.hshort button{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(90deg,rgba(228,180,80,.12),rgba(0,0,0,.2));color:var(--ink);font-size:15px;cursor:pointer;text-align:left}.hshort button:hover{border-color:var(--gold)}.hshort button svg{width:26px;height:26px;color:var(--gold);flex:none}.hshort button span{display:grid}.hshort button small{color:var(--mute);font-size:11px}
 #hideout[data-tab="gacha"] #paneGacha{display:grid;grid-row:2;grid-column:1/-1;gap:10px;align-content:start}
 #hideout[data-tab="gacha"] .tabnav [data-t="gacha"]{color:var(--gold);background:rgba(228,180,80,.08);box-shadow:inset 0 -2px 0 var(--gold)}
@@ -828,6 +836,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
     <button class="acct off" id="acctChip" type="button">確認中…</button>
     <button class="iconbtn" id="optBtn" type="button" aria-label="設定">⚙</button>
     <button class="plcard" id="plCard" type="button" aria-label="冒険者の記録を開く"></button>
+    <nav class="basebar" id="baseBar" aria-label="拠点メニュー"></nav>
   </header>
   <section id="secDeploy" class="lobby">
     <canvas id="stage" aria-label="ロビーの情景"></canvas>
@@ -861,7 +870,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
       <h3>セーフポーチ</h3>
       <div class="pouchrow"><div id="pouchSlot" style="width:56px"></div><p class="hint">ここに入れた1品は死んでも失わない。レイド中にも出し入れできる。</p></div>
     </div>
-    <div><h3>リュック <span class="hint" id="kitInfo"></span></h3><div class="kitgrid" id="kitGrid"></div><p class="hint">回復薬や道具はリュックに入れたものだけ持ち込める。レイド中は持ち物（Tab・「持物」ボタン）を開いて、中から選んで使う。</p><div class="consrow" id="consSlot"></div></div>
+    <div><h3>バッグ（持ち込む道具） <span class="hint" id="kitInfo"></span></h3><div class="kitgrid" id="kitGrid"></div><p class="hint">回復薬・道具・料理はバッグに入れたものだけ持ち込める。レイドで拾う装備も同じバッグの枠を使う。大きい鞄を装備すると枠が増える。</p><div class="consrow" id="consSlot"></div></div>
   </section>
   <section class="pane" id="paneStash">
     <h2>倉庫 <span class="hint" id="stashCount"></span><span class="goldv" id="goldV"></span></h2>
@@ -885,7 +894,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
   <section class="pane" id="paneCook">
     <h2>釜・料理 <span class="hint">食材の組み合わせで料理が変わる</span></h2>
     <div id="cookBox"></div>
-    <p class="hint">魚・肉・きのこ・野草・木の実などを最大5個まで釜に入れて調理する。組み合わせで料理の種類が、食材の効果で回復量やバフが変わる。作った料理は図鑑の「料理」に記録される。料理はリュックに入れてレイドに持ち込み、持ち物から食べる。</p>
+    <p class="hint">組み合わせで料理の種類が、食材の効果で回復量やバフが変わる。作った料理は図鑑の「料理」に記録される。料理はバッグに入れてレイドに持ち込み、持ち物から食べる。</p>
   </section>
   <section class="pane" id="paneCraft">
     <h2>作業台 <span class="hint" id="craftGold"></span></h2>
@@ -991,7 +1000,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>PvP</b>：基本はオン。ロビーのスイッチでオフにすると誰も攻撃しない。レイド中は画面左上の「PvP」（<span data-kb="pvp">P</span>キー）から、近くの相手ごとに「攻撃しない」を選べる。その相手から攻撃されると自動で解除。同じチーム（パーティ）は互いに攻撃できない。</li>
         <li><b>ボスレイド</b>：報酬は一人ずつランダムに抽選。ボスと取り巻きに与えたダメージで貢献度が決まり、平均以上ならボーナス装備が1つ、1位（MVP）ならさらに1つ追加。ダンジョンでまれに手に入る鍵を使い、ホストが募集→仲間が参加して準備OK→一斉に出発。鍵ごとにボスと強さが違い、強いボスほど報酬が良い（報酬は人ごとにランダム）。制限8分。残機は3つで、倒れても時間で復活できる。3回倒れると観戦モードになり、仲間が討伐すれば少し減った報酬がもらえる。討伐すれば装備は失わない。時間切れか全員の残機が尽きると装備を失う。</li>
         <li><b>難易度</b>：普通・危険・悪夢・地獄。高いほど敵の数が増え、攻撃が速く重く、足も速くなる（HPはあまり増えない）。そのぶん装備のレベル・レア度・金貨・素材・鍵の出やすさが上がる。</li>
-        <li><b>回復薬は自分で用意</b>：最初は持っていない。商人で買うか作業台で作ってリュックに入れて持ち込む。宝箱からも出る。</li>
+        <li><b>回復薬は自分で用意</b>：最初は持っていない。商人で買うか作業台で作ってバッグに入れて持ち込む。宝箱からも出る。</li>
         <li><b>宝箱の開封</b>：調べてから少し時間がかかる（普通1.3秒・番人の宝箱3.4秒）。動いたり攻撃を受けたりすると中断する。</li>
         <li><b>拾い物</b>：近くに倒れた魔物がいくつもあると、まとめて1つの画面で拾える。すぐ近くに落ちている素材と金貨は歩くだけで自動で拾う。拾ったものは左下に少しの間表示される。</li>
         <li><b>異変</b>：まれにダンジョンで異変が起きる。闇夜（視界が狭い）・大発生（雑魚が大量）・血の月（敵が凶暴だが報酬が良い）・黄金の巡り（金貨2.5倍）・静寂（敵は少ないが全員精鋭）・地鳴り（落石）・濃霧（地図が使えない）。</li>
@@ -1016,12 +1025,12 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>攻撃アシスト</b>（画面左上のボタン・スマホは「狙」・PCは<span data-kb="assist">R</span>キーですぐ切り替え）：オンだと攻撃した瞬間だけ近くの敵の方を向く（弓・杖は動きを先読み）。移動中や逃げるときは進む方向を向いたまま。</li>
         <li><b>武器スキル</b>（<span data-kb="skill">F</span>キー・スマホは「技」）：武器の種類ごとに固有の技がある。剣＝旋風斬り、斧・槌＝大地割り（スタン）、短剣＝影走り、槍＝穿ち、弓＝五月雨、杖＝魔力爆発。斧や槌の通常攻撃は相手を一瞬スタンさせる。</li>
         <li><b>鞄（バックパック）</b>：装備欄の「鞄」に付けると、レイド中のバッグの枠が増える（鞄なしは12枠）。大きい鞄ほど足が遅くなり、斥候の軽背嚢のように速くなるものもある。鞄は主に作業台の「鞄」で作るか、他の冒険者を倒して奪う。宝箱からはめったに出ない。バッグの枠を超えて持つと足がかなり遅くなる。</li>
-        <li><b>リュックと道具</b>：回復薬や道具は拠点の「倉庫・装備」でリュック（6枠）に入れたものだけ持ち込める。レイド中は持ち物（Tab・スマホは「持物」）を開いて押すと使う。生還すると残りはリュックに戻り、死ぬと失う。</li>
+        <li><b>バッグと道具</b>：回復薬・道具・料理は拠点の「倉庫・装備」でバッグに入れたものだけ持ち込める。道具もレイドで拾った装備も、バッグの枠を1つずつ使う。枠の数は装備した鞄で決まり（鞄なしは12枠）、大きい鞄ほど広がる。レイド中は持ち物（Tab・スマホは「持物」）のバッグの中の道具を押すと使う。生還すると残った道具はバッグに戻る。</li>
         <li><b>探索マップ</b>：マップ選択の「探索」は砂漠・草原・川辺・海岸のどれかがランダムに生成される明るい屋外。道や小屋、野営地などがあり、ダンジョンより採集場所が多く、遭難者の救助イベントも起こりやすい。魔物もいるので油断しないこと。</li>
         <li><b>採集</b>：鉱脈・木・薬草の近くで調べる（宝箱と同じ操作）と、少しの間その場にとどまって素材を集める。動いたり殴られたりすると中断する。一部のダンジョンにもある。探索マップでは外周以外の木・岩・サボテン・ヤシはすべて採集できる（鉱脈やトラップは置かれていない）。</li>
         <li><b>ガチャ</b>：「ガチャ」タブに キャラクター（スキン）・衣装（帽子・マント・オーラ）・拠点装飾 の3つがある。毎週月曜9:00にピックアップが入れ替わり、レジェンドとエピックの半分はピックアップになる。10回はエピック以上が1つ確定、60回でレジェンド確定。</li>
         <li><b>釣り</b>：水面に丸い波紋が広がっている場所の岸で調べると釣りができる。魚が釣れるほか、まれに装備・金貨・レシピが釣れる。海岸では鮪や貝、ごくまれに黄金魚も。</li>
-        <li><b>料理</b>：拠点の「釜・料理」で食材を最大5個入れて調理する。入れた組み合わせで料理が変わり（魚＋野草＝香草焼き など）、食材によって回復量や攻撃・防御・移動のバフが付く。料理はリュックに入れて持ち込み、持ち物から食べる。作った料理は図鑑の「料理」に残る。</li>
+        <li><b>料理</b>：拠点の「釜・料理」で食材を最大5個入れて調理する。入れた組み合わせで料理が変わり（魚＋野草＝香草焼き など）、食材によって回復量や攻撃・防御・移動のバフが付く。料理はバッグに入れて持ち込み、持ち物から食べる。作った料理は図鑑の「料理」に残る。</li>
         <li><b>レシピ</b>：宝箱や釣りでまれにレシピが手に入る。料理のレシピは図鑑に載り、作業台の★4以上の装備はレシピを覚えないと作れない。脱出すると覚える。</li>
         <li><b>拠点</b>：「拠点」タブに部屋・倉庫と装備・作業台・釜がまとまっている。部屋の家具はガチャの「拠点装飾」で集めて自由に飾れる。作業台はレベルを上げるほど強い装備が作れる。</li>
         <li><b>回復薬</b>は飲むのに1秒かかり、その後2.5秒かけて回復する。その間は足が遅くなる。槌で殴られるとスタンする。</li>
@@ -1368,7 +1377,8 @@ function calcStats(eq){
 /* durability: every item wears out; at 0 it's broken and gives nothing until repaired */
 const DURMAX=[160,200,250,320,400];
 const maxDur=it=>Math.round((DURMAX[clamp(it.r|0,0,4)]+(BASES[it.b]&&BASES[it.b].craft?60:0))*(pfOf(it)?pfOf(it).du:1));
-const durOf=it=>it.du==null?maxDur(it):it.du;
+const isPack=it=>!!(it&&BASES[it.b]&&BASES[it.b].s==='back');
+const durOf=it=>it.du==null||isPack(it)?maxDur(it):it.du;
 const isBroken=it=>!!it&&durOf(it)<=0;
 const durFrac=it=>clamp(durOf(it)/maxDur(it),0,1);
 const encItem=it=>[it.b,it.r,it.l,Math.round(it.q*100),it.x,it.e>=0?it.e:-1,it.ep||0].concat(...it.v,[Math.round(durOf(it))*8+(it.pf!=null?it.pf+1:0)]);
@@ -1921,7 +1931,7 @@ function buildPresence(){
   return p;
 }
 /* ---------- version check: everyone in a room should run the same build ---------- */
-const BUILD='2026.10.03.1500';
+const BUILD='2026.10.03.1600';
 const UPD={newer:null,t:0,going:false};
 async function checkUpdate(force){
   if(!/^https?:$/.test(location.protocol))return;const t=Date.now();if(!force&&t-UPD.t<45000)return;UPD.t=t;
@@ -2315,7 +2325,7 @@ function inspector(el,it,acts,cmp,cmpLabel){
   }
   if(bv.arm)lines+='<li><span>防御</span><b>'+bv.arm+'</b></li>';
   {const P=pfOf(it);if(P)lines+='<li><span>品質の銘</span><b style="color:'+(P.m>=1?'#7cc47f':'#e0644c')+'">'+P.n+'（性能'+(P.m>=1?'+':'')+Math.round((P.m-1)*100)+'%・耐久×'+P.du+'）</b></li>'}
-  {const fr=durFrac(it);lines+='<li><span>耐久</span><b style="color:'+(fr<=0?'#e0644c':fr<=0.15?'#ff9a6a':fr<0.5?'#e4b450':'inherit')+'">'+(fr<=0?'壊れている':Math.round(durOf(it))+' / '+maxDur(it))+'</b></li>'}
+  if(!isPack(it)){const fr=durFrac(it);lines+='<li><span>耐久</span><b style="color:'+(fr<=0?'#e0644c':fr<=0.15?'#ff9a6a':fr<0.5?'#e4b450':'inherit')+'">'+(fr<=0?'壊れている':Math.round(durOf(it))+' / '+maxDur(it))+'</b></li>'}
   if(bv.bag)lines+='<li><span>バッグ容量</span><b>'+bv.bag+'枠</b><span class="hint">（なしは'+BAG0+'枠）</span></li>';
   if(bv.mv)lines+='<li><span>移動速度</span><b class="'+(bv.mv>0?'pos':'neg')+'">'+(bv.mv>0?'+':'')+bv.mv+'%</b></li>';
   for(const [ai,v] of it.v)lines+='<li class="aff"><span>'+AFF[ai].n+'</span><b>'+affText(ai,v)+'</b></li>';
@@ -2468,27 +2478,29 @@ function buy(w){
 function freeKit(){
   const it=starterSword();SAVE.stash.push(it);SEL={where:'stash',i:SAVE.stash.length-1};persist();renderLobby();toast('支給品の長剣を受け取りました');
 }
-const KIT_CAP=6;
-function kitEnsure(){if(!SAVE)return;if(!Array.isArray(SAVE.kit)){SAVE.kit=[];const np=Math.min(3,SAVE.potions||0);for(let i=0;i<np;i++)SAVE.kit.push({k:'pot'});SAVE.potions-=np;const c=SAVE.consSel;if(c&&CONS[c]){const n=Math.min(2,SAVE.cons[c]||0);for(let i=0;i<n;i++)SAVE.kit.push({k:'c',id:c});SAVE.cons[c]-=n}}SAVE.kit=SAVE.kit.filter(e=>e&&(e.k==='pot'||(e.k==='c'&&CONS[e.id])||(e.k==='f'&&e.d&&e.d.n))).slice(0,KIT_CAP)}
+const kitCap=()=>{try{return calcStats(SAVE.equip).bag}catch(e){return BAG0}};
+const toolsN=()=>G?(G.potions||0)+Object.values(G.consInv||{}).reduce((a,b)=>a+(b|0),0)+(G.foodInv||[]).length:0;
+const bagUsed=()=>G?G.bag.length+toolsN():0;
+function kitEnsure(){if(!SAVE)return;if(!Array.isArray(SAVE.kit)){SAVE.kit=[];const np=Math.min(3,SAVE.potions||0);for(let i=0;i<np;i++)SAVE.kit.push({k:'pot'});SAVE.potions-=np;const c=SAVE.consSel;if(c&&CONS[c]){const n=Math.min(2,SAVE.cons[c]||0);for(let i=0;i<n;i++)SAVE.kit.push({k:'c',id:c});SAVE.cons[c]-=n}}SAVE.kit=SAVE.kit.filter(e=>e&&(e.k==='pot'||(e.k==='c'&&CONS[e.id])||(e.k==='f'&&e.d&&e.d.n)));const cap=kitCap();while(SAVE.kit.length>cap){const e=SAVE.kit.pop();if(e.k==='f')(SAVE.food=SAVE.food||[]).push(e.d);else if(e.k==='pot')SAVE.potions=(SAVE.potions||0)+1;else SAVE.cons[e.id]=(SAVE.cons[e.id]||0)+1}}
 const kitName=e=>e.k==='pot'?'回復薬':e.k==='f'?e.d.n:CONS[e.id].n,kitGlyph=e=>e.k==='pot'?'薬':e.k==='f'?'食':CONS[e.id].g;
-function kitAdd(e){kitEnsure();if(SAVE.kit.length>=KIT_CAP){toast('リュックがいっぱいです（'+KIT_CAP+'枠）');return}
+function kitAdd(e){kitEnsure();if(SAVE.kit.length>=kitCap()){toast('バッグがいっぱいです（'+kitCap()+'枠・大きい鞄で広がる）');return}
   if(e.k==='pot'){if(!(SAVE.potions>0))return;SAVE.potions--}else{if(!(SAVE.cons[e.id]>0))return;SAVE.cons[e.id]--}
   SAVE.kit.push(e);sfx('equip');persist();renderLobby()}
 function kitRemove(i){const e=SAVE.kit[i];if(!e)return;SAVE.kit.splice(i,1);if(e.k==='f'){(SAVE.food=SAVE.food||[]).push(e.d)}else if(e.k==='pot')SAVE.potions=(SAVE.potions||0)+1;else SAVE.cons[e.id]=(SAVE.cons[e.id]||0)+1;persist();renderLobby()}
 function renderKit(){
-  kitEnsure();const g=$('#kitGrid'),inf=$('#kitInfo');if(!g)return;g.innerHTML='';inf.textContent=SAVE.kit.length+' / '+KIT_CAP+'枠（死ぬと失う）';
-  for(let i=0;i<KIT_CAP;i++){const e=SAVE.kit[i],b=document.createElement('button');b.type='button';b.className='kitc'+(e?'':' empty');
+  kitEnsure();const g=$('#kitGrid'),inf=$('#kitInfo');if(!g)return;g.innerHTML='';inf.textContent=SAVE.kit.length+' / '+kitCap()+'枠（鞄で広がる・死ぬと失う）';
+  for(let i=0;i<kitCap();i++){const e=SAVE.kit[i],b=document.createElement('button');b.type='button';b.className='kitc'+(e?'':' empty');
     if(e){b.innerHTML='<b>'+kitGlyph(e)+'</b><span>'+esc(kitName(e))+'</span>';b.title=(e.k==='pot'?'2.5秒かけてHP45回復':e.k==='f'?dishDesc(e.d):CONS[e.id].d)+'（押すと倉庫へ戻す）';b.onclick=()=>kitRemove(i)}else b.innerHTML='<span>空き</span>';g.appendChild(b)}
-  const cs=$('#consSlot');cs.innerHTML='<h3 style="margin:6px 0 4px;font-size:13px">倉庫の消耗品 <span class="hint">（押すとリュックへ）</span></h3>';
+  const cs=$('#consSlot');cs.innerHTML='<h3 style="margin:6px 0 4px;font-size:13px">倉庫の消耗品 <span class="hint">（押すとバッグへ）</span></h3>';
   const items=[];if(SAVE.potions>0)items.push({e:{k:'pot'},n:SAVE.potions});for(const id of CONS_IDS)if((SAVE.cons[id]||0)>0)items.push({e:{k:'c',id},n:SAVE.cons[id]});
   if(!items.length){const p=document.createElement('p');p.className='hint';p.textContent='消耗品を持っていない。商人で買うか、作業台で作れる。';cs.appendChild(p)}
-  for(const x of items){const b=document.createElement('button');b.type='button';b.className='conschip';b.innerHTML='<b>'+kitGlyph(x.e)+'</b>'+esc(kitName(x.e))+' ×'+x.n;b.disabled=SAVE.kit.length>=KIT_CAP;b.onclick=()=>kitAdd(x.e);cs.appendChild(b)}
-  (SAVE.food||[]).forEach((d,i)=>{const b=document.createElement('button');b.type='button';b.className='conschip food';b.title=dishDesc(d);b.innerHTML='<b>食</b>'+esc(d.n);b.disabled=SAVE.kit.length>=KIT_CAP;b.onclick=()=>{kitEnsure();if(SAVE.kit.length>=KIT_CAP)return;SAVE.food.splice(i,1);SAVE.kit.push({k:'f',d});sfx('equip');persist();renderLobby()};cs.appendChild(b)});
+  for(const x of items){const b=document.createElement('button');b.type='button';b.className='conschip';b.innerHTML='<b>'+kitGlyph(x.e)+'</b>'+esc(kitName(x.e))+' ×'+x.n;b.disabled=SAVE.kit.length>=kitCap();b.onclick=()=>kitAdd(x.e);cs.appendChild(b)}
+  (SAVE.food||[]).forEach((d,i)=>{const b=document.createElement('button');b.type='button';b.className='conschip food';b.title=dishDesc(d);b.innerHTML='<b>食</b>'+esc(d.n);b.disabled=SAVE.kit.length>=kitCap();b.onclick=()=>{kitEnsure();if(SAVE.kit.length>=kitCap())return;SAVE.food.splice(i,1);SAVE.kit.push({k:'f',d});sfx('equip');persist();renderLobby()};cs.appendChild(b)});
 }
 function kitReturn(){
   // what's left after a raid goes back into the backpack first, then to the stash
   kitEnsure();const left=[];for(let i=0;i<(G.potions||0);i++)left.push({k:'pot'});for(const id in (G.consInv||{}))for(let i=0;i<G.consInv[id];i++)left.push({k:'c',id});for(const d of G.foodInv||[])left.push({k:'f',d});
-  for(const e of left){if(SAVE.kit.length<KIT_CAP)SAVE.kit.push(e);else if(e.k==='f')(SAVE.food=SAVE.food||[]).push(e.d);else if(e.k==='pot')SAVE.potions=(SAVE.potions||0)+1;else SAVE.cons[e.id]=(SAVE.cons[e.id]||0)+1}
+  for(const e of left){if(SAVE.kit.length<kitCap())SAVE.kit.push(e);else if(e.k==='f')(SAVE.food=SAVE.food||[]).push(e.d);else if(e.k==='pot')SAVE.potions=(SAVE.potions||0)+1;else SAVE.cons[e.id]=(SAVE.cons[e.id]||0)+1}
   SAVE.potions=Math.min(99,SAVE.potions||0);
 }
 function renderLobby(){
@@ -3126,8 +3138,8 @@ function drawThumb(cvs,b){
   const sb=SCENE_OF[b];g.drawImage(sceneStatic(sb,7,w,h),0,0);drawSceneLive(g,sb,w,h,3);
 }
 const mapDesc=b=>b===-2?['探索','砂漠・草原・川辺・海岸から毎回ランダム。明るく広い屋外で採集・釣りがしやすい']:MAPDESC[b+1]||MAPDESC[0];
-const bMatch=(b,rb)=>b===-1?rb<DUNGEON_N:b===-2?rb>=DUNGEON_N:rb===b;
-const MAPDESC=[['ランダム','7つのダンジョンから毎回ランダム'],['冥窟','石造りの地下迷宮。部屋と通路'],['黒き森','霧と古樹の森。木と池が遮蔽物'],['灰の廃都','焼け落ちた古都。建物と通り'],['廃れた城下町','疫病に呑まれた町。路地と屍犬'],['炭鉱','崩落した坑道。曲がりくねる洞と坑夫の亡者'],['腐れ沼','瘴気の湿地。毒を吐く化け物と泥'],['地下墓所','狭い墓室が連なる迷宮。亡霊と墓守']];
+const bMatch=(b,rb)=>b===-1?true:b===-2?rb>=DUNGEON_N:rb===b;
+const MAPDESC=[['ランダム','7つのダンジョンからランダム（たまに探索）'],['冥窟','石造りの地下迷宮。部屋と通路'],['黒き森','霧と古樹の森。木と池が遮蔽物'],['灰の廃都','焼け落ちた古都。建物と通り'],['廃れた城下町','疫病に呑まれた町。路地と屍犬'],['炭鉱','崩落した坑道。曲がりくねる洞と坑夫の亡者'],['腐れ沼','瘴気の湿地。毒を吐く化け物と泥'],['地下墓所','狭い墓室が連なる迷宮。亡霊と墓守']];
 const DIFFDESC=['いつもの黄泉','敵が増え攻撃が速く重い · 装備+1Lv','敵1.5倍の数 · 被ダメ約2倍 · 装備+2Lv · 鍵が出やすい','敵約2倍の数 · 被ダメ2.6倍 · 猛攻 · 装備+3Lv · 最高の報酬'];
 const SRV={ping:null,at:0,busy:false};
 function srvPing(){if(SRV.busy||Date.now()-SRV.at<8000||!navigator.onLine)return;SRV.busy=true;const t=performance.now();
@@ -3184,7 +3196,7 @@ function renderLobbyTop(){
   $('#mcName').textContent=mapDesc(b)[0];const dc=$('#mcDiff');dc.textContent=DIFF[d].n;dc.style.color=DIFF[d].col;
   drawThumb($('#mapThumb'),b);
   const sw=$('#pvpSw');sw.classList.toggle('on',!SAVE.pvpOff);$('#pvpSwT').textContent=SAVE.pvpOff?'PvP：オフ（他人を攻撃しない）':'PvP：オン';
-  $('#carryNote').textContent='15:00 · '+DIFF[d].n+' · 装備'+SLOTS.filter(s=>SAVE.equip[s]).length+'点 · リュック'+(kitEnsure(),SAVE.kit.length)+'/'+KIT_CAP;
+  $('#carryNote').textContent='15:00 · '+DIFF[d].n+' · 装備'+SLOTS.filter(s=>SAVE.equip[s]).length+'点 · バッグ'+(kitEnsure(),SAVE.kit.length)+'/'+kitCap();
 }
 let COSTAB='skin';
 function withCtx(c2,fn){const old=ctx;ctx=c2;try{fn()}finally{ctx=old}}
@@ -3498,7 +3510,7 @@ function benchBox(){
 /* ---------- sub navigation inside 拠点 ---------- */
 let BASESUB=(()=>{try{const v=lsGet('meikutsu-basesub');return ['home','stash','craft','cook'].includes(v)?v:'home'}catch(e){return 'home'}})();
 function baseNav(){
-  const t=$('#hideout').dataset.tab;for(const id of ['#paneHome','#paneGear','#paneCraft','#paneCook']){const p=$(id);if(!p)continue;let nv=p.querySelector('.subnav');if(!nv){nv=document.createElement('nav');nv.className='subnav';p.prepend(nv)}
+  const t=$('#hideout').dataset.tab;for(const id of ['#baseBar']){const nv=$(id);if(!nv)continue;
     nv.innerHTML='';for(const [k,n] of [['home','拠点'],['stash','倉庫・装備'],['craft','作業台'],['cook','釜・料理']]){const b=document.createElement('button');b.type='button';b.innerHTML=svgI(k==='home'?'home':k)+'<span>'+n+'</span>';b.className=t===k?'on':'';b.onclick=()=>{BASESUB=k;lsSet('meikutsu-basesub',k);$('#hideout').dataset.tab=k;SEL=null;renderLobby();window.scrollTo(0,0)};nv.appendChild(b)}}
 }
 
@@ -3825,9 +3837,12 @@ function genMap(seed){
   if(mapCache.has(seed))return mapCache.get(seed);
   const B=biomeOf(seed),bk=B.style||B.k;
   const r=rngFrom(seed),t=new Uint8Array(MW*MH),tier=new Uint8Array(MW*MH),ind=new Uint8Array(MW*MH),rooms=[];
-  const cx=MW/2|0,cy=MH/2|0;
   // every dive has its own size: the usable square shrinks or grows around the centre
   const rs=rngFrom((seed^0x3c5a11)>>>0),S=[56,64,72,80,84][R.w(rs,[16,26,26,20,12])],ox=(MW-S)>>1,SZ=S/84;
+  // the guardian's lair sits somewhere off the middle (everything is measured from it)
+  const ro=rngFrom((seed^0x0ff5e7)>>>0),oa=ro()*Math.PI*2,od=S*R.f(ro,0.12,0.24);
+  const cx=clamp(Math.round(MW/2+Math.cos(oa)*od),ox+12,ox+S-13),cy=clamp(Math.round(MH/2+Math.sin(oa)*od),ox+11,ox+S-12);
+  const noBoss=!!B.open&&hashStr(seed+':nb')%3!==0;
   rooms.push({x:cx-8,y:cy-7,w:16,h:14,boss:1});
   for(let k=0;k<900&&rooms.length<Math.max(12,Math.round((B.crypt?38:28)*SZ*SZ));k++){
     const w=B.crypt?R.i(r,5,9):R.i(r,7,13),h=B.crypt?R.i(r,5,8):R.i(r,6,11),x=R.i(r,ox+2,ox+S-w-3),y=R.i(r,ox+2,ox+S-h-3);
@@ -3968,11 +3983,12 @@ function genMap(seed){
     const dg=o.boss?1:clamp(1-Math.hypot(o.cx-cx,o.cy-cy)/(S*0.5),0,1);o.dg=dg;
     let nc=o.boss?2:o.spawn?R.i(r,0,1):R.i(r,0,1)+Math.round(dg*2.6);if(!o.boss)nc=r()<0.5?Math.floor(nc/2):Math.ceil(nc/2);
     for(let k=0;k<nc;k++){const p=floorIn(o,usedT);if(p)chests.push({id:cid++,x:p.x,y:p.y,tier:o.tier,dg,boss:0})}
-    if(o.boss){const bx=o.cx|0,by=o.y+2;set(bx,by,1);chests.push({id:cid++,x:bx*TS+TS/2,y:by*TS+TS/2,tier:3,dg:1,boss:1})}
+    if(o.boss&&!noBoss){const bx=o.cx|0,by=o.y+2;set(bx,by,1);chests.push({id:cid++,x:bx*TS+TS/2,y:by*TS+TS/2,tier:3,dg:1,boss:1})}
     if(o.spawn)continue;
     const ri=rooms.indexOf(o);
     const M=(k,p,extra)=>mons.push(Object.assign({id:mid++,k,x:p.x,y:p.y,tier:dg>0.66?3:dg>0.33?2:1,dg,room:ri,elite:r()<0.025+0.12*Math.pow(dg,1.5)?1:0},extra||{}));
     if(o.lair){mons.push({id:mid++,k:'dragon',x:(o.cx|0)*TS+16,y:(o.cy|0)*TS+16,tier:3,dg:1,room:ri,lv:o.lv,el:o.el});const p=floorIn(o,usedT);if(p)chests.push({id:cid++,x:p.x,y:p.y,tier:3,dg:1,boss:0});continue}
+    if(o.boss&&noBoss){for(let k=0;k<3;k++){const p=floorIn(o,usedT);if(p)M(k?'caster':'brute',p,{elite:k===0?1:0})}continue}
     if(o.boss){mons.push({id:mid++,k:'boss',x:(o.cx|0)*TS,y:(o.cy|0)*TS+TS,tier:3,dg:1,room:ri});for(let k=0;k<3;k++){const p=floorIn(o,usedT);if(p)M(k?'caster':'brute',p,{elite:1})}continue}
     if(!o.ext&&r()<0.04){o.horde=1;const nh=R.i(r,8,13);for(let k=0;k<nh;k++){const p=floorIn(o,usedT);if(p)M('swarm',p,{elite:0})}const p=floorIn(o,usedT);if(p)M(r()<0.5?'brute':'charger',p,{elite:1});continue}
     if(!o.ext&&r()<0.05){o.horde=2;const pk=R.pick(r,['ghoul','archer','skel','charger']);const np=R.i(r,4,6);for(let k=0;k<np;k++){const p=floorIn(o,usedT);if(p)M(pk,p,{elite:k===0?1:0})}continue}
@@ -4018,7 +4034,7 @@ function genMap(seed){
   const spawns=spRooms.map(o=>({x:(o.cx|0)*TS+TS/2,y:(o.cy|0)*TS+TS/2}));
   const bossRoom=rooms[0];
   const lairRoom=rooms.find(o=>o.lair);
-  const map={seed,biome:B.k,style:bk,B,t,tier,ind,rooms,traces,altar,traps,pieces,bb:{x0:ox,y0:ox,S},size:S,lair:lairRoom?{x:(lairRoom.cx|0)*TS+16,y:(lairRoom.cy|0)*TS+16}:null,exts,chests,mons,spawns,anim,road,boss:{x:(bossRoom.cx|0)*TS,y:(bossRoom.cy|0)*TS}};
+  const map={seed,biome:B.k,style:bk,B,t,tier,ind,rooms,traces,altar,traps,pieces,bb:{x0:ox,y0:ox,S},size:S,lair:lairRoom?{x:(lairRoom.cx|0)*TS+16,y:(lairRoom.cy|0)*TS+16}:null,exts,chests,mons,spawns,anim,road,noBoss,cx,cy,boss:{x:(bossRoom.cx|0)*TS,y:(bossRoom.cy|0)*TS}};
   if(B.open)openObs(map);
   map.nodes=placeNodes(map,seed);
   mapCache.set(seed,map);
@@ -4358,10 +4374,10 @@ function startRaid(raidId,seed,t0,opts={}){
   sendPresence();sfx('start');
 }
 const raidScore=r=>{const pg=r.ping?r.ping.ms+(r.ping.via==='relay'?120:0):180;return r.names.length*55-pg-(r.t0+RAID_MS-Date.now()<6*60000?60:0)};
-function randomJoinTarget(df,cat){const now0=Date.now();const L=liveRaids().filter(r=>r.df===df&&bMatch(cat==null?-1:cat,r.b)&&!r.gr&&r.bv===BUILD&&r.t0+RAID_MS-now0>JOIN_MIN);const ok=L.filter(r=>!r.ping||r.ping.ms<300);return (ok.length?ok:L).sort((a,b)=>raidScore(b)-raidScore(a))[0]||null}
+function randomJoinTarget(df,cat){const now0=Date.now();const L=liveRaids().filter(r=>r.df===df&&bMatch(cat==null?-1:cat,r.b)&&(cat!==-1||r.b<DUNGEON_N||Math.random()<0.25)&&!r.gr&&r.bv===BUILD&&r.t0+RAID_MS-now0>JOIN_MIN);const ok=L.filter(r=>!r.ping||r.ping.ms<300);return (ok.length?ok:L).sort((a,b)=>raidScore(b)-raidScore(a))[0]||null}
 function newRaid(){setTimeout(()=>{if(G)PF_SEEN.add(G.rid)},0);
   {const b0=+($('#inBiome')?$('#inBiome').value:-1),df0=+$('#inDiff').value||0;if(b0<0){const T=randomJoinTarget(df0,b0);if(T){toast('ランダム：『'+BIOMES[T.b].n+'・'+DIFF[T.df].n+'』のレイドに合流します');startRaid(T.rid,T.seed,T.t0,{gr:0,diff:T.df});return}}}
-  const b=+($('#inBiome')?$('#inBiome').value:-1),NB=BIOMES.length,bi=b>=0?b:b===-2?DUNGEON_N+Math.floor(Math.random()*(NB-DUNGEON_N)):Math.floor(Math.random()*DUNGEON_N);const seed=(Math.floor(Math.random()*Math.floor(4294967295/NB))*NB+bi)>>>0;lsSet('meikutsu-biome',String(b));const df=+$('#inDiff').value||0;lsSet('meikutsu-diff',String(df));startRaid(rid(6),seed,Date.now(),{diff:df})}
+  const b=+($('#inBiome')?$('#inBiome').value:-1),NB=BIOMES.length,bi=b>=0?b:b===-2||Math.random()<0.12?DUNGEON_N+Math.floor(Math.random()*(NB-DUNGEON_N)):Math.floor(Math.random()*DUNGEON_N);const seed=(Math.floor(Math.random()*Math.floor(4294967295/NB))*NB+bi)>>>0;lsSet('meikutsu-biome',String(b));const df=+$('#inDiff').value||0;lsSet('meikutsu-diff',String(df));startRaid(rid(6),seed,Date.now(),{diff:df})}
 function leaveRaid(){
   if(!G)return;
   if(G.me.st==='alive'&&!G.done)return;
@@ -4824,7 +4840,7 @@ function rescueTalk(v){
   const df=G.diff||0,r=rngFrom((G.seed^hashStr('rescue:'+NET.peerId))>>>0),gold=Math.round((140+df*130)*(0.8+r()*0.5));
   G.gold+=gold;pickLog('金貨 '+gold+'G','#e4b450');
   const pot=Math.min(9-G.potions,1+(r()<0.4?1:0));if(pot>0){G.potions+=pot;pickLog('回復薬 ×'+pot,'#e2675a')}
-  if(r()<0.4&&G.bag.length<bagCap()){const lv=clamp(5+DIFF[df].lv+R.i(r,0,2),1,13);const it=genItem(r,lv,null,{minR:2,luck:2});it.id=rid();G.bag.push(it);dexItem(it);pickLog(itemName(it),RAR[it.r].hex)}
+  if(r()<0.4&&bagUsed()<bagCap()){const lv=clamp(5+DIFF[df].lv+R.i(r,0,2),1,13);const it=genItem(r,lv,null,{minR:2,luck:2});it.id=rid();G.bag.push(it);dexItem(it);pickLog(itemName(it),RAR[it.r].hex)}
   addXp(160+df*120);SAVE.st.rescues=(SAVE.st.rescues||0)+1;persist();
   banner('救出成功','遭難者を助け出した','#7cc47f');sfx('fanfare',0.6);addFeed('遭難者を救出した！');addText(v.x,v.y-34,'ありがとう！','#bff0c0',true);renderHud();
 }
@@ -4847,7 +4863,7 @@ function renderBM(el){
     else b=tile(e.it,{sel:i===G.loot.sel,onClick:()=>{G.loot.sel=i;renderLoot()}});
     if(i===G.loot.sel)b.classList.add('sel');if(sold){b.style.opacity=0.3}grid.appendChild(b)});
   left.appendChild(grid);const right=document.createElement('div');const e=st[G.loot.sel],sold=G.bmBought.has(G.loot.sel);
-  const buy=()=>{if(sold)return;if(e.it&&G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです');return}if(e.pot&&G.potions+e.pot>9){flashMsg('回復薬はこれ以上持てません');return}if(!bmPay(e.price)){flashMsg('金貨が足りない（'+e.price.toLocaleString()+'G）');sfx('hurt',0.4);return}
+  const buy=()=>{if(sold)return;if(e.it&&bagUsed()>=bagCap()){flashMsg('バッグがいっぱいです');return}if(e.pot&&bagUsed()+e.pot>bagCap()){flashMsg('バッグがいっぱいです');return}if(!bmPay(e.price)){flashMsg('金貨が足りない（'+e.price.toLocaleString()+'G）');sfx('hurt',0.4);return}
     G.bmBought.add(G.loot.sel);if(e.it){const it=Object.assign({},e.it,{id:rid()});G.bag.push(it);dexItem(it);pickLog(itemName(it),RAR[it.r].hex)}else{G.potions+=e.pot;pickLog('回復薬 ×'+e.pot,'#e2675a')}sfx('coin');renderLoot();renderHud()};
   if(e.it){inspector(right,e.it,[{label:sold?'売り切れ':'購入 '+e.price.toLocaleString()+'G',fn:buy,cls:sold?'':'primary'}],G.equip[BASES[e.it.b].s],'装備中');if(e.ex){const n=document.createElement('p');n.className='hint';n.style.color='#ff8a9a';n.textContent='闇商人だけが扱う品';right.querySelector('.pw').after(n)}}
   else{right.innerHTML='<p>回復薬 ×'+e.pot+'</p><p class="hint">飲むと2.5秒かけてHP45回復。</p>';const a=document.createElement('div');a.className='acts';a.appendChild(armedBtn(sold?'売り切れ':'購入 '+e.price.toLocaleString()+'G',buy,sold?'':'primary'));right.appendChild(a)}
@@ -5266,7 +5282,7 @@ function monLootBase(m,key){
     if(r()<0.3)out.push({key:key+'.rk',rkey:r()<0.7?'rk4':'rk5'});
     return out;
   }
-  const boss=m.k==='boss';let n=boss?3:m.k==='swarm'?R.w(r,[88,12,0]):m.k==='brute'||m.k==='charger'?R.w(r,[30,45,25]):R.w(r,[50,38,12]);
+  const boss=m.k==='boss';let n=boss?3:m.k==='swarm'?R.w(r,[96,4,0]):m.k==='brute'||m.k==='charger'?R.w(r,[55,36,9]):R.w(r,[74,23,3]);
   if(m.elite)n+=1;
   if(G.mode==='boss')return [];
   const kch=(boss?0.3:m.elite?0.04:0)*(1+0.6*(G.diff||0));
@@ -5301,13 +5317,13 @@ function takeLoot0(e){
   if(e.rcp){(G.rcpGot=G.rcpGot||[]).push(e.rcp);banner('レシピを見つけた！',rcpName(e.rcp)+'（脱出すると覚える）','#ffd36b');sfx('rare');addFeed('★ レシピ：'+rcpName(e.rcp))}
   else if(e.rkey){const K=RK(e.rkey);G.keys[e.rkey]=(G.keys[e.rkey]||0)+1;banner('ボスレイドの鍵！',K.n+' '+'★'.repeat(K.star)+' · '+K.b.n,'#ffd36b');sfx('fanfare');shake(4);addFeed('★ '+K.n+'を手に入れた（脱出すれば使える）')}
   else if(e.mat){G.mats[e.mat]=(G.mats[e.mat]||0)+e.n;addText(G.me.x,G.me.y-26,MATS[e.mat].n+' +'+e.n,RAR[MATS[e.mat].r].hex);sfx('loot')}
-  else if(e.cn){G.consInv=G.consInv||{};if((G.consInv[e.cn]||0)>=9){flashMsg('これ以上持てません');return false}G.consInv[e.cn]=(G.consInv[e.cn]||0)+1;sfx('loot');addFeed(CONS[e.cn].n+' を拾った')}
+  else if(e.cn){G.consInv=G.consInv||{};if(bagUsed()>=bagCap()){flashMsg('バッグがいっぱいです（Tabで整理）');return false}G.consInv[e.cn]=(G.consInv[e.cn]||0)+1;sfx('loot');addFeed(CONS[e.cn].n+' を拾った')}
   else if(e.cos){const c=COS[COSI[e.cos]];const fresh=grantCos(e.cos);if(!fresh)G.gold+=600;persist();addFeed('★ 衣装「'+c.n+'」を手に入れた'+(fresh?'（死んでも消えない）':'（所持済みのため金貨600G）'));sfx('rare')}
   else if(e.gold){const g=Math.round(e.gold*(1+G.stats.luck/100)*(G.goldMul||1));G.gold+=g;addText(G.me.x,G.me.y-26,'+'+g+'G','#e4b450');sfx('coin')}
-  else if(e.pot){if(G.potions>=9){flashMsg('回復薬はこれ以上持てません');return false}G.potions=Math.min(9,G.potions+e.pot);sfx('loot')}
+  else if(e.pot){if(bagUsed()+e.pot>bagCap()){flashMsg('バッグがいっぱいです（Tabで整理）');return false}G.potions+=e.pot;sfx('loot')}
   else{
     if(e.grave){G.recovered.push(Object.assign({},e.it));G.taken.add(e.key);G.myTaken.push(e.key);sfx('loot');return true}
-    if(G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです（Tabで整理）');return false}
+    if(bagUsed()>=bagCap()){flashMsg('バッグがいっぱいです（Tabで整理）');return false}
     const it=Object.assign({},lootItem(e),{id:rid()});G.bag.push(it);sfx(it.r>=3?'rare':'loot');
     dexItem(it);
     if(it.r>=3){addFeed('★ '+RAR[it.r].n+'「'+itemName(it)+'」を拾った');banner(RAR[it.r].n+'！',itemName(it),RAR[it.r].hex);sfx('fanfare');shake(it.r===4?6:3);for(let i=0;i<24;i++)G.fx.push({t:'bit',x:G.me.x,y:G.me.y,vx:R.f(Math.random,-160,160),vy:R.f(Math.random,-200,60),life:0.9,max:0.9,col:RAR[it.r].hex})}
@@ -5401,12 +5417,16 @@ function renderInv(){
   const sel=G.invSel;
   const eg=document.createElement('div');eg.className='eqgrid';
   for(const s of SLOTS){const c=document.createElement('div');c.className='eqcell';c.appendChild(tile(G.equip[s],{label:SLOTN[s],always:1,drag:{c:'R',where:'equip',slot:s},drop:{c:'R',where:'equip',slot:s},sel:sel&&sel.where==='equip'&&sel.slot===s,onClick:()=>{G.invSel={where:'equip',slot:s};renderInv()}}));const l=document.createElement('span');l.textContent=SLOTN[s];c.appendChild(l);eg.appendChild(c)}
-  const bt=document.createElement('h3');bt.textContent='バッグ '+G.bag.length+'/'+bagCap()+(G.bag.length>bagCap()?'（重すぎる！足が遅い）':'');
+  const bt=document.createElement('h3');bt.innerHTML='バッグ '+bagUsed()+'/'+bagCap()+(bagUsed()>bagCap()?'（重すぎる！足が遅い）':'')+' <span class="hint">道具は押すと使う</span>';
   const bg=document.createElement('div');bg.className='grid';
-  for(let i=0;i<Math.max(bagCap(),G.bag.length);i++)bg.appendChild(tile(G.bag[i]||null,{drag:{c:'R',where:'bag',i},drop:{c:'R',where:'bag',i:G.bag[i]?i:null},sel:sel&&sel.where==='bag'&&sel.i===i,onClick:()=>{G.invSel={where:'bag',i};renderInv()}}));
+  for(let i=0;i<G.bag.length;i++)bg.appendChild(tile(G.bag[i],{drag:{c:'R',where:'bag',i},drop:{c:'R',where:'bag',i},sel:sel&&sel.where==='bag'&&sel.i===i,onClick:()=>{G.invSel={where:'bag',i};renderInv()}}));
+  {const tl=[];for(let i=0;i<(G.potions||0);i++)tl.push({k:'pot'});for(const id in (G.consInv||{}))for(let i=0;i<(G.consInv[id]|0);i++)tl.push({k:'c',id});for(const d of G.foodInv||[])tl.push({k:'f',d});
+   for(const e of tl){const b=document.createElement('button');b.type='button';b.className='it tool'+(e.k==='pot'?' pot':'');b.dataset.r=e.k==='f'?2:1;b.innerHTML='<span class="g">'+kitGlyph(e)+'</span><span class="tn">'+esc(kitName(e))+'</span>';b.title=(e.k==='pot'?'回復薬：2.5秒かけてHP45回復':e.k==='f'?e.d.n+'：'+dishDesc(e.d):CONS[e.id].n+'：'+CONS[e.id].d)+'（押すと使う）';
+     b.onclick=()=>{if(e.k==='pot')drink();else if(e.k==='f'){if(eatFood(e.d))G.foodInv.splice(G.foodInv.indexOf(e.d),1)}else useCons(e.id);renderInv();renderHud()};bg.appendChild(b)}
+   for(let i=G.bag.length+tl.length;i<bagCap();i++)bg.appendChild(tile(null,{drop:{c:'R',where:'bag',i:null}}))}
   const pt=document.createElement('h3');pt.textContent='セーフポーチ（死んでも残る）';
   const pw=document.createElement('div');pw.style.width='56px';pw.appendChild(tile(SAVE.pouch,{label:'空',drag:{c:'R',where:'pouch'},drop:{c:'R',where:'pouch'},sel:sel&&sel.where==='pouch',onClick:()=>{G.invSel={where:'pouch'};renderInv()}}));
-  {const ct=document.createElement('h3');ct.textContent='道具（押すと使う）';const cg=document.createElement('div');cg.className='kitgrid';
+  if(0){const ct=document.createElement('h3');ct.textContent='道具（押すと使う）';const cg=document.createElement('div');cg.className='kitgrid';
     const list=[];if(G.potions>0)list.push({k:'pot',n:G.potions});for(const id in (G.consInv||{}))if(G.consInv[id]>0)list.push({k:'c',id,n:G.consInv[id]});for(const d of G.foodInv||[])list.push({k:'f',d,n:1});
     if(!list.length)cg.innerHTML='<p class="hint" style="grid-column:1/-1;margin:0">道具は持っていない。</p>';
     for(const e of list){const b=document.createElement('button');b.type='button';b.className='kitc use';b.innerHTML='<b>'+kitGlyph(e)+'</b><span>'+esc(kitName(e))+' ×'+e.n+'</span>';b.title=e.k==='pot'?'2.5秒かけてHP45回復':e.k==='f'?dishDesc(e.d):CONS[e.id].d;
@@ -5425,10 +5445,10 @@ function renderInv(){
       acts.push({label:SAVE.pouch?'ポーチと入れ替え':'ポーチへ',fn:()=>{const old=SAVE.pouch;SAVE.pouch=it;if(old)G.bag[sel.i]=old;else G.bag.splice(sel.i,1);persist();G.invSel={where:'pouch'};renderInv()}});
       acts.push({label:'捨てる',fn:()=>{G.bag.splice(sel.i,1);G.invSel=null;renderInv()},cls:'danger'});
     }else if(sel.where==='equip'){
-      acts.push({label:'外してバッグへ',fn:()=>{if(G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです');return}G.equip[slot]=null;G.bag.push(it);restat();G.invSel={where:'bag',i:G.bag.length-1};renderInv()}});
-      acts.push({label:'ポーチへ',fn:()=>{const old=SAVE.pouch;SAVE.pouch=it;G.equip[slot]=null;if(old){if(G.bag.length<bagCap())G.bag.push(old);else{SAVE.pouch=old;G.equip[slot]=it;flashMsg('バッグがいっぱいです');return}}restat();persist();G.invSel={where:'pouch'};renderInv()}});
+      acts.push({label:'外してバッグへ',fn:()=>{if(bagUsed()>=bagCap()){flashMsg('バッグがいっぱいです');return}G.equip[slot]=null;G.bag.push(it);restat();G.invSel={where:'bag',i:G.bag.length-1};renderInv()}});
+      acts.push({label:'ポーチへ',fn:()=>{const old=SAVE.pouch;SAVE.pouch=it;G.equip[slot]=null;if(old){if(bagUsed()<bagCap())G.bag.push(old);else{SAVE.pouch=old;G.equip[slot]=it;flashMsg('バッグがいっぱいです');return}}restat();persist();G.invSel={where:'pouch'};renderInv()}});
     }else{
-      acts.push({label:'バッグへ出す',fn:()=>{if(G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです');return}G.bag.push(it);SAVE.pouch=null;persist();G.invSel={where:'bag',i:G.bag.length-1};renderInv()}});
+      acts.push({label:'バッグへ出す',fn:()=>{if(bagUsed()>=bagCap()){flashMsg('バッグがいっぱいです');return}G.bag.push(it);SAVE.pouch=null;persist();G.invSel={where:'bag',i:G.bag.length-1};renderInv()}});
       acts.push({label:'装備する',fn:()=>{const old=G.equip[slot];G.equip[slot]=it;SAVE.pouch=old||null;restat();persist();G.invSel={where:'equip',slot};renderInv()},cls:'primary'});
     }
     {const fc=fieldRepairCost(it);if(fc){const ok=fieldCanPay(fc);acts.unshift({label:'応急修理（耐久+'+fc.add+' · '+Object.entries(fc.m).map(([k,n])=>MATS[k].n+'×'+n).join('・')+'）',fn:()=>{if(fieldRepair(it)){restat();renderInv();renderHud()}},cls:ok?'primary':''})}}
@@ -5589,7 +5609,7 @@ function update(dt){
     for(const k of ['skCd','buffD','buffA','buffS','smokeT','stunT'])if(G[k]>0)G[k]-=dt;
     if(G.smokeT<=0&&G.smokeOn){G.smokeOn=false}if(G.smokeT>0)G.smokeOn=true;
     if(G.drinkT>0){G.drinkT-=dt;if(G.drinkT<=0){G.potT=2.5;flashMsg('回復中…（少し足が遅くなる）')}}
-    let sp=s.speed*(G.sneak?0.55:1)*(G.drinkT>0?0.45:G.potT>0?0.72:1)*(G.sSlow>0?0.65:1)*(G.buffS>0?1.25:1)*(G.bag.length>bagCap()?0.7:1)*(G.stunT>0?0:1)*(G.rootT>0?0:1);
+    let sp=s.speed*(G.sneak?0.55:1)*(G.drinkT>0?0.45:G.potT>0?0.72:1)*(G.sSlow>0?0.65:1)*(G.buffS>0?1.25:1)*(bagUsed()>bagCap()?0.7:1)*(G.stunT>0?0:1)*(G.rootT>0?0:1);
     if(G.kb&&G.kb.t>0){const f=G.kb.t/G.kb.T;moveCirc(me,G.kb.vx*f*dt,G.kb.vy*f*dt,PR);G.kb.t-=dt}
     if(G.dodgeT>0){moveCirc(me,G.dodgeDir[0]*s.speed*2.9*dt,G.dodgeDir[1]*s.speed*2.9*dt,PR)}
     else moveCirc(me,mx*sp*dt,my*sp*dt,PR);
@@ -6326,14 +6346,15 @@ function render(){
 const BOTNAMES=['たける','ゆうと','Kaito','みかん','ぽてと','shiro','くろねこ','Ren','あおい','そら','ハル','nagi','こてつ','りく','ゆず','mochi','kuro','タロウ','ひなた','ねむ','Yuki','とうふ','さくら','zero','ルカ','しゅん','ayaka','もぶ','おでん','Leo','かげ','ミナト','sora_7','つばさ','ぎん','hiro','あめ','ponta','レイ','ゆきむら','いちご','Taiga','ちくわ','セナ','gin','はやて','らむね','kotaro','ナギ','ぺんぎん'];
 function botName(r){if(r()<0.38)return '冒険者'+R.i(r,100,999);let n=R.pick(r,BOTNAMES);if(r()<0.25)n+=R.i(r,1,99);return n}
 function setupBots(map,seed,df){
-  const h=hashStr(seed+':bot')%1000;if(h>=(df>=2?120:df>=1?95:70))return;
-  const r=rngFrom((seed^0xb07b07)>>>0),n=r()<0.06?2:1;
+  const h=hashStr(seed+':bot')%1000;if(h>=(df>=2?540:df>=1?500:460))return;
+  const r=rngFrom((seed^0xb07b07)>>>0),party=r()<0.2,n=party?(r()<0.3?3:2):1;let lead=-1,o0=null;
   const rooms=map.rooms.filter(o=>!o.boss&&!o.spawn&&!o.lair&&o.w>=4&&o.h>=4),SP=map.spawns||[];if(!rooms.length)return;
   const W=BASES.map((b,i)=>[b,i]),pickB=sl=>{const c=W.filter(([b])=>b.s===sl&&!b.bm&&(!b.craft||r()<0.25));return c.length?R.pick(r,c)[1]:-1};
   for(let k=0;k<n;k++){
+    if(k===1&&party){const lm=G.mons[G.mons.length-1];if(!lm||!isBot(lm))return;lead=lm.id}
     const md0=rooms.map(o=>{const cx=(o.x+o.w/2)*TS,cy=(o.y+o.h/2)*TS;let md=1e9;for(const p of SP)md=Math.min(md,Math.hypot(p.x-cx,p.y-cy));return {o,md}}),far=Math.max(...md0.map(x=>x.md));
     const order=md0.filter(x=>x.md>=Math.min(1100,far*0.93)).map(x=>({o:x.o,sc:x.md*(0.85+0.3*r())})).sort((a,b)=>b.sc-a.sc);if(!order.length)return;
-    const o=order[Math.min(order.length-1,k)].o;let x=0,y=0;for(let t=0;t<30;t++){const tx=R.i(r,o.x+1,o.x+o.w-2),ty=R.i(r,o.y+1,o.y+o.h-2);if(map.t[ty*MW+tx]===1){x=tx*TS+16;y=ty*TS+16;break}}if(!x)continue;
+    const o=party&&o0?o0:order[0].o;o0=o;let x=0,y=0;for(let t=0;t<30;t++){const tx=R.i(r,o.x+1,o.x+o.w-2),ty=R.i(r,o.y+1,o.y+o.h-2);if(map.t[ty*MW+tx]===1){x=tx*TS+16;y=ty*TS+16;break}}if(!x)continue;
     for(const mo of G.mons)if(!mo.dead&&!mo.sl&&mo.k!=='boss'&&mo.k!=='dragon'&&mo.k!=='mimic'&&Math.hypot(mo.x-x,mo.y-y)<260){mo.dead=true;mo.gone=true;mo.hp=0}   // they already cleared the room they're in
     const lv=clamp(3+DIFF[df].lv*2+R.i(r,0,4),1,13),eq=emptyEquip();
     eq.weapon=genItem(r,lv,null,{b:pickB('weapon')});
@@ -6347,7 +6368,7 @@ function setupBots(map,seed,df){
     const D={n:name,hp:st.mhp,dmg:0,spd:st.speed*0.97,r:PR,range:reach,wind:0,cd:1/st.aspdF,aggro:420,col:colorOf(name),bot:1};
     G.mons.push({id:G.mons.length,k:'bot',def:D,x,y,hx:x,hy:y,rx:x,ry:y,tx:x,ty:y,mhp:st.mhp,hp:st.mhp,dm:1,spm:1,s:1,ang:r()*6.28,cd:0,wt:0,dead:false,tier:1,dg:0,elite:0,room:null,sl:0,kind:0,name,col:D.col,f:'bot',ph:r()*6,
       B:{eq,st,lv:plv,cs,pers,pots:R.i(r,1,3)+(df>=2?1:0),goal:'explore',path:null,pathAt:0,atkCd:0.5,dodgeCd:0,iframe:0,drinkT:0,openT:0,chest:null,visited:new Set(),bag:[],
-        leaveAt:(R.f(r,0.38,0.85))*RAID_MS,thinkT:0,stuckT:0,lx:x,ly:y,hideT:0,sx:1,sxT:0,react:0,swT:0}});
+        lead:k>0&&party?lead:-1,leaveAt:(party&&lead>=0?G.mons[lead].B.leaveAt:(R.f(r,0.38,0.85))*RAID_MS),thinkT:0,stuckT:0,lx:x,ly:y,hideT:0,sx:1,sxT:0,react:0,swT:0}});
   }
 }
 const isBot=m=>m&&m.k==='bot';
@@ -6425,6 +6446,7 @@ function botAI(m,dt,pls){
       if(brave>0.45||src.pd<130||(hurtRecent&&B.hurtBy===pl.peer)){goal='fight';tgt=pl}else if(goal!=='fight'){goal='hide';tgt=pl}}
     {let mob=0;for(const o of G.mons)if(!o.dead&&!isBot(o)&&o.tgt==='b'+m.id&&Math.hypot(o.x-m.x,o.y-m.y)<260)mob++;
      if((hpR<0.32||(mob>=3&&hpR<0.6))&&(goal==='fight'||hurtRecent)&&tgt!==src.pl){goal='flee';tgt=tgt||mo}else if(hpR<0.25&&goal==='fight'&&tgt===src.pl&&src.pl.hp>hpR)goal='flee'}
+    if(B.lead>=0){const L=G.mons[B.lead];if(L&&!L.dead&&L.B){if(L.B.goal==='fight'&&L.B.tgt&&goal!=='flee'&&goal!=='fight'&&Math.hypot(L.x-m.x,L.y-m.y)<460){goal='fight';tgt=L.B.tgt}if(L.B.goal==='extract'&&goal==='explore')goal='extract'}}
     if(goal!=='fight'&&goal!=='flee'&&hpR<0.6&&B.pots>0&&B.drinkT<=0&&(!pl||src.pd>300)&&(!mo||src.md>200)){B.pots--;B.drinkT=2.5;B.drank=tn}
     if(goal==='explore'||goal==='extract'&&B.pers.greed>0.7&&el<B.leaveAt){const c=botChest(m);if(c&&!(goal==='extract'&&Math.hypot(c.x-m.x,c.y-m.y)>320)){goal='loot';tgt=c}}
     if(goal!==B.goal){B.goal=goal;B.path=null;if(goal!=='loot')B.openT=0}
@@ -6463,10 +6485,11 @@ function botAI(m,dt,pls){
     if(!B.exit){let best=null,bd=1e9;for(const e of G.map.exts){const d=Math.hypot(e.x-m.x,e.y-m.y);if(d<bd){bd=d;best=e}}B.exit=best}
     if(B.exit){const d=Math.hypot(B.exit.x-m.x,B.exit.y-m.y);if(d>30){botSteer(m,B.exit.x,B.exit.y,spd,dt);B.exT=0}else{B.exT=(B.exT||0)+dt;if(B.exT>5)botLeave(m)}}
   }else{
-    // wander from room to room
+    // wander from room to room (party members tag along with their leader)
+    {const L=B.lead>=0?G.mons[B.lead]:null;if(L&&!L.dead&&L.B){const d=Math.hypot(L.x-m.x,L.y-m.y);if(d>70){botSteer(m,L.x+Math.cos(m.id)*34,L.y+Math.sin(m.id)*34,spd*(d>200?1:0.85),dt)}else m.ang=turnTo(m.ang,L.ang||0,dt*3)}else{
     if(!B.wander||Math.hypot(B.wander[0]-m.x,B.wander[1]-m.y)<40||tn-(B.wAt||0)>25){B.wAt=tn;const rs=G.map.rooms.filter(o=>!o.boss&&!B.visited.has(o));const o=rs.length?R.pick(Math.random,rs):R.pick(Math.random,G.map.rooms);if(o){B.visited.add(o);let p=null;for(let k=0;k<20&&!p;k++){const tx=R.i(Math.random,o.x+1,o.x+o.w-2),ty=R.i(Math.random,o.y+1,o.y+o.h-2);if(G.map.t[ty*MW+tx]===1)p=[tx*TS+16,ty*TS+16]}B.wander=p}}
     if(B.wander)botSteer(m,B.wander[0],B.wander[1],spd*(B.pers.caut>0.6?0.8:1),dt);
-  }
+  }}}
   // stuck: try another way
   B.stuckT+=dt;if(B.stuckT>1.5){if(Math.hypot(m.x-B.lx,m.y-B.ly)<6&&g!=='hide'&&g!=='loot'&&B.drinkT<=0&&!(g==='fight'&&B.atkCd>0)){B.path=null;B.wander=null;const a=Math.random()*6.28;moveCirc(m,Math.cos(a)*10,Math.sin(a)*10,m.def.r)}B.stuckT=0;B.lx=m.x;B.ly=m.y}
   if(Math.hypot(m.x-(B.px||m.x),m.y-(B.py||m.y))>0.5)m.kind|=16;B.px=m.x;B.py=m.y;
@@ -6563,7 +6586,7 @@ function gatherDone(n){
   else if(n.k==='herb'){if(b==='desert'){give('spice',R.i(r,1,2));if(r()<0.4)give('herb',1)}else{give('herb',R.i(r,1,2));if(['dungeon','crypt','mine','forest','swamp'].includes(b)||r()<0.3)give('mush',R.i(r,0,2))}if(r()<0.25)give('berry',1);if(b==='swamp'&&r()<0.3)give('venom',1);sfx('loot')}
   else{G.fishN=(G.fishN||0)+1;const x=r();
     if(x<0.03){const rk=rcpRoll(r);if(rk){G.rcpGot.push(rk);pickLog('レシピ：'+rcpName(rk),'#ffd36b');banner('レシピを釣り上げた！',rcpName(rk),'#ffd36b');sfx('rare')}}
-    else if(x<0.09){if(G.bag.length<bagCap()){const it=genItem(r,clamp(3+DIFF[df].lv+R.i(r,0,3),1,13),null,{});it.id=rid();G.bag.push(it);dexItem(it);pickLog('釣り上げた：'+itemName(it),RAR[it.r].hex);sfx('rare')}else give('fish',1)}
+    else if(x<0.09){if(bagUsed()<bagCap()){const it=genItem(r,clamp(3+DIFF[df].lv+R.i(r,0,3),1,13),null,{});it.id=rid();G.bag.push(it);dexItem(it);pickLog('釣り上げた：'+itemName(it),RAR[it.r].hex);sfx('rare')}else give('fish',1)}
     else if(x<0.13){const g=R.i(r,20,80)*(1+df);G.gold+=g;pickLog('沈んでいた金貨 '+g+'G','#e4b450');sfx('coin')}
     else{const gold=r()<0.025+df*0.01;const sea=b==='coast';const kind=gold?'gfish':sea?(r()<0.35?'tuna':r()<0.4?'shell':'fish'):(r()<0.32?'salmon':'fish');give(kind,1);if(kind==='gfish'){banner('黄金魚！','めったに釣れない幻の魚','#ffd36b');sfx('fanfare',0.6)}else sfx('loot')}}
   addText(n.x,n.y-26,n.k==='fish'?'釣れた！':'採れた','#bff0c0');renderHud();
@@ -6623,21 +6646,42 @@ function cookNow(){
   SAVE.food.push(d);dexEnsure();SAVE.dex.food=SAVE.dex.food||{};const first=!SAVE.dex.food[d.id];SAVE.dex.food[d.id]=(SAVE.dex.food[d.id]||0)+1;
   persist();sfx('fanfare',0.5);banner(d.n+'ができた！',dishDesc(d)+(first?' · 図鑑に登録':''),'#ffb04a');renderLobby();
 }
+const CATN={fish:'魚',meat:'肉',mush:'きのこ',fruit:'木の実',veg:'野草',sea:'貝',spice:'香辛料',sweet:'蜂蜜'};
+const EFTAG={atk:'攻撃↑',def:'防御↑',spd:'移動↑',heal:'回復↑',all:'全部↑'};
+const dishKnown=id=>BASIC_DISH.includes(id)||(SAVE.rcpF||[]).includes(id)||!!(SAVE.dex&&SAVE.dex.food&&SAVE.dex.food[id]);
+// fill the pot for a dish: the most plentiful ingredient of each kind it needs
+function potFor(d){const left={},pick=[];for(const id of Object.keys(INGR))left[id]=matHave(id,0);
+  for(const [cat,n] of Object.entries(d.need))for(let i=0;i<n;i++){const c=Object.keys(INGR).filter(id=>INGR[id].c===cat&&left[id]>0).sort((a,b)=>left[b]-left[a])[0];if(!c)return null;left[c]--;pick.push(c)}return pick}
+function potAdd(id){if(POT.length>=5){toast('釜はいっぱい（5個まで）。入れた食材を押すと取り出せる');return}const left=matHave(id,0)-POT.filter(x=>x===id).length;if(left<=0)return;POT.push(id);sfx('tap');renderCook();const pc=$('#potCv');if(pc){pc.classList.remove('plop');void pc.offsetWidth;pc.classList.add('plop')}}
 function renderCook(){
-  const el=$('#cookBox');if(!el||!SAVE)return;const ing=Object.keys(INGR).filter(id=>matHave(id,0)>0),inPot={};for(const id of POT)inPot[id]=(inPot[id]||0)+1;
-  const pv=POT.length?cookResult(POT):null,known=pv&&(SAVE.dex&&SAVE.dex.food&&SAVE.dex.food[pv.id]||(SAVE.rcpF||[]).includes(pv.id)||BASIC_DISH.includes(pv.id));
-  el.innerHTML='<div class="potrow"><canvas id="potCv" width="200" height="150"></canvas><div class="potslots">'+[0,1,2,3,4].map(i=>{const id=POT[i];return '<button type="button" class="kitc'+(id?'':' empty')+'" data-i="'+i+'">'+(id?'<b>'+MATS[id].g+'</b><span>'+esc(MATS[id].n)+'</span>':'<span>空き</span>')+'</button>'}).join('')+'</div>'
-    +'<div class="potout">'+(pv?'<b>'+(known?esc(pv.n):'？？？')+'</b><span class="hint">'+(known?dishDesc(pv):'作ってみるまでわからない')+'</span>':'<span class="hint">食材を入れると何ができるかが変わる</span>')+'<button class="btn primary" type="button" id="cookGo"'+(POT.length?'':' disabled')+'>調理する</button></div></div>'
-    +'<h3>食材 <span class="hint">（押すと釜へ・最大5個）</span></h3><div class="matrow">'+(ing.length?ing.map(id=>{const left=matHave(id,0)-(inPot[id]||0);return '<button type="button" class="conschip" data-id="'+id+'"'+(left>0&&POT.length<5?'':' disabled')+'><b>'+MATS[id].g+'</b>'+esc(MATS[id].n)+' ×'+left+'</button>'}).join(''):'<p class="hint">食材がない。採集（木・草・釣り）や獣の肉で集まる。探索マップのほうが集めやすい。</p>')+'</div>'
-    +'<h3>料理 <span class="hint">（押すとリュックへ。レイド中に持ち物から食べる）</span></h3><div class="matrow">'+((SAVE.food||[]).length?(SAVE.food||[]).map((d,i)=>'<button type="button" class="conschip food" data-f="'+i+'" title="'+esc(dishDesc(d))+'"><b>食</b>'+esc(d.n)+'</button>').join(''):'<p class="hint">まだ料理がない。</p>')+'</div>';
-  el.querySelectorAll('.potslots .kitc').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(POT[i]){POT.splice(i,1);renderCook()}});
-  el.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{if(POT.length>=5)return;POT.push(b.dataset.id);sfx('tap');renderCook()});
-  el.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{const i=+b.dataset.f;kitEnsure();if(SAVE.kit.length>=KIT_CAP){toast('リュックがいっぱいです');return}const d=SAVE.food.splice(i,1)[0];SAVE.kit.push({k:'f',d});persist();renderLobby();toast(d.n+' をリュックに入れた')});
-  $('#cookGo').onclick=cookNow;
-  const g=$('#potCv').getContext('2d'),tn=now();g.clearRect(0,0,200,150);g.fillStyle='#3a3030';g.fillRect(40,118,120,14);for(let i=0;i<3;i++){g.fillStyle=['#ff7a2a','#ffb04a','#ffe08a'][i];g.beginPath();g.moveTo(70+i*20,120);g.quadraticCurveTo(80+i*20,96,90+i*20,120);g.fill()}
-  g.fillStyle='#2a2a2e';g.beginPath();g.ellipse(100,70,62,46,0,0,Math.PI);g.fill();g.fillRect(38,52,124,18);g.fillStyle='#4a4048';g.beginPath();g.ellipse(100,54,62,12,0,0,7);g.fill();g.fillStyle=POT.length?'#c8843a':'#2a2024';g.beginPath();g.ellipse(100,56,54,9,0,0,7);g.fill();
-  for(let i=0;i<POT.length;i++){g.fillStyle='#fff';g.globalAlpha=0.6;g.beginPath();g.arc(70+i*15,40-((tn*20+i*9)%20),3,0,7);g.fill()}g.globalAlpha=1;
+  const el=$('#cookBox');if(!el||!SAVE)return;
+  const all=Object.keys(INGR),inPot={};for(const id of POT)inPot[id]=(inPot[id]||0)+1;
+  const pv=POT.length?cookResult(POT):null,known=pv&&dishKnown(pv.id);
+  const ingTile=id=>{const have=matHave(id,0),left=have-(inPot[id]||0),g=INGR[id];return '<button type="button" class="ingc'+(have?'':' none')+(inPot[id]?' inpot':'')+'" data-id="'+id+'" draggable="'+(left>0)+'"'+(left>0?'':' disabled')+'><b>'+MATS[id].g+'</b><span class="in">'+esc(MATS[id].n)+'</span><span class="ic">'+CATN[g.c]+(g.e?' · '+EFTAG[g.e]:'')+'</span><span class="cnt">'+(have?'×'+left:'なし')+'</span>'+(inPot[id]?'<i class="ip">'+inPot[id]+'</i>':'')+'</button>'};
+  const dishes=DISHES.filter(d=>dishKnown(d.id));
+  el.innerHTML='<div class="cookTop"><div class="potWrap" id="potDrop"><canvas id="potCv" width="240" height="170"></canvas><div class="potHint">食材を押す／ここへドラッグ</div></div>'
+    +'<div class="cookSide"><div class="potslots">'+[0,1,2,3,4].map(i=>{const id=POT[i];return '<button type="button" class="kitc'+(id?'':' empty')+'" data-i="'+i+'" title="'+(id?'押すと取り出す':'空き')+'">'+(id?'<b>'+MATS[id].g+'</b><span>'+esc(MATS[id].n)+' ✕</span>':'<span>空き</span>')+'</button>'}).join('')+'</div>'
+    +'<div class="potout">'+(pv?'<div><b>'+(known?esc(pv.n):'？？？')+'</b><div class="hint">'+(known?dishDesc(pv):'作ってみるまでわからない（新しい料理かも）')+'</div></div>':'<div class="hint">下の食材を押すと釜に入る（最大5個）。組み合わせで料理が変わる。</div>')
+    +'<div class="potbtns"><button class="btn" type="button" id="potClr"'+(POT.length?'':' disabled')+'>空にする</button><button class="btn primary big" type="button" id="cookGo"'+(POT.length?'':' disabled')+'>調理する</button></div></div></div></div>'
+    +(dishes.length?'<h3>レシピから入れる <span class="hint">（押すと必要な食材が自動で入る）</span></h3><div class="rcprow">'+dishes.map(d=>{const ok=!!potFor(d);return '<button type="button" class="rcpc'+(ok?'':' lack')+'" data-d="'+d.id+'"><b>'+esc(d.n)+'</b><span>'+Object.entries(d.need).map(([c,n])=>CATN[c]+(n>1?'×'+n:'')).join('＋')+'</span></button>'}).join('')+'</div>':'')
+    +'<h3>食材</h3><div class="inggrid">'+all.map(ingTile).join('')+'</div>'
+    +'<p class="hint">食材は採集（木・岩・草・釣り）や獣の肉で集まる。探索マップのほうが集めやすい。</p>'
+    +'<h3>できた料理 <span class="hint">（押すとバッグへ。レイド中に持ち物から食べる）</span></h3><div class="matrow">'+((SAVE.food||[]).length?(SAVE.food||[]).map((d,i)=>'<button type="button" class="conschip food" data-f="'+i+'" title="'+esc(dishDesc(d))+'"><b>食</b>'+esc(d.n)+'</button>').join(''):'<p class="hint">まだ料理がない。</p>')+'</div>';
+  el.querySelectorAll('.potslots .kitc').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(POT[i]){POT.splice(i,1);sfx('tap');renderCook()}});
+  el.querySelectorAll('.ingc[data-id]').forEach(b=>{b.onclick=()=>potAdd(b.dataset.id);b.ondragstart=e=>{e.dataTransfer.setData('text/plain',b.dataset.id);e.dataTransfer.effectAllowed='copy'}});
+  el.querySelectorAll('.rcpc').forEach(b=>b.onclick=()=>{const d=DISHES.find(x=>x.id===b.dataset.d),p=potFor(d);if(!p){toast('「'+d.n+'」の食材が足りない：'+Object.entries(d.need).map(([c,n])=>CATN[c]+(n>1?'×'+n:'')).join('＋'));return}POT=p;sfx('tap');renderCook()});
+  const pd=$('#potDrop');pd.ondragover=e=>{e.preventDefault();pd.classList.add('over')};pd.ondragleave=()=>pd.classList.remove('over');pd.ondrop=e=>{e.preventDefault();pd.classList.remove('over');const id=e.dataTransfer.getData('text/plain');if(INGR[id])potAdd(id)};
+  el.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{const i=+b.dataset.f;kitEnsure();if(SAVE.kit.length>=kitCap()){toast('バッグがいっぱいです');return}const d=SAVE.food.splice(i,1)[0];SAVE.kit.push({k:'f',d});persist();renderLobby();toast(d.n+' をバッグに入れた')});
+  $('#cookGo').onclick=cookNow;$('#potClr').onclick=()=>{POT=[];renderCook()};
+  potDraw();
 }
+function potDraw(){const c=$('#potCv');if(!c)return;const g=c.getContext('2d'),tn=now();g.clearRect(0,0,240,170);
+  g.fillStyle='#3a3030';g.fillRect(50,140,140,14);for(let i=0;i<4;i++){g.fillStyle=['#ff7a2a','#ffb04a','#ffe08a','#ff9a3a'][i];g.beginPath();g.moveTo(74+i*24,142);g.quadraticCurveTo(84+i*24,116-Math.sin(tn*8+i)*4,94+i*24,142);g.fill()}
+  g.fillStyle='#2a2a2e';g.beginPath();g.ellipse(120,82,74,54,0,0,Math.PI);g.fill();g.fillRect(46,62,148,20);g.fillStyle='#4a4048';g.beginPath();g.ellipse(120,62,74,14,0,0,7);g.fill();
+  g.fillStyle=POT.length?'#c8843a':'#2a2024';g.beginPath();g.ellipse(120,64,64,10,0,0,7);g.fill();
+  g.font='bold 15px DotGothic16, monospace';g.textAlign='center';POT.forEach((id,i)=>{const x=84+i*18,y=62+Math.sin(tn*3+i)*2;g.fillStyle='rgba(0,0,0,.35)';g.beginPath();g.arc(x,y+1,8,0,7);g.fill();g.fillStyle='#fff3d8';g.fillText(MATS[id].g,x,y+5)});
+  for(let i=0;i<POT.length+1&&POT.length;i++){g.fillStyle='#fff';g.globalAlpha=0.5;g.beginPath();g.arc(90+i*14,44-((tn*24+i*9)%26),3,0,7);g.fill()}g.globalAlpha=1}
+function potLoop(){if($('#hideout')&&$('#hideout').dataset.tab==='cook'&&!G)potDraw();setTimeout(()=>requestAnimationFrame(potLoop),80)}
 function eatFood(d){if(G.drinkT>0||G.potT>0){flashMsg('食べている途中');return false}G.drinkT=1.0;G.healRate=d.hp/2.5;if(d.atk)G.buffD=Math.max(G.buffD||0,d.atk);if(d.def)G.buffA=Math.max(G.buffA||0,d.def);if(d.spd)G.buffS=Math.max(G.buffS||0,d.spd);sfx('drink');flashMsg(d.n+' を食べている…');return true}
 function renderDexFood(g){
   dexEnsure();const cooked=SAVE.dex.food||{},known=new Set([...BASIC_DISH,...(SAVE.rcpF||[])]);
@@ -7349,7 +7393,8 @@ function renderMini(){
   g.imageSmoothingEnabled=false;g.drawImage(G.miniC,bb.x0,bb.y0,bb.S,bb.S,0,0,c.width,c.height);
   const dot=(x,y,col,r)=>{g.fillStyle=col;g.beginPath();g.arc((x-ox)/TS*sc,(y-oy)/TS*sc,r,0,Math.PI*2);g.fill()};
   for(const e of G.map.exts){g.strokeStyle='#62b8a5';g.lineWidth=2;g.strokeRect((e.x-ox)/TS*sc-4,(e.y-oy)/TS*sc-4,8,8)}
-  g.fillStyle='rgba(149,102,211,.8)';g.font='10px DotGothic16, monospace';g.textAlign='center';g.fillText('番人',(G.map.boss.x-ox)/TS*sc,(G.map.boss.y-oy)/TS*sc+3);
+  if(!G.bossKnown&&!G.map.noBoss&&G.map.boss&&(G.mode==='boss'||Math.hypot(G.me.x-G.map.boss.x,G.me.y-G.map.boss.y)<300||G.mons.some(m=>m.k==='boss'&&!m.dead&&visAt(m.rx,m.ry)>0))){G.bossKnown=1;addFeed('番人の居場所を地図に記した')}
+  if(G.bossKnown){g.fillStyle='rgba(149,102,211,.8)';g.font='10px DotGothic16, monospace';g.textAlign='center';g.fillText('番人',(G.map.boss.x-ox)/TS*sc,(G.map.boss.y-oy)/TS*sc+3)}
   if(G.mk)for(const q of G.mk){if(q.done)continue;g.fillStyle=q.col||'#ffd36b';g.font='bold 12px DotGothic16, monospace';g.fillText(q.ch||'!',(q.x-ox)/TS*sc,(q.y-oy)/TS*sc+4)}
   for(const Rm of G.remote.values()){const p=Rm.pres;if(p&&p.st==='alive'&&!hostile(Rm.team,myTeam()))dot(Rm.rx,Rm.ry,'#9fe3cf',2.5)}
   if(G.grave&&lootList({type:'grave'}).length){g.fillStyle='#e4b450';g.font='14px DotGothic16, monospace';g.textAlign='center';g.fillText('★',(G.grave.x-ox)/TS*sc,(G.grave.y-oy)/TS*sc+5)}
@@ -7373,7 +7418,7 @@ function renderHud(){
   $('#hSneak').textContent=(G.stunT>0?' · スタン':'')+(G.buffD>0?' · 砥石'+Math.ceil(G.buffD)+'秒':'')+(G.buffA>0?' · 鉄壁'+Math.ceil(G.buffA)+'秒':'')+(G.buffS>0?' · 俊足'+Math.ceil(G.buffS)+'秒':'')+(G.smokeT>0?' · 煙'+Math.ceil(G.smokeT)+'秒':'')+(G.mode==='boss'?' · 残機 '+'♥'.repeat(Math.max(0,BOSS_LIVES-G.deaths))+'♡'.repeat(Math.min(BOSS_LIVES,G.deaths)):'')+(G.sneak?'· 忍び足':'')+(G.sBurn>0?' · 燃焼':'')+(G.sSlow>0?' · 凍結':'')+(G.sPoi>0?' · 猛毒×'+G.sPoiN:'');
   {const pb=$('#pvpBtn');const n=G.truce.size;pb.textContent=(SAVE.pvpOff?'PvP オフ':'PvP オン')+(n?' · 攻撃しない'+n+'人':'');pb.classList.toggle('on',!SAVE.pvpOff);if(G.pvpOpen)renderPvp()}
   const ab=$('#assistBtn');ab.hidden=false;ab.textContent='攻撃アシスト '+(G.assist?'ON':'OFF')+(TOUCH.active?'':'（'+kbName('assist')+'）');ab.classList.toggle('on',!!G.assist);if(TOUCH.aimBtn){TOUCH.aimBtn.textContent=G.assist?'狙 ON':'狙 OFF';TOUCH.aimBtn.style.borderColor=G.assist?'#e4b450':'rgba(255,255,255,.25)'}
-  if(G.mode==='boss')$('#hDanger').textContent='';else{const dg=clamp(1-Math.hypot(me.x/TS-MW/2,me.y/TS-MH/2)/((G.map.size||MW)*0.5),0,1),lv=1+Math.min(4,Math.floor(dg*5));
+  if(G.mode==='boss')$('#hDanger').textContent='';else{const dg=clamp(1-Math.hypot(me.x/TS-(G.map.cx||MW/2),me.y/TS-(G.map.cy||MH/2))/((G.map.size||MW)*0.5),0,1),lv=1+Math.min(4,Math.floor(dg*5));
     const hd=$('#hDanger');hd.textContent='危険度 '+'★'.repeat(lv)+'☆'.repeat(5-lv);hd.style.color=['#9fd26b','#e4d36a','#e4b450','#ff8a5a','#ff4d5a'][lv-1];
     if(me.st==='alive'&&lv>(G.maxLv||0)){if(G.maxLv&&lv>=3)banner('危険度 '+lv,['','','中層に入った。敵が手強くなる','深層に入った。精鋭が徘徊している','最深部。生きて帰れる保証はない'][lv-1],['#9fd26b','#e4d36a','#e4b450','#ff8a5a','#ff4d5a'][lv-1]);G.maxLv=lv}}
   const left=G.t0+G.dur-Date.now();const tm=$('#hTimer');
@@ -7643,11 +7688,11 @@ function dropOn(src,t,it){
     else{const old=G.equip[t.slot];G.equip[t.slot]=it;SAVE.pouch=old||null;restat();persist();G.invSel={where:'equip',slot:t.slot}}
   }else if(t.where==='pouch'){
     const old=SAVE.pouch;take();SAVE.pouch=it;
-    if(old){if(src.where==='equip'&&BASES[old.b].s===src.slot)G.equip[src.slot]=old;else if(G.bag.length<bagCap())G.bag.push(old);else{SAVE.pouch=old;if(src.where==='bag')G.bag.splice(src.i,0,it);else G.equip[src.slot]=it;flashMsg('バッグがいっぱいです');renderInv();return}}
+    if(old){if(src.where==='equip'&&BASES[old.b].s===src.slot)G.equip[src.slot]=old;else if(bagUsed()<bagCap())G.bag.push(old);else{SAVE.pouch=old;if(src.where==='bag')G.bag.splice(src.i,0,it);else G.equip[src.slot]=it;flashMsg('バッグがいっぱいです');renderInv();return}}
     restat();persist();G.invSel={where:'pouch'};
   }else if(t.where==='bag'){
     if(src.where==='bag'){const [x]=G.bag.splice(src.i,1);const to=t.i==null?G.bag.length:t.i;G.bag.splice(to,0,x);G.invSel={where:'bag',i:to}}
-    else{if(G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです');return}take();G.bag.push(it);restat();persist();G.invSel={where:'bag',i:G.bag.length-1}}
+    else{if(bagUsed()>=bagCap()){flashMsg('バッグがいっぱいです');return}take();G.bag.push(it);restat();persist();G.invSel={where:'bag',i:G.bag.length-1}}
   }
   renderInv();
 }
@@ -7902,7 +7947,7 @@ function toggleBigMap(force){
   for(const b of document.querySelectorAll('#tabbar button,#tabnav button'))b.onclick=()=>{$('#hideout').dataset.tab=b.dataset.t==='base'?BASESUB:b.dataset.t;SEL=null;renderLobby();window.scrollTo(0,0)};
   $('#inspClose').onclick=()=>{SEL=null;renderLobby()};
   $('#gDetClose').onclick=()=>{$('#gDetModal').hidden=true};$('#toGacha').onclick=()=>{GTAB=GTAB==='home'?'chara':GTAB;$('#hideout').dataset.tab='gacha';renderLobby();window.scrollTo(0,0)};
-  requestAnimationFrame(cosPreviewLoop);requestAnimationFrame(gArtLoop);requestAnimationFrame(homeLoop);
+  requestAnimationFrame(cosPreviewLoop);requestAnimationFrame(gArtLoop);requestAnimationFrame(potLoop);requestAnimationFrame(homeLoop);
   document.addEventListener('pointerdown',audioInit,{once:true});
   setInterval(()=>{if(!G){renderParty();if(SAVE.claims.length){if(processClaims())renderLobby();else renderLoss()}}},1000);
   setupTouch();
