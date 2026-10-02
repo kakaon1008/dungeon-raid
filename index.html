@@ -226,7 +226,7 @@ b,.num{font-variant-numeric:tabular-nums}
 .pane h2{font-size:18px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .pane h3{font-size:14px;color:var(--mute)}
 .goldv{font-family:var(--fd);color:var(--gold);font-size:18px}
-.eqgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.eqgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .eqcell{display:grid;gap:3px;justify-items:center;font-size:11px;color:var(--mute)}
 .stats{display:grid;grid-template-columns:1fr auto;gap:2px 10px;margin:0;font-size:13px}
 .stats dt{color:var(--mute)}
@@ -403,7 +403,7 @@ details.rules ul b{color:var(--fg);font-weight:400}
   .mgrid,.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
   #stageName{display:none}
   .lcard h3{flex-wrap:wrap}.lcard .netrow{font-size:11px}
-  #hideout>.tabbar{display:grid;grid-template-columns:repeat(7,1fr);position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--panel);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+  #hideout>.tabbar{display:grid;grid-template-columns:repeat(8,1fr);position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--panel);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
   #hideout>.tabbar button{border:0;background:none;padding:7px 0 8px;display:grid;justify-items:center;gap:2px;font-size:10px;color:var(--mute);min-height:56px}
   #hideout:is([data-tab="home"],[data-tab="stash"],[data-tab="craft"],[data-tab="gear"],[data-tab="cook"]) .tabbar [data-t="base"],#hideout[data-tab="deploy"] .tabbar [data-t="deploy"],#hideout[data-tab="gear"] .tabbar [data-t="gear"],#hideout[data-tab="stash"] .tabbar [data-t="stash"],#hideout[data-tab="shop"] .tabbar [data-t="shop"],#hideout[data-tab="cos"] .tabbar [data-t="cos"],#hideout[data-tab="craft"] .tabbar [data-t="craft"],#hideout[data-tab="dex"] .tabbar [data-t="dex"],#hideout[data-tab="prof"] .tabbar [data-t="prof"],#hideout[data-tab="quest"] .tabbar [data-t="quest"]{color:var(--gold);box-shadow:inset 0 2px 0 var(--gold)}
   .raidrow .btn,.lossbox .btn{padding:11px 14px}
@@ -564,7 +564,24 @@ body.touchui #skSlot{display:none}
 .potslots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.potout{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;border:1px solid #3a2e22;border-radius:8px;background:rgba(255,176,74,.06)}.potout b{color:#ffb04a;font-size:15px}
 .conschip.food b{color:#ffb04a}.dexc.dish .dishic{font-size:34px;display:grid;place-items:center;min-height:70px}
 @media (max-width:560px){.potrow{grid-template-columns:1fr}.potrow canvas{width:min(100%,240px);height:auto;justify-self:center}}
-.subnav{display:flex;gap:4px;margin:-2px 0 4px;flex-wrap:wrap}.subnav button{border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--mute);border-radius:16px;padding:4px 12px;font-size:12px}.subnav button.on{color:#1a1208;background:var(--gold);border-color:var(--gold)}
+.subnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:-2px 0 6px;position:sticky;top:0;z-index:5;padding:4px 0;background:var(--panel)}.subnav button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);border-radius:10px;padding:6px 8px;font-size:14px;cursor:pointer}.subnav button svg{width:20px;height:20px;flex:none}.subnav button:hover{border-color:var(--gold)}.subnav button.on{color:#1a1208;background:var(--gold);border-color:var(--gold);font-weight:bold}@media (max-width:560px){.subnav button{flex-direction:column;gap:2px;font-size:11px;min-height:52px}}
+.hshort{display:grid;gap:8px;align-content:start}.hshort button{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(90deg,rgba(228,180,80,.12),rgba(0,0,0,.2));color:var(--ink);font-size:15px;cursor:pointer;text-align:left}.hshort button:hover{border-color:var(--gold)}.hshort button svg{width:26px;height:26px;color:var(--gold);flex:none}.hshort button span{display:grid}.hshort button small{color:var(--mute);font-size:11px}
+#hideout[data-tab="gacha"] #paneGacha{display:grid;grid-row:2;grid-column:1/-1;gap:10px;align-content:start}
+#hideout[data-tab="gacha"] .tabnav [data-t="gacha"]{color:var(--gold);background:rgba(228,180,80,.08);box-shadow:inset 0 -2px 0 var(--gold)}
+#paneGacha .gtop{display:flex;align-items:center;gap:12px;flex-wrap:wrap}#paneGacha .gtop h2{margin:0}.gbanners{display:flex;gap:10px;flex:1;justify-content:flex-end;flex-wrap:wrap}
+.gbtab{position:relative;width:118px;height:62px;border-radius:10px;border:2px solid rgba(255,255,255,.14);padding:0;overflow:hidden;background:#111;cursor:pointer;transform:skewX(-8deg);transition:transform .15s,box-shadow .15s}.gbtab canvas{width:100%;height:100%;display:block;opacity:.6}.gbtab span{position:absolute;left:8px;bottom:4px;font-size:12px;font-weight:bold;color:#fff;text-shadow:0 1px 3px #000;transform:skewX(8deg)}.gbtab.on{border-color:var(--b);box-shadow:0 0 14px var(--a);transform:skewX(-8deg) translateY(-3px)}.gbtab.on canvas{opacity:1}
+.ggold{padding:6px 14px;border-radius:999px;background:rgba(0,0,0,.4);border:1px solid #5a4a2a;color:var(--gold);font-weight:bold}
+.gbanner{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:16/8;min-height:280px;max-height:60vh;width:100%;border:1px solid rgba(255,230,180,.25);box-shadow:0 10px 30px rgba(0,0,0,.5)}.gbanner canvas{position:absolute;inset:0;width:100%;height:100%}
+.ginfo{position:absolute;left:0;top:0;bottom:0;width:min(50%,440px);padding:18px 22px;display:flex;flex-direction:column;gap:8px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8)}.gkind{align-self:flex-start;background:linear-gradient(90deg,#e8b84a,#ffe9a8);color:#3a2408;font-size:12px;font-weight:bold;padding:3px 12px;border-radius:999px;text-shadow:none}
+.gtitle{font-size:clamp(28px,4.4vw,48px);font-weight:bold;letter-spacing:.06em;line-height:1.05}.gtitle small{font-size:.42em;margin-left:6px;opacity:.85}.gsub{font-size:13px;opacity:.9}
+.gpu{display:grid;gap:2px;margin-top:4px;padding:8px 12px;background:rgba(0,0,0,.38);border-left:3px solid #f3a63d;border-radius:6px}.gpu b{font-size:clamp(16px,2.2vw,22px)}.gst{font-size:12px;font-weight:bold}.gsl{font-size:12px;opacity:.8}
+.gpu4{display:flex;gap:6px;flex-wrap:wrap}.gpu4 span{font-size:12px;padding:4px 8px;border:1px solid;border-radius:6px;background:rgba(0,0,0,.38);display:grid}.gpu4 i,.gpu4 em{font-style:normal;font-size:10px;opacity:.85}
+.gtime{margin-top:auto;font-size:12px;opacity:.9}.gcoll{position:absolute;right:12px;top:10px;font-size:12px;color:#fff;background:rgba(0,0,0,.45);padding:3px 10px;border-radius:999px}
+.gbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.gsp{flex:1}.gpity{font-size:13px;color:var(--mute)}.gpity b{color:#f3a63d}
+.gwish{min-width:170px;padding:9px 18px;border-radius:999px;border:2px solid #d8c8a0;background:linear-gradient(#fbf3de,#e6d8b8);color:#4a3a22;display:grid;justify-items:center;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.35);font-family:inherit}.gwish small{font-size:12px}.gwish b{font-size:17px}.gwish.ten{border-color:#f3c86a;background:linear-gradient(#fff4d0,#f0d48a)}.gwish:hover:not(:disabled){filter:brightness(1.06)}.gwish:disabled{opacity:.5;cursor:not-allowed}
+.gdl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.gdl span{font-size:12px;padding:3px 8px;border:1px solid #3a3228;border-radius:6px}.gdl span.pu{border-color:#ffd36b;color:#ffd36b}.gfx-card .pu{position:absolute;left:4px;top:4px;font-size:9px;background:#ffd36b;color:#3a2408;padding:1px 5px;border-radius:4px;font-weight:bold}
+@media (max-width:900px){.hshort{order:-1;grid-template-columns:1fr 1fr}.hshort button{padding:10px;font-size:13px}.hshort button small{display:none}}
+@media (max-width:640px){.gbanner{aspect-ratio:auto;height:400px;min-height:0;max-height:none}.ginfo{width:100%;padding:14px;gap:6px}.gbanners{order:3;flex-basis:100%;justify-content:space-between;gap:6px}.gbtab{width:31%;height:54px}.gbtab span{font-size:11px}.ggold{margin-left:auto}.gwish{flex:1;min-width:0}.gsp{display:none}.gpity{width:100%;order:-1}}
 .homeStage{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#0c0a08}#homeCv{display:block;width:100%;aspect-ratio:2/1;max-height:52vh}
 .homeGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}.homeGrid .cosc canvas{width:100%;height:auto;aspect-ratio:4/3}
 .homeBottom{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:12px;align-items:start}@media (max-width:900px){.homeBottom{grid-template-columns:1fr}}
@@ -577,7 +594,7 @@ body.touchui #skSlot{display:none}
 #gfx{position:fixed;inset:0;z-index:120;cursor:pointer}#gfx canvas{position:absolute;inset:0;width:100%;height:100%}
 #gfx .gfx-res{position:absolute;left:0;right:0;bottom:calc(46px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:0 12px;opacity:0;pointer-events:none;max-height:56vh;overflow:auto}
 #gfx .gfx-res.on{opacity:1}
-#gfx .gfx-card{width:112px;display:grid;justify-items:center;gap:2px;padding:6px;border:2px solid var(--c);border-radius:10px;background:rgba(20,16,12,.92);box-shadow:0 0 18px var(--c);font-size:11px;animation:gpop .35s both}
+#gfx .gfx-card{position:relative;width:112px;display:grid;justify-items:center;gap:2px;padding:6px;border:2px solid var(--c);border-radius:10px;background:rgba(20,16,12,.92);box-shadow:0 0 18px var(--c);font-size:11px;animation:gpop .35s both}
 #gfx .gfx-card canvas{width:80px;height:80px;position:static}#gfx .gfx-card .r{color:var(--c)}#gfx .gfx-card b{font-size:12px;text-align:center}
 #gfx .gfx-card .nw{color:#7cc47f;font-weight:bold}#gfx .gfx-card .dp{color:var(--mute)}
 #gfx .gfx-tap{position:absolute;left:0;right:0;bottom:calc(14px + env(safe-area-inset-bottom,0px));text-align:center;color:var(--mute);font-size:12px}
@@ -661,7 +678,7 @@ body.touchui .tbtn{background:rgba(10,8,7,.5);border-color:rgba(255,255,255,.3)}
   .lb-bottom{left:auto!important;width:min(520px,66vw)}
   .profTop{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
   .grid{grid-template-columns:repeat(auto-fill,minmax(60px,1fr))!important}
-  .eqgrid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+  .eqgrid{grid-template-columns:repeat(7,minmax(0,1fr))!important}
 }
 
 /* ---- per-tab decoration ---- */
@@ -690,8 +707,8 @@ body.touchui .tbtn{background:rgba(10,8,7,.5);border-color:rgba(255,255,255,.3)}
 /* ---- phone held sideways: side rail, compact panes, inspector as a right-hand drawer ---- */
 @media (orientation:landscape) and (max-height:520px) and (pointer:coarse){
   #hideout{grid-template-columns:minmax(0,1fr);padding-left:calc(58px + env(safe-area-inset-left,0px))}
-  #hideout>.tabbar{left:0;top:0;bottom:0;right:auto;width:calc(58px + env(safe-area-inset-left,0px));grid-template-columns:1fr;grid-template-rows:repeat(7,minmax(0,1fr));border-top:0;border-right:1px solid var(--line);padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
-  #hideout>.tabbar{overflow-y:auto;overscroll-behavior:contain;grid-template-rows:repeat(7,minmax(40px,1fr))!important;z-index:32}
+  #hideout>.tabbar{left:0;top:0;bottom:0;right:auto;width:calc(58px + env(safe-area-inset-left,0px));grid-template-columns:1fr;grid-template-rows:repeat(8,minmax(0,1fr));border-top:0;border-right:1px solid var(--line);padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+  #hideout>.tabbar{overflow-y:auto;overscroll-behavior:contain;grid-template-rows:repeat(8,minmax(38px,1fr))!important;z-index:32}
   #hideout>.tabbar button{min-height:0;padding:2px 0;font-size:9px;gap:0;align-content:center;touch-action:manipulation}
   #hideout{padding-right:env(safe-area-inset-right,0px)}
   #hideout[data-tab="deploy"] #secDeploy>*{min-width:0}
@@ -712,7 +729,7 @@ body.touchui .tbtn{background:rgba(10,8,7,.5);border-color:rgba(255,255,255,.3)}
   #hideout[data-tab="gear"] #paneStash,#hideout[data-tab="stash"] #paneStash{display:grid!important;grid-area:b;grid-column:auto;grid-row:auto}
   #paneGear,#paneStash{padding:10px!important;gap:8px!important}
   #paneGear h2,#paneStash h2{font-size:16px}
-  .eqgrid{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:5px!important}
+  .eqgrid{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:5px!important}
   .eqcell{font-size:9.5px;gap:1px}
   .grid{grid-template-columns:repeat(auto-fill,minmax(46px,1fr))!important;gap:4px!important}
   .it .lv{font-size:9px}
@@ -862,7 +879,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
     <div class="homeStage"><canvas id="homeCv"></canvas></div>
     <div class="homeBottom">
       <div><div class="cosTabs" id="homeTabs"></div><div class="homeGrid" id="homeGrid"></div></div>
-      <div class="gacha ghome"><h3>拠点ガチャ <span class="hint">家具・壁紙・ペット</span></h3><div class="acts"><button class="btn primary" type="button" id="hg1">1回 150G</button><button class="btn primary" type="button" id="hg10">10回 1350G</button></div><p class="hint">拠点の見た目を変える家具が出る。10回はエピック以上が1つ確定。かぶりは金貨で一部返金。</p></div>
+      <div class="hshort" id="homeShort"></div>
     </div>
   </section>
   <section class="pane" id="paneCook">
@@ -917,17 +934,16 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
     <h2>衣装 <span class="hint" id="cosCount"></span></h2>
     <div class="cosTop">
       <canvas id="cosPrev" width="150" height="150" aria-label="キャラクターのプレビュー"></canvas>
-      <div class="gachas">
-        <div class="gacha gchar"><h3>キャラガチャ <span class="hint">帽子・マント・オーラ</span></h3>
-          <div class="acts"><button class="btn primary" type="button" id="g1">1回 200G</button><button class="btn primary" type="button" id="g10">10回 1800G</button></div></div>
-        <div class="gacha gskin"><h3>スキンガチャ <span class="hint">服の色・柄</span></h3>
-          <div class="acts"><button class="btn primary" type="button" id="gs1">1回 200G</button><button class="btn primary" type="button" id="gs10">10回 1800G</button></div></div>
-        <p class="hint" style="grid-column:1/-1">衣装はアカウントに保存され、死んでも失わない。見た目だけで性能は変わらない。10回はエピック以上が1つ確定。確率：ノーマル58% · レア28% · エピック11% · レジェンド3%。かぶりは金貨で一部返金。</p>
-      </div>
+      <div class="cosgo"><p class="hint">衣装はアカウントに保存され、死んでも失わない。見た目だけで性能は変わらない。新しい衣装は「ガチャ」タブで手に入る。</p><button class="btn primary" type="button" id="toGacha">ガチャへ</button></div>
     </div>
     <div class="gres" id="gres"></div>
     <div class="cosTabs" id="cosTabs"></div>
     <div class="cosGrid" id="cosGrid"></div>
+  </section>
+  <section class="pane" id="paneGacha">
+    <div class="gtop"><h2>ガチャ</h2><div class="gbanners" id="gBanners"></div><span class="ggold" id="gGold"></span></div>
+    <div class="gbanner"><canvas id="gArt"></canvas><div class="ginfo" id="gInfo"></div><span class="gcoll" id="gColl"></span></div>
+    <div class="gbar"><button class="btn" type="button" id="gDet">詳細・確率</button><span class="gpity" id="gPity"></span><span class="gsp"></span><button class="gwish" type="button" id="gw1"></button><button class="gwish ten" type="button" id="gw10"></button></div>
   </section>
   <section class="pane" id="paneInspect">
     <div class="sheethead"><h2>鑑定</h2><button class="btn sheetclose" id="inspClose" type="button">× 閉じる</button></div>
@@ -936,6 +952,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
   <nav class="tabbar" id="tabbar" aria-label="メニュー"></nav>
 </div>
 
+<div class="modal" id="gDetModal" hidden><div class="mbox"><h2><span>提供内容と確率</span><button class="btn" type="button" id="gDetClose">× 閉じる</button></h2><div id="gDetBody" class="msbody"></div></div></div>
 <div class="modal" id="matSell" hidden><div class="mbox"><h2><span id="msTitle">素材を売る</span><button class="btn" type="button" id="msClose">× 閉じる</button></h2><p class="hint">素材の買い取り値は安め。品位が高いほど少し高く売れる。</p><div id="msBody" class="msbody"></div></div></div>
 <div class="modal" id="invModal" hidden><div class="mbox"><h2><span>パーティへの招待</span></h2><p id="invText"></p><div class="acts"><button class="btn primary" type="button" id="invYes">参加する</button><button class="btn" type="button" id="invNo">断る</button></div></div></div>
 <div class="modal" id="eqvModal" hidden><div class="mbox"><h2><span id="eqvTitle">装備</span><button class="btn" type="button" id="eqvClose">× 閉じる</button></h2><div class="eqvGrid" id="eqvGrid"></div><div id="eqvIns"></div></div></div>
@@ -998,13 +1015,15 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>属性武器</b>：武器にまれに炎・氷・雷・毒・闇の属性が付く（レア度が高いほど出やすい）。燃焼・凍結・連鎖・猛毒・吸命の効果と、それぞれの攻撃エフェクトがある。</li>
         <li><b>攻撃アシスト</b>（画面左上のボタン・スマホは「狙」・PCは<span data-kb="assist">R</span>キーですぐ切り替え）：オンだと攻撃した瞬間だけ近くの敵の方を向く（弓・杖は動きを先読み）。移動中や逃げるときは進む方向を向いたまま。</li>
         <li><b>武器スキル</b>（<span data-kb="skill">F</span>キー・スマホは「技」）：武器の種類ごとに固有の技がある。剣＝旋風斬り、斧・槌＝大地割り（スタン）、短剣＝影走り、槍＝穿ち、弓＝五月雨、杖＝魔力爆発。斧や槌の通常攻撃は相手を一瞬スタンさせる。</li>
+        <li><b>鞄（バックパック）</b>：装備欄の「鞄」に付けると、レイド中のバッグの枠が増える（鞄なしは12枠）。大きい鞄ほど足が遅くなり、斥候の軽背嚢のように速くなるものもある。鞄は主に作業台の「鞄」で作るか、他の冒険者を倒して奪う。宝箱からはめったに出ない。バッグの枠を超えて持つと足がかなり遅くなる。</li>
         <li><b>リュックと道具</b>：回復薬や道具は拠点の「倉庫・装備」でリュック（6枠）に入れたものだけ持ち込める。レイド中は持ち物（Tab・スマホは「持物」）を開いて押すと使う。生還すると残りはリュックに戻り、死ぬと失う。</li>
         <li><b>探索マップ</b>：マップ選択の「探索」は砂漠・草原・川辺・海岸のどれかがランダムに生成される明るい屋外。道や小屋、野営地などがあり、ダンジョンより採集場所が多く、遭難者の救助イベントも起こりやすい。魔物もいるので油断しないこと。</li>
-        <li><b>採集</b>：鉱脈・木・薬草の近くで調べる（宝箱と同じ操作）と、少しの間その場にとどまって素材を集める。動いたり殴られたりすると中断する。一部のダンジョンにもある。</li>
+        <li><b>採集</b>：鉱脈・木・薬草の近くで調べる（宝箱と同じ操作）と、少しの間その場にとどまって素材を集める。動いたり殴られたりすると中断する。一部のダンジョンにもある。探索マップでは外周以外の木・岩・サボテン・ヤシはすべて採集できる（鉱脈やトラップは置かれていない）。</li>
+        <li><b>ガチャ</b>：「ガチャ」タブに キャラクター（スキン）・衣装（帽子・マント・オーラ）・拠点装飾 の3つがある。毎週月曜9:00にピックアップが入れ替わり、レジェンドとエピックの半分はピックアップになる。10回はエピック以上が1つ確定、60回でレジェンド確定。</li>
         <li><b>釣り</b>：水面に丸い波紋が広がっている場所の岸で調べると釣りができる。魚が釣れるほか、まれに装備・金貨・レシピが釣れる。海岸では鮪や貝、ごくまれに黄金魚も。</li>
         <li><b>料理</b>：拠点の「釜・料理」で食材を最大5個入れて調理する。入れた組み合わせで料理が変わり（魚＋野草＝香草焼き など）、食材によって回復量や攻撃・防御・移動のバフが付く。料理はリュックに入れて持ち込み、持ち物から食べる。作った料理は図鑑の「料理」に残る。</li>
         <li><b>レシピ</b>：宝箱や釣りでまれにレシピが手に入る。料理のレシピは図鑑に載り、作業台の★4以上の装備はレシピを覚えないと作れない。脱出すると覚える。</li>
-        <li><b>拠点</b>：「拠点」タブに部屋・倉庫と装備・作業台・釜がまとまっている。部屋の家具は拠点ガチャで集めて自由に飾れる。作業台はレベルを上げるほど強い装備が作れる。</li>
+        <li><b>拠点</b>：「拠点」タブに部屋・倉庫と装備・作業台・釜がまとまっている。部屋の家具はガチャの「拠点装飾」で集めて自由に飾れる。作業台はレベルを上げるほど強い装備が作れる。</li>
         <li><b>回復薬</b>は飲むのに1秒かかり、その後2.5秒かけて回復する。その間は足が遅くなる。槌で殴られるとスタンする。</li>
         <li><b>応急修理</b>：レイド中も持ち物画面で装備を直せる。金貨は使わないが、そのレイドで拾った素材だけを使い、ロビーより多くの素材が要るうえ、傷みの半分しか戻らない。</li>
         <li><b>耐久</b>：装備は使うほど傷み、0で壊れて効果がなくなる。壊れる前でもロビーでいつでも修復できる。少しの傷みなら金貨だけ、大きく傷むほど素材も必要（レア度が高いほど高い）。足りないときは払える分だけ一部修復する。</li>
@@ -1115,8 +1134,9 @@ const RAR=[
   {n:'エピック',hex:'#ba78f3',mult:1.2,aff:3,val:12},
   {n:'レジェンド',hex:'#f3a63d',mult:1.32,aff:4,val:30},
 ];
-const SLOTS=['weapon','head','chest','hands','feet','ring'];
-const SLOTN={weapon:'武器',head:'頭',chest:'胴',hands:'手',feet:'足',ring:'指輪'};
+const SLOTS=['weapon','head','chest','hands','feet','ring','back'];
+const SLOTN={weapon:'武器',head:'頭',chest:'胴',hands:'手',feet:'足',ring:'指輪',back:'鞄'};
+const BAG0=12;
 const BASES=[
   {k:'sword',n:'長剣',s:'weapon',dmg:[10,16],aspd:1.6,range:58,arc:100},
   {k:'axe',n:'戦斧',s:'weapon',dmg:[19,29],aspd:0.95,range:56,arc:130},
@@ -1219,22 +1239,31 @@ const BASES=[
   {k:'vampcloak',n:'吸血鬼の外套',s:'chest',arm:[16,24],bm:1},
   {k:'shadowmask',n:'影の仮面',s:'head',arm:[7,11],bm:1},
   {k:'smugring',n:'密輸人の指輪',s:'ring',bm:1},
+  {k:'satchel',n:'肩掛け鞄',s:'back',bag:16,mv:0,bw:50},
+  {k:'rucksack',n:'革のリュック',s:'back',bag:20,mv:-2,bw:30},
+  {k:'framepack',n:'背負い枠',s:'back',bag:24,mv:-5,bw:14},
+  {k:'peddler',n:'行商の大荷物',s:'back',bag:30,mv:-9,bw:6},
+  {k:'scoutpack',n:'斥候の軽背嚢',s:'back',bag:18,mv:4,craft:1},
+  {k:'wyrmpack',n:'竜革の背嚢',s:'back',bag:28,mv:-2,craft:1},
+  {k:'voidpack',n:'虚空の鞄',s:'back',bag:34,mv:-1,craft:1},
 ];
+const PACKB=BASES.map((b,i)=>b.s==='back'&&!b.craft?i:-1).filter(i=>i>=0);
+const packRoll=r=>PACKB[R.w(r,PACKB.map(i=>BASES[i].bw||1))];
 const BI={};BASES.forEach((b,i)=>BI[b.k]=i);
-const GL={sword:'剣',axe:'斧',dagger:'匕',spear:'槍',bow:'弓',staff:'杖',hood:'巾',helm:'兜',greathelm:'冑',tunic:'衣',leather:'革',mail:'鎖',plate:'鎧',gloves:'手',gauntlet:'甲',boots:'靴',greaves:'脛',ring:'環',seal:'印',bonecleaver:'鉈',wolfbow:'牙',spiritstaff:'霊',dragonblade:'刀',ghostmail:'衣',dragonplate:'竜',beastboots:'獣',kingring:'王',fangknife:'牙',thornspear:'茨',frostbow:'霜',thunderhammer:'槌',ashstaff:'灰',shadowblade:'影',heavycrossbow:'弩',reaper:'鎌',trollhide:'苔',soulhood:'霊',scalehelm:'鱗',corefist:'核',nightgloves:'夜',galeboots:'風',scalegreaves:'鱗',soulring:'魂',goldcharm:'護',dragoneye:'眼',scimitar:'曲',warhammer:'鎚',rapier:'細',halberd:'戟',shortbow:'弓',wand:'杖',coif:'頭',leathercap:'帽',robe:'衣',brigandine:'鋲',chaingloves:'籠',sandals:'鞋',sabatons:'靴',amulet:'飾',hexblade:'黒',nightbow:'夜',vampcloak:'血',shadowmask:'仮',smugring:'密',rustcleaver:'錆',bonedagger:'骨',huntbow:'猟',pickaxe:'鶴',minerhelm:'坑',patchcoat:'継',coalring:'炭',torchstaff:'炬',venomfang:'蛇',bogspear:'銛',bogboots:'沼',cryptshroud:'屍',venomring:'蛇',knightsword:'騎',knighthelm:'面',wraithhood:'怨',wispwand:'鬼',knightplate:'騎',crestseal:'団',obsidianaxe:'曜',cursedblade:'呪',royalxbow:'弩',obsidiangaunt:'曜',shadowtreads:'渡',relicblade:'聖',abyssstaff:'淵',wyrmbow:'王',relicplate:'聖',relicring:'聖',greatsword:'大',flail:'棍',sickle:'鎌',lightxbow:'弩',censer:'香',bascinet:'尖',tabard:'陣',bracers:'腕'};
+const GL={satchel:'鞄',rucksack:'嚢',framepack:'枠',peddler:'荷',scoutpack:'斥',wyrmpack:'竜',voidpack:'虚',sword:'剣',axe:'斧',dagger:'匕',spear:'槍',bow:'弓',staff:'杖',hood:'巾',helm:'兜',greathelm:'冑',tunic:'衣',leather:'革',mail:'鎖',plate:'鎧',gloves:'手',gauntlet:'甲',boots:'靴',greaves:'脛',ring:'環',seal:'印',bonecleaver:'鉈',wolfbow:'牙',spiritstaff:'霊',dragonblade:'刀',ghostmail:'衣',dragonplate:'竜',beastboots:'獣',kingring:'王',fangknife:'牙',thornspear:'茨',frostbow:'霜',thunderhammer:'槌',ashstaff:'灰',shadowblade:'影',heavycrossbow:'弩',reaper:'鎌',trollhide:'苔',soulhood:'霊',scalehelm:'鱗',corefist:'核',nightgloves:'夜',galeboots:'風',scalegreaves:'鱗',soulring:'魂',goldcharm:'護',dragoneye:'眼',scimitar:'曲',warhammer:'鎚',rapier:'細',halberd:'戟',shortbow:'弓',wand:'杖',coif:'頭',leathercap:'帽',robe:'衣',brigandine:'鋲',chaingloves:'籠',sandals:'鞋',sabatons:'靴',amulet:'飾',hexblade:'黒',nightbow:'夜',vampcloak:'血',shadowmask:'仮',smugring:'密',rustcleaver:'錆',bonedagger:'骨',huntbow:'猟',pickaxe:'鶴',minerhelm:'坑',patchcoat:'継',coalring:'炭',torchstaff:'炬',venomfang:'蛇',bogspear:'銛',bogboots:'沼',cryptshroud:'屍',venomring:'蛇',knightsword:'騎',knighthelm:'面',wraithhood:'怨',wispwand:'鬼',knightplate:'騎',crestseal:'団',obsidianaxe:'曜',cursedblade:'呪',royalxbow:'弩',obsidiangaunt:'曜',shadowtreads:'渡',relicblade:'聖',abyssstaff:'淵',wyrmbow:'王',relicplate:'聖',relicring:'聖',greatsword:'大',flail:'棍',sickle:'鎌',lightxbow:'弩',censer:'香',bascinet:'尖',tabard:'陣',bracers:'腕'};
 const AFF=[
   {k:'atkp',n:'攻撃力',f:'+%v%',r:[4,20],s:'weapon ring hands',pre:'鋭い',w:10},
   {k:'flat',n:'追加ダメージ',f:'+%v',r:[1,5],s:'weapon ring hands',pre:'重い',w:8,scale:1},
   {k:'crit',n:'会心率',f:'+%v%',r:[2,9],s:'weapon ring hands head',pre:'精密な',w:8},
   {k:'critd',n:'会心ダメージ',f:'+%v%',r:[10,45],s:'weapon ring head',pre:'残酷な',w:6},
   {k:'aspd',n:'攻撃速度',f:'+%v%',r:[3,15],s:'weapon ring hands',pre:'迅速な',w:7},
-  {k:'hp',n:'最大HP',f:'+%v',r:[6,28],s:'head chest hands feet ring',pre:'頑健な',w:10,scale:1},
-  {k:'arm',n:'防御',f:'+%v',r:[3,12],s:'head chest hands feet ring',pre:'堅牢な',w:8,scale:1},
-  {k:'move',n:'移動速度',f:'+%v%',r:[2,9],s:'feet ring chest',pre:'軽やかな',w:6},
+  {k:'hp',n:'最大HP',f:'+%v',r:[6,28],s:'head chest hands feet ring back',pre:'頑健な',w:10,scale:1},
+  {k:'arm',n:'防御',f:'+%v',r:[3,12],s:'head chest hands feet ring back',pre:'堅牢な',w:8,scale:1},
+  {k:'move',n:'移動速度',f:'+%v%',r:[2,9],s:'feet ring chest back',pre:'軽やかな',w:6},
   {k:'ls',n:'吸血',f:'%v%',r:[0.4,2],s:'weapon ring',pre:'吸血の',w:4,dec:1},
   {k:'regen',n:'HP再生',f:'+%v/秒',r:[0.2,1.2],s:'chest head ring',pre:'再生の',w:0,dec:1},
-  {k:'luck',n:'金運',f:'+%v%',r:[5,25],s:'head ring hands feet',pre:'黄金の',w:5},
-  {k:'dodge',n:'回避の再使用',f:'-%v%',r:[5,20],s:'feet chest',pre:'身軽な',w:5},
+  {k:'luck',n:'金運',f:'+%v%',r:[5,25],s:'head ring hands feet back',pre:'黄金の',w:5},
+  {k:'dodge',n:'回避の再使用',f:'-%v%',r:[5,20],s:'feet chest back',pre:'身軽な',w:5},
   {k:'rng',n:'射程',f:'+%v%',r:[6,25],s:'weapon',pre:'遠矢の',w:7,proj:1},
 ];
 const LEG=[
@@ -1289,12 +1318,13 @@ function baseVals(it){
   if(b.dmg){o.dmin=Math.max(1,Math.round(b.dmg[0]*it.q*sc));o.dmax=Math.max(o.dmin+1,Math.round(b.dmg[1]*it.q*sc))}
   if(b.arm){const u=clamp((it.q-0.55)/0.9,0,1);o.arm=Math.max(1,Math.round((b.arm[0]+(b.arm[1]-b.arm[0])*u)*sc))}
   if(b.mv)o.mv=b.mv;
+  if(b.bag)o.bag=b.bag+(it.r|0)+(it.r>=4?2:0);
   return o;
 }
 function power(it){
   const b=BASES[it.b],bv=baseVals(it);let p=0;
   if(bv.dmin)p+=(bv.dmin+bv.dmax)/2*b.aspd*3.2;
-  if(bv.arm)p+=bv.arm*2.2;if(bv.mv)p+=bv.mv*1.5;
+  if(bv.arm)p+=bv.arm*2.2;if(bv.mv)p+=bv.mv*1.5;if(bv.bag)p+=(bv.bag-BAG0)*3;
   for(const [ai,v] of it.v)p+=v*AW[AFF[ai].k];
   if(it.x>=0)p+=45;
   if(it.e>=0)p+=it.ep*1.2;
@@ -1314,10 +1344,10 @@ function itemName(it){
 }
 const affText=(ai,v)=>AFF[ai].f.replace('%v',v);
 function calcStats(eq){
-  const s={mhp:100,arm:0,move:0,atkp:0,flat:0,crit:5,critd:50,aspd:0,ls:0,regen:0,luck:0,dodge:0,hp:0,rng:0,leg:{}};
+  const s={bag:BAG0,mhp:100,arm:0,move:0,atkp:0,flat:0,crit:5,critd:50,aspd:0,ls:0,regen:0,luck:0,dodge:0,hp:0,rng:0,leg:{}};
   for(const sl of SLOTS){
     const it=eq[sl];if(!it||isBroken(it))continue;
-    const bv=baseVals(it);if(bv.arm)s.arm+=bv.arm;if(bv.mv)s.move+=bv.mv;
+    const bv=baseVals(it);if(bv.arm)s.arm+=bv.arm;if(bv.mv)s.move+=bv.mv;if(bv.bag)s.bag=bv.bag;
     for(const [ai,v] of it.v)s[AFF[ai].k]+=v;
     if(it.x>=0)s.leg[LEG[it.x].k]=1;
   }
@@ -1349,10 +1379,13 @@ function decItem(a){const v=[];for(let i=7;i+1<a.length;i+=2)v.push([a[i],a[i+1]
    ========================================================= */
 const SAVE_KEY='meikutsu-save-v1';
 let SAVE=null,dbRef=null,dbBusy=false,dbDirty=false;
-function emptyEquip(){return {weapon:null,head:null,chest:null,hands:null,feet:null,ring:null}}
+function emptyEquip(){return {weapon:null,head:null,chest:null,hands:null,feet:null,ring:null,back:null}}
+function starterPack(){const it=genItem(rngFrom((Date.now()^0x5ac)>>>0),1,rid(),{b:BI.satchel,rar:0});it.v=[];return it}
+function backEnsure(){if(!SAVE||SAVE.bpGift)return;SAVE.bpGift=1;if(!SAVE.equip.back)SAVE.equip.back=starterPack();else if(SAVE.stash.length<stashCap())SAVE.stash.push(starterPack())}
+const bagCap=()=>G&&G.stats&&G.stats.bag||BAG0;
 function starterSword(){const it=genItem(rngFrom(Date.now()>>>0),1,rid(),{b:0,rar:0});it.q=Math.max(it.q,0.9);return it}
-function newSave(){const e=emptyEquip();e.weapon=starterSword();
-  return {v:1,ts:Date.now(),name:'',gold:150,potions:0,cons:{},consSel:null,stash:[],equip:e,pouch:null,inRaid:null,lost:null,claims:[],cos:{own:[],eq:{}},mats:{},scrolls:0,keys:{},dex:{m:{},i:{},l:{}},xp:0,ach:{},prof:{plate:'np_wood',title:'t_novice'},st:{raids:0,ext:0,kills:0,deaths:0,best:0}}}
+function newSave(){const e=emptyEquip();e.weapon=starterSword();e.back=starterPack();
+  return {bpGift:1,v:1,ts:Date.now(),name:'',gold:150,potions:0,cons:{},consSel:null,stash:[],equip:e,pouch:null,inRaid:null,lost:null,claims:[],cos:{own:[],eq:{}},mats:{},scrolls:0,keys:{},dex:{m:{},i:{},l:{}},xp:0,ach:{},prof:{plate:'np_wood',title:'t_novice'},st:{raids:0,ext:0,kills:0,deaths:0,best:0}}}
 function noRegen(it){if(!it||!Array.isArray(it.v))return;for(const a of it.v){if(a[0]===9){a[0]=5;a[1]=Math.max(1,Math.round(a[1]*20))}else if(a[0]===8&&!it.lsv2){a[1]=Math.max(0.2,Math.round(a[1]*4)/10)}}it.lsv2=1}
 function migrate(s){if(!s||typeof s!=='object')return newSave();try{for(const it of [...(s.stash||[]),...Object.values(s.equip||{}),s.pouch,...((s.claims||[]).flatMap(c=>c.items||[])),...((s.lost&&s.lost.items)||[])])noRegen(it)}catch(e){}s.equip=Object.assign(emptyEquip(),s.equip||{});s.stash=Array.isArray(s.stash)?s.stash:[];s.st=Object.assign({raids:0,ext:0,kills:0,deaths:0,best:0},s.st||{});if(typeof s.gold!=='number')s.gold=0;if(typeof s.potions!=='number')s.potions=0;if(!Array.isArray(s.claims))s.claims=[];if(!s.mats||typeof s.mats!=='object')s.mats={};if(!s.keys||typeof s.keys!=='object')s.keys={};if(typeof s.xp!=='number')s.xp=0;if(!s.ach)s.ach={};if(!s.prof)s.prof={plate:'np_wood',title:'t_novice'};if(!s.dex||typeof s.dex!=='object')s.dex={m:{},i:{},l:{}};if(typeof s.scrolls!=='number')s.scrolls=0;if(!s.cos||typeof s.cos!=='object')s.cos={own:[],eq:{}};if(!Array.isArray(s.cos.own))s.cos.own=[];if(!s.cos.eq)s.cos.eq={};if(s.lost===undefined)s.lost=null;if(!s.cons||typeof s.cons!=='object')s.cons={};if(s.consSel&&!CONS[s.consSel])s.consSel=null;return s}
 function checkAbandoned(){
@@ -1637,10 +1670,21 @@ async function flushDb(){
   }catch(e){
     const m=String(e&&e.message||e);AUTH.errInfo={msg:m,code:e&&e.code||'',details:e&&(e.details||e.hint)||'',at:Date.now(),online:navigator.onLine};
     if(m.indexOf('OTHER_SESSION')>=0){kicked();return}
+    if(m.indexOf('BAD_SAVE:cosmetic')>=0&&!flushDb.fixed){flushDb.fixed=1;AUTH.err=m;repairCos().then(ok=>{flushDb.fixed=0;clearTimeout(AUTH.retryT);if(ok){AUTH.dirty=true;AUTH.retryT=setTimeout(flushDb,300)}else AUTH.retryT=setTimeout(flushDb,60000);renderAcct()});return}
     if(m.indexOf('BAD_SAVE')>=0){if(AUTH.err!==m)toast('⚠ サーバーがセーブを受け付けませんでした（'+m.replace('BAD_SAVE:','')+'）。この端末には保存されています');AUTH.err=m}
     else AUTH.err='NET';
     clearTimeout(AUTH.retryT);AUTH.retryT=setTimeout(flushDb,AUTH.err==='NET'?8000:60000);
   }finally{AUTH.busy=false;renderAcct()}
+}
+// a cosmetic the server can't vouch for (e.g. an old device's save overwrote the server copy) blocks every save: take it off, pay it back in gold
+async function repairCos(){
+  if(repairCos.busy||!AUTH.user||!SB)return false;repairCos.busy=true;
+  try{const {data,error}=await SB.from('saves').select('data').eq('user_id',AUTH.user.id).maybeSingle();if(error||!data||!data.data)return false;
+    const so=new Set((((data.data||{}).cos||{}).own)||[]);const bad=SAVE.cos.own.filter(id=>{const c=COS[COSI[id]];return c&&!c.drop&&!so.has(id)});if(!bad.length)return false;
+    let g=0;for(const id of bad)g+=COSR[COS[COSI[id]].r].dup;SAVE.cos.own=SAVE.cos.own.filter(id=>!bad.includes(id));for(const k in SAVE.cos.eq)if(bad.includes(SAVE.cos.eq[k]))SAVE.cos.eq[k]=null;SAVE.gold+=g;
+    if(data.data.gp)SAVE.gp=data.data.gp;persist();renderLobby();
+    toast('サーバーで確認できない衣装 '+bad.length+'個（'+bad.map(id=>COS[COSI[id]].n).join('、')+'）を外し、金貨'+g+'Gに換えました。同期を再開します');return true}
+  catch(e){return false}finally{repairCos.busy=false}
 }
 async function flushDbNow(){
   clearTimeout(scheduleSync.t);
@@ -1877,7 +1921,7 @@ function buildPresence(){
   return p;
 }
 /* ---------- version check: everyone in a room should run the same build ---------- */
-const BUILD='2026.10.03.1200';
+const BUILD='2026.10.03.1500';
 const UPD={newer:null,t:0,going:false};
 async function checkUpdate(force){
   if(!/^https?:$/.test(location.protocol))return;const t=Date.now();if(!force&&t-UPD.t<45000)return;UPD.t=t;
@@ -2019,6 +2063,7 @@ const ICON_VAR={
   bracers:{k:'gloves',lea:['#3a2a1a','#7a5a3a'],deco:g=>{g.fillStyle='#a8a8b0';g.fillRect(20,40,16,4)}},
   dragoneye:{k:'ring',band:['#5a120e','#e4b450'],gem:'#ff3a2a',deco:g=>{g.fillStyle='#1a0806';g.beginPath();g.ellipse(32,24,1.3,4.6,0,0,Math.PI*2);g.fill()}},
 };
+Object.assign(ICON_VAR,{satchel:{k:'pack',sz:0,lea:['#5a3a20','#9a6a3e']},rucksack:{k:'pack',sz:0.4,lea:['#4a3220','#8a5a34'],roll:'#7a6a4a'},framepack:{k:'pack',sz:0.7,lea:['#3e3a2a','#7a7050'],frame:1,roll:'#6a4a3a'},peddler:{k:'pack',sz:1,lea:['#5a4a2a','#a08a5a'],frame:1,roll:'#8a3a2a'},scoutpack:{k:'pack',sz:0.25,lea:['#2a4a3a','#5a9a7a']},wyrmpack:{k:'pack',sz:0.85,lea:['#5a1a14','#c8452f'],roll:'#3a2a20'},voidpack:{k:'pack',sz:1,lea:['#1a1028','#7a4ac8'],glow:'#b07cff'}});
 function drawItemArt(g,k,r,e,leg){
   const V=ICON_VAR[k];const sv=[IC_WOOD,IC_LEA,IC_CLOTH];
   if(V){k=V.k;if(V.wood)IC_WOOD=V.wood;if(V.lea)IC_LEA=V.lea;if(V.cloth){IC_CLOTH=IC_CLOTH.slice();IC_CLOTH[r]=V.cloth}}
@@ -2197,6 +2242,16 @@ function drawItemArt0(g,k,r,e,leg,V){
     g.strokeStyle='#e8dcc0';g.lineWidth=1.1;g.beginPath();g.moveTo(10,26);g.lineTo(32,33);g.lineTo(54,26);g.stroke();
     g.strokeStyle=IC_OUT;g.lineWidth=2;g.beginPath();g.moveTo(32,6);g.lineTo(32,33);g.stroke();icShape(g,()=>{g.moveTo(32,2);g.lineTo(35,8);g.lineTo(29,8);g.closePath()},e>=0?ELM[e].col:M[1],1.2);
     icRect(g,27,40,10,5,T,1.4,1)});break;
+  case 'pack':{const sz=V&&V.sz||0,w=24+sz*12,h=28+sz*12,x0=32-w/2,y0=35-h/2;
+    if(V&&V.glow){const gl=g.createRadialGradient(32,34,4,32,34,30);gl.addColorStop(0,V.glow+'aa');gl.addColorStop(1,V.glow+'00');g.fillStyle=gl;g.fillRect(0,0,64,64)}
+    if(V&&V.frame){g.strokeStyle='#4a3218';g.lineWidth=3.5;g.beginPath();g.moveTo(x0-2,y0-5);g.lineTo(x0-2,y0+h+5);g.moveTo(x0+w+2,y0-5);g.lineTo(x0+w+2,y0+h+5);g.moveTo(x0-2,y0-3);g.lineTo(x0+w+2,y0-3);g.stroke()}
+    g.strokeStyle=IC_OUT;g.lineWidth=2.4;g.beginPath();g.moveTo(27,y0+1);g.quadraticCurveTo(32,y0-9,37,y0+1);g.stroke();
+    icRect(g,x0,y0,w,h,icLin(g,x0,y0,x0+w,y0+h,IC_LEA[1],IC_LEA[0]),2,7);
+    icRect(g,x0+4,y0+h*0.55,w-8,h*0.33,'rgba(0,0,0,.22)',1.2,3);
+    icRect(g,x0-1,y0-1,w+2,h*0.42,icLin(g,x0,y0,x0+w,y0,IC_LEA[0],IC_LEA[1]),2,6);
+    icRect(g,30,y0+h*0.3,4,7,T,1.4,1);
+    if(V&&V.roll)icRect(g,x0-3,y0+h-3,w+6,8,V.roll,1.8,4);
+    break;}
   default:g.fillStyle=M[1];g.font='32px serif';g.textAlign='center';g.fillText('?',32,44);
   }
   if(V&&V.deco)try{V.deco(g)}catch(err){}
@@ -2261,7 +2316,8 @@ function inspector(el,it,acts,cmp,cmpLabel){
   if(bv.arm)lines+='<li><span>防御</span><b>'+bv.arm+'</b></li>';
   {const P=pfOf(it);if(P)lines+='<li><span>品質の銘</span><b style="color:'+(P.m>=1?'#7cc47f':'#e0644c')+'">'+P.n+'（性能'+(P.m>=1?'+':'')+Math.round((P.m-1)*100)+'%・耐久×'+P.du+'）</b></li>'}
   {const fr=durFrac(it);lines+='<li><span>耐久</span><b style="color:'+(fr<=0?'#e0644c':fr<=0.15?'#ff9a6a':fr<0.5?'#e4b450':'inherit')+'">'+(fr<=0?'壊れている':Math.round(durOf(it))+' / '+maxDur(it))+'</b></li>'}
-  if(bv.mv)lines+='<li><span>移動速度</span><b class="neg">'+bv.mv+'%</b></li>';
+  if(bv.bag)lines+='<li><span>バッグ容量</span><b>'+bv.bag+'枠</b><span class="hint">（なしは'+BAG0+'枠）</span></li>';
+  if(bv.mv)lines+='<li><span>移動速度</span><b class="'+(bv.mv>0?'pos':'neg')+'">'+(bv.mv>0?'+':'')+bv.mv+'%</b></li>';
   for(const [ai,v] of it.v)lines+='<li class="aff"><span>'+AFF[ai].n+'</span><b>'+affText(ai,v)+'</b></li>';
   let diff='';
   if(cmp!==undefined){
@@ -2445,6 +2501,8 @@ function renderLobby(){
   renderLoss();
   renderCos();
   renderHome();
+  renderGacha();
+  backEnsure();
   renderCraft();
   renderCook();
   baseNav();
@@ -2529,6 +2587,13 @@ function renderLoss(){
   }else cb.hidden=true;
 }
 const RECIPES=[
+  {g:'鞄',id:'b_satchel',n:'肩掛け鞄',d:'バッグ16枠・足の速さそのまま',m:{cloth:6,fur:3},gold:150,out:{kind:'gear',b:'satchel',l:3}},
+  {g:'鞄',id:'b_ruck',n:'革のリュック',d:'バッグ20枠・移動-2%',m:{fur:8,cloth:4,iron:2},gold:450,out:{kind:'gear',b:'rucksack',l:5}},
+  {g:'鞄',id:'b_frame',n:'背負い枠',d:'バッグ24枠・移動-5%',m:{wood:10,fur:6,iron:4},gold:950,out:{kind:'gear',b:'framepack',l:7,minR:1}},
+  {g:'鞄',id:'b_peddler',n:'行商の大荷物',d:'バッグ30枠・移動-9%（重い）',m:{wood:12,cloth:10,fur:8,iron:6},gold:1900,out:{kind:'gear',b:'peddler',l:8,minR:1}},
+  {g:'鞄',id:'b_scout',n:'斥候の軽背嚢',d:'バッグ18枠・移動+4%。移動速度が必ず付く',m:{fur:10,soul:4,venom:3},gold:1600,out:{kind:'gear',b:'scoutpack',l:8,minR:2,force:['move']}},
+  {g:'鞄',id:'c_wyrmpack',n:'竜革の背嚢',d:'バッグ28枠・移動-2%。最大HPが必ず付く',m:{scale:3,fur:10,core:2},gold:4500,out:{kind:'gear',b:'wyrmpack',l:10,minR:3,force:['hp']}},
+  {g:'鞄',id:'c_voidpack',n:'虚空の鞄',d:'バッグ34枠・移動-1%。最上の鞄',m:{relic:1,wisp:3,curse:4},gold:6500,out:{kind:'gear',b:'voidpack',l:12,minR:3}},
   {g:'装備',id:'r_wpn',n:'鍛冶：武器',d:'ランダムな武器 Lv6・レア以上',m:{bone:6,iron:4},gold:220,out:{kind:'gear',slot:'weapon',l:6,minR:2}},
   {g:'装備',id:'r_arm',n:'仕立て：防具',d:'ランダムな頭・胴・手・足 Lv6・レア以上',m:{fur:5,cloth:5,iron:3},gold:220,out:{kind:'gear',slots:['head','chest','hands','feet'],l:6,minR:2}},
   {g:'装備',id:'r_ring',n:'彫金：指輪',d:'ランダムな指輪 Lv7・レア以上',m:{gem:2,soul:3},gold:300,out:{kind:'gear',slot:'ring',l:7,minR:2}},
@@ -2603,7 +2668,7 @@ const RECIPES=[
   {g:'交易品',id:'t_dragon',n:'竜鱗の宝飾',d:'作るとすぐ商人が買い取る',m:{scale:4,gem:2},gold:0,out:{kind:'gold',n:900}},
 ];
 const rcTier=rc=>{const l=rc.out&&rc.out.l;if(!l)return 0;return l<=5?1:l<=7?2:l<=8?3:l<=10?4:5};
-let CRAFTTAB='装備';const CRAFTTABS=['装備','限定武器','限定防具','限定装飾','消耗品','交易品'];
+let CRAFTTAB='装備';const CRAFTTABS=['装備','鞄','限定武器','限定防具','限定装飾','消耗品','交易品'];
 let CRAFTQ=0;const rcQ=rc=>rc.out.kind==='gear'?CRAFTQ:0;
 const canCraft=rc=>(SAVE.bench||1)>=rcNeedLv(rc)&&(!rcpNeeded(rc)||rcpKnownG(rc.id))&&SAVE.gold>=rc.gold&&Object.entries(rc.m).every(([id,n])=>matHave(id,rcQ(rc))>=n);
 function craft(rc){
@@ -2634,7 +2699,7 @@ function renderCraft(){
   $('#craftGold').textContent='金貨 '+SAVE.gold.toLocaleString()+'G · 巻物 '+(SAVE.scrolls||0)+' · 回復薬 '+SAVE.potions+' · 作業台 Lv'+(SAVE.bench||1);
   const tabs=$('#craftTabs');tabs.innerHTML='';
   for(const gname of CRAFTTABS){const b=document.createElement('button');b.type='button';b.textContent=gname;b.className=CRAFTTAB===gname?'on':'';b.onclick=()=>{CRAFTTAB=gname;renderCraft()};tabs.appendChild(b)}
-  {const isGear=['装備','限定武器','限定防具','限定装飾'].includes(CRAFTTAB),cb=$('#craftQ');cb.hidden=!isGear;cb.innerHTML='';
+  {const isGear=['装備','鞄','限定武器','限定防具','限定装飾'].includes(CRAFTTAB),cb=$('#craftQ');cb.hidden=!isGear;cb.innerHTML='';
     if(isGear){const lab=document.createElement('span');lab.className='cql';lab.textContent='使う素材の品位';cb.appendChild(lab);
       const D=['Lv−1・品質55〜100%（弱め）','Lv+1・品質90〜130%・25%でレア度+1','Lv+2・品質115〜145%・レア度+1・効果値が高め'];
       MQN.forEach((nm,q)=>{const b=document.createElement('button');b.type='button';b.className='cqb'+(CRAFTQ===q?' on':'');b.dataset.q=q;b.innerHTML='<b>'+nm+'</b><span>'+D[q]+'</span>';b.onclick=()=>{CRAFTQ=q;renderCraft()};cb.appendChild(b)});
@@ -2732,6 +2797,9 @@ function renderProf(){
 }
 /* ---------- lobby: icons, scene generator, stage ---------- */
 const ICONS={
+  gacha:'<path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18"/><path d="M9 3l3 6 3-6"/><path d="M12 9v12"/>',
+  cook:'<path d="M4 10h16v2a8 8 0 0 1-16 0z"/><path d="M2 10h20"/><path d="M9 6c0-1 1-1 1-2"/><path d="M14 6c0-1 1-1 1-2"/>',
+  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><rect x="9" y="13" width="6" height="4"/>',
   base:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
   deploy:'<path d="M5 21V11a7 7 0 0 1 14 0v10"/><path d="M9 21v-5a3 3 0 0 1 6 0v5"/><path d="M3 21h18"/>',
   gear:'<path d="M14 4h6v6L9 21l-6-6z"/><path d="M5 13l6 6"/><path d="M15 9l-2 2"/>',
@@ -2743,7 +2811,7 @@ const ICONS={
   quest:'<path d="M6 3h10l2 2v16H6z"/><path d="M9 8h6"/><path d="M9 12h6"/><path d="M9 16h4"/>',
   prof:'<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5l-5.3 2.9 1.2-6L3.4 9.3l6-.7z"/>',
 };
-const TABS=[['deploy','ロビー'],['base','拠点'],['quest','依頼'],['shop','商人'],['cos','衣装'],['dex','図鑑'],['prof','記録']];
+const TABS=[['deploy','ロビー'],['base','拠点'],['gacha','ガチャ'],['quest','依頼'],['shop','商人'],['cos','衣装'],['dex','図鑑'],['prof','記録']];
 const svgI=k=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[k]+'</svg>';
 function buildTabs(){
   $('#tabnav').innerHTML=TABS.map(([k,n])=>'<button type="button" data-t="'+k+'">'+svgI(k)+'<span>'+n+'</span></button>').join('');
@@ -3126,42 +3194,110 @@ function drawCosThumb(cv2,cs,a){
   withCtx(g,()=>drawPlayer(0,0,a,'#8f8778',SAVE.equip.weapon?BASES[SAVE.equip.weapon.b].k:'fist',SAVE.equip.weapon?SAVE.equip.weapon.r:0,false,1,null,null,true,cs,false,{eq:eqIdx(SAVE.equip)}));
 }
 function grantCos(id){if(!SAVE.cos.own.includes(id)){SAVE.cos.own.push(id);return true}return false}
+/* ---------- gacha: three banners (キャラクター / 衣装 / 拠点装飾) with weekly pickups ---------- */
+const GWEEK=()=>Math.floor((Date.now()/86400000+3)/7);
+const GBAN=[
+  {k:'chara',n:'キャラクター',sub:'スキン（服の色・柄）',cost:[200,1800],th:['#3a1c4a','#c8643a','#ffd36b']},
+  {k:'outfit',n:'衣装',sub:'帽子・マント・オーラ',cost:[200,1800],th:['#0f2a3a','#2f7f8a','#9ff0e0']},
+  {k:'home',n:'拠点装飾',sub:'家具・壁紙・ペット',cost:[150,1350],th:['#2a1a10','#8a5a2a','#ffc890']},
+];
+let GTAB=(()=>{try{const v=lsGet('yd-gtab');return GBAN.some(b=>b.k===v)?v:'chara'}catch(e){return 'chara'}})();
+const gList=pool=>pool==='home'?HITEMS.filter(h=>!h.st):COS.filter(c=>!c.drop&&(pool==='chara'?c.s==='skin':c.s!=='skin'));
+function gPick(pool,r,k){const l=gList(pool).filter(c=>c.r===r).map(c=>c.id).sort();return l.length?l[(GWEEK()*(r===3?1:2)+k)%l.length]:null}
+const gItem=(pool,id)=>pool==='home'?HI[id]:COS[COSI[id]];
+function gPity(pool){return pool==='home'?((homeEnsure().gp)|0):(((SAVE.gp||{})[pool])|0)}
+function gLeft(){const end=((GWEEK()+1)*7-3)*86400000,ms=Math.max(0,end-Date.now()),d=Math.floor(ms/86400000),h=Math.floor(ms%86400000/3600000);return d?d+'日'+h+'時間':h+'時間'+Math.floor(ms%3600000/60000)+'分'}
+// one pull done on this device (guests, and the 拠点装飾 banner which is only looks)
+function gRollLocal(pool,n){
+  const L=gList(pool),res=[];let gp=gPity(pool);
+  for(let i=0;i<n;i++){let r=R.w(Math.random,COSR.map(x=>x.w));if(n===10&&i===9&&!res.some(x=>x.r>=2))r=Math.max(r,2);gp++;if(gp>=60)r=3;if(r===3)gp=0;
+    let id=null,pu=false;if(r>=2&&Math.random()<0.5){id=gPick(pool,r,r===3?0:Math.floor(Math.random()*2));pu=!!id}
+    if(!id){let c=L.filter(x=>x.r===r);if(!c.length)c=L;id=c[Math.floor(Math.random()*c.length)].id}
+    res.push({id,r,pu})}
+  if(pool==='home')homeEnsure().gp=gp;else{SAVE.gp=SAVE.gp||{};SAVE.gp[pool]=gp}
+  return res;
+}
 async function gacha(n,pool){
-  pool=pool==='skin'?'skin':'char';
-  const cost=n===10?1800:200;
+  pool=pool==='skin'?'chara':pool==='char'?'outfit':pool;
+  const B=GBAN.find(b=>b.k===pool)||GBAN[0],cost=B.cost[n===10?1:0];
   if(SAVE.gold<cost){toast('金貨が足りません');return}
   if(gacha.busy)return;
   let res=[];
+  const lockBtns=v=>{for(const id of ['#gw1','#gw10'])if($(id))$(id).disabled=v};
+  if(pool==='home'){
+    const H=homeEnsure();SAVE.gold-=cost;
+    for(const x of gRollLocal('home',n)){const h=HI[x.id];const fresh=!H.own.includes(h.id);let refund=0;if(fresh)H.own.push(h.id);else{refund=HDUP[h.r];SAVE.gold+=refund}res.push({r:h.r,name:h.n,sub:HSLOTS.find(s=>s[0]===h.s)[1],fresh,refund,home:h,pu:x.pu})}
+    persist();const best=res.reduce((a,b)=>b.r>a.r?b:a,res[0]);if(best.fresh)HOMETAB=best.home.s;renderLobby();gachaShow('home',res);return;
+  }
   if(AUTH.user&&SB){
-    gacha.busy=true;$('#g1').disabled=$('#g10').disabled=$('#gs1').disabled=$('#gs10').disabled=true;
+    gacha.busy=true;lockBtns(true);
     try{
       if(!(await flushDbNow())){toast(AUTH.err==='NET'?'サーバーにつながらないため、今はガチャを引けません':'セーブがサーバーと同期できていないため、ガチャを引けません');return}
       AUTH.lock=true;
       const {data,error}=await SB.rpc('gacha_pull',{p_n:n,p_sid:SESS.sid,p_pool:pool});if(error&&String(error.message||'').indexOf('OTHER_SESSION')>=0){kicked();return}
       if(error){toast('ガチャ失敗：'+authMsg(error));return}
-      SAVE.gold=data.gold;SAVE.cos.own=data.own.slice();
-      res=data.res.map(x=>({c:COS[COSI[x.id]],fresh:!!x.fresh,refund:x.refund|0})).filter(x=>x.c);
+      SAVE.gold=data.gold;SAVE.cos.own=data.own.slice();if(data.gp)SAVE.gp=data.gp;if(data.ts)SAVE.ts=Math.max(SAVE.ts||0,data.ts);
+      res=data.res.map(x=>({c:COS[COSI[x.id]],fresh:!!x.fresh,refund:x.refund|0,pu:!!x.pu})).filter(x=>x.c);
     }catch(e){toast('ガチャ失敗：'+authMsg(e));return}
-    finally{AUTH.lock=false;gacha.busy=false;$('#g1').disabled=$('#g10').disabled=$('#gs1').disabled=$('#gs10').disabled=false}
+    finally{AUTH.lock=false;gacha.busy=false;lockBtns(false)}
   }else{
-  SAVE.gold-=cost;
-  const pl=COS.filter(c=>!c.drop&&(pool==='skin'?c.s==='skin':c.s!=='skin'));
-  for(let i=0;i<n;i++){
-    let r=R.w(Math.random,COSR.map(x=>x.w));
-    if(n===10&&i===9&&!res.some(x=>x.c.r>=2))r=Math.max(r,2);
-    let cands=pl.filter(c=>c.r===r);if(!cands.length)cands=pl;const c=cands[Math.floor(Math.random()*cands.length)];
-    const fresh=grantCos(c.id);let refund=0;if(!fresh){refund=COSR[c.r].dup;SAVE.gold+=refund}
-    res.push({c,fresh,refund});
-  }
+    SAVE.gold-=cost;
+    for(const x of gRollLocal(pool,n)){const c=COS[COSI[x.id]];const fresh=grantCos(c.id);let refund=0;if(!fresh){refund=COSR[c.r].dup;SAVE.gold+=refund}res.push({c,fresh,refund,pu:x.pu})}
   }
   persist();
-  const box=$('#gres');box.innerHTML='';
-  res.forEach((x,i)=>{const d=document.createElement('div');d.className='gcard';d.style.borderColor=COSR[x.c.r].hex;
-    d.innerHTML='<span style="color:'+COSR[x.c.r].hex+'">'+COSR[x.c.r].n+' · '+COS_SLOTN[x.c.s]+'</span><b>'+esc(x.c.n)+'</b>'+(x.fresh?'<span class="nw">NEW</span>':'<span class="dp">かぶり +'+x.refund+'G</span>');box.appendChild(d)});
   const best=res.reduce((a,b)=>b.c.r>a.c.r?b:a,res[0]);
   if(best.fresh){COSTAB=best.c.s}
   renderLobby();
-  gachaShow(pool,res.map(x=>({r:x.c.r,name:x.c.n,sub:COS_SLOTN[x.c.s],fresh:x.fresh,refund:x.refund,cos:x.c})));
+  gachaShow(pool==='chara'?'skin':'char',res.map(x=>({r:x.c.r,name:x.c.n,sub:COS_SLOTN[x.c.s],fresh:x.fresh,refund:x.refund,cos:x.c,pu:x.pu})));
+}
+function renderGacha(){
+  const el=$('#paneGacha');if(!el||!SAVE)return;const B=GBAN.find(b=>b.k===GTAB);
+  const bn=$('#gBanners');bn.innerHTML='';
+  for(const b of GBAN){const t=document.createElement('button');t.type='button';t.className='gbtab'+(b.k===GTAB?' on':'');t.style.setProperty('--a',b.th[1]);t.style.setProperty('--b',b.th[2]);
+    const cv=document.createElement('canvas');cv.width=96;cv.height=60;t.appendChild(cv);const sp=document.createElement('span');sp.textContent=b.n;t.appendChild(sp);
+    t.onclick=()=>{GTAB=b.k;lsSet('yd-gtab',b.k);sfx('tab');renderGacha()};bn.appendChild(t);gTabArt(cv,b)}
+  $('#gGold').textContent=SAVE.gold.toLocaleString()+'G';
+  const L=gPick(B.k,3,0),E=[gPick(B.k,2,0),gPick(B.k,2,1)].filter(Boolean),own=B.k==='home'?new Set(homeEnsure().own):new Set(SAVE.cos.own);
+  const it=L&&gItem(B.k,L),slotN=x=>B.k==='home'?HSLOTS.find(s=>s[0]===x.s)[1]:COS_SLOTN[x.s];
+  $('#gInfo').innerHTML='<div class="gkind">限定ピックアップ</div><div class="gtitle">'+esc(B.n)+'<small>ガチャ</small></div><div class="gsub">'+esc(B.sub)+'</div>'
+    +(it?'<div class="gpu"><span class="gst" style="color:'+COSR[3].hex+'">★レジェンド</span><b>'+esc(it.n)+'</b><span class="gsl">'+esc(slotN(it))+(own.has(it.id)?' · 所持':'')+'</span></div>':'')
+    +'<div class="gpu4">'+E.map(id=>{const x=gItem(B.k,id);return '<span style="border-color:'+COSR[2].hex+'"><i style="color:'+COSR[2].hex+'">★エピック</i>'+esc(x.n)+(own.has(id)?'<em>所持</em>':'')+'</span>'}).join('')+'</div>'
+    +'<div class="gtime">入れ替えまで あと '+gLeft()+'</div>';
+  const pity=gPity(B.k);$('#gPity').innerHTML='レジェンド確定まで <b>'+(60-pity)+'</b> 回';
+  const w1=$('#gw1'),w10=$('#gw10');
+  w1.innerHTML='<small>1回</small><b>'+B.cost[0]+'G</b>';w10.innerHTML='<small>10回</small><b>'+B.cost[1].toLocaleString()+'G</b>';
+  w1.disabled=SAVE.gold<B.cost[0]||!!gacha.busy;w10.disabled=SAVE.gold<B.cost[1]||!!gacha.busy;
+  w1.onclick=()=>gacha(1,B.k);w10.onclick=()=>gacha(10,B.k);
+  $('#gDet').onclick=()=>gDetails(B);
+  const coll=B.k==='home'?[homeEnsure().own.filter(id=>HI[id]&&!HI[id].st).length,gList('home').length]:[gList(B.k).filter(c=>own.has(c.id)).length,gList(B.k).length];
+  $('#gColl').textContent='コレクション '+coll[0]+' / '+coll[1];
+}
+function gDetails(B){
+  const m=$('#gDetModal'),L=gList(B.k);
+  const groups=[3,2,1,0].map(r=>'<h3 style="color:'+COSR[r].hex+'">'+COSR[r].n+'（'+COSR[r].w+'%）</h3><div class="gdl">'+L.filter(x=>x.r===r).map(x=>'<span'+((r===3&&gPick(B.k,3,0)===x.id)||(r===2&&[gPick(B.k,2,0),gPick(B.k,2,1)].includes(x.id))?' class="pu"':'')+'>'+esc(x.n)+'</span>').join('')+'</div>').join('');
+  $('#gDetBody').innerHTML='<p class="hint">1回 '+B.cost[0]+'G · 10回 '+B.cost[1].toLocaleString()+'G。10回の最後はエピック以上が確定。'+'レジェンドとエピックが出たとき、50%でピックアップ（黄色の枠）になる。60回引くまでにレジェンドが出なければ、60回目は必ずレジェンド（回数はガチャごとに数え、レジェンドが出ると0に戻る）。ピックアップは毎週月曜9:00に入れ替わる。かぶりは金貨で一部返金。'+(B.k==='home'?'拠点装飾は拠点の見た目だけを変える。':'衣装・スキンは見た目だけで性能は変わらず、死んでも失わない。')+'</p>'+groups;
+  m.hidden=false;
+}
+function gTabArt(cv,b){const g=cv.getContext('2d'),w=cv.width,h=cv.height,gr=g.createLinearGradient(0,0,w,h);gr.addColorStop(0,b.th[0]);gr.addColorStop(1,b.th[1]);g.fillStyle=gr;g.fillRect(0,0,w,h);
+  const id=gPick(b.k,3,0);if(!id)return;try{if(b.k==='home')homeThumbAt(g,HI[id],w,h);else{g.save();g.setTransform(1.15,0,0,1.15,w*0.5,h*0.98);withCtx(g,()=>drawSideHero({tn:0,col:colorOf(SAVE.name),cs:gHeroCs(b.k,id),eq:[],wk:'fist',wr:0,name:SAVE.name}));g.restore()}}catch(e){}}
+function homeThumbAt(g,h,w,hh){const c=document.createElement('canvas');c.width=112;c.height=84;homeThumb(c,h);g.drawImage(c,(w-hh*1.33)/2,0,hh*1.33,hh)}
+function gHeroCs(pool,id){const cs=cosIdx();const c=COS[COSI[id]];if(c)cs[COS_SLOTS.indexOf(c.s)]=COSI[id];return cs}
+// animated banner art
+function gArtLoop(){
+  requestAnimationFrame(gArtLoop);
+  if(G||$('#hideout').hidden||$('#hideout').dataset.tab!=='gacha')return;
+  const cv=$('#gArt');if(!cv||!cv.offsetParent)return;
+  const d=Math.min(2,devicePixelRatio||1),W=cv.clientWidth,H=cv.clientHeight;if(!W||!H)return;if(cv.width!==Math.round(W*d)||cv.height!==Math.round(H*d)){cv.width=Math.round(W*d);cv.height=Math.round(H*d)}
+  const g=cv.getContext('2d'),tn=now(),B=GBAN.find(b=>b.k===GTAB),th=B.th;g.setTransform(d,0,0,d,0,0);
+  const gr=g.createLinearGradient(0,0,W,H);gr.addColorStop(0,th[0]);gr.addColorStop(0.65,th[1]);gr.addColorStop(1,th[0]);g.fillStyle=gr;g.fillRect(0,0,W,H);
+  // rays behind the pickup
+  const cx=W*0.7,cy=H*0.55;g.save();g.translate(cx,cy);g.rotate(tn*0.08);for(let i=0;i<14;i++){g.rotate(Math.PI/7);const l=g.createLinearGradient(0,0,Math.max(W,H),0);l.addColorStop(0,th[2]+'55');l.addColorStop(1,th[2]+'00');g.fillStyle=l;g.beginPath();g.moveTo(0,0);g.lineTo(Math.max(W,H),-H*0.08);g.lineTo(Math.max(W,H),H*0.08);g.fill()}g.restore();
+  const gl=g.createRadialGradient(cx,cy,10,cx,cy,H*0.6);gl.addColorStop(0,th[2]+'88');gl.addColorStop(1,th[2]+'00');g.fillStyle=gl;g.fillRect(0,0,W,H);
+  for(let i=0;i<40;i++){const s=(i*97.13)%1,x=((i*53.7+tn*(8+s*14))%(W+20))-10,y=H-((i*31.3+tn*(12+s*20))%(H+20));g.fillStyle='rgba(255,250,220,'+(0.25+0.5*Math.abs(Math.sin(tn*2+i)))+')';g.fillRect(x,y,1.6+s*1.6,1.6+s*1.6)}
+  const id=gPick(B.k,3,0);
+  try{if(B.k==='home'){const h=HI[id];if(h){const c=document.createElement('canvas');c.width=336;c.height=252;homeThumb(c,h);const s=Math.min(W*0.55/336,H*0.8/252);g.save();g.translate(cx,cy+Math.sin(tn*1.5)*4);g.rotate(-0.04);g.fillStyle='rgba(0,0,0,.35)';g.fillRect(-168*s+8,-126*s+10,336*s,252*s);g.drawImage(c,-168*s,-126*s,336*s,252*s);g.strokeStyle=th[2];g.lineWidth=3;g.strokeRect(-168*s,-126*s,336*s,252*s);g.restore()}}
+    else{const sc=H/62;g.save();g.setTransform(d*sc,0,0,d*sc,d*cx,d*(H*0.92+Math.sin(tn*1.4)*3));withCtx(g,()=>drawSideHero({tn,col:colorOf(SAVE.name),cs:gHeroCs(B.k,id),eq:eqIdx(SAVE.equip),wk:SAVE.equip.weapon?BASES[SAVE.equip.weapon.b].k:'fist',wr:SAVE.equip.weapon?SAVE.equip.weapon.r:0,name:SAVE.name}));g.restore()}}catch(e){}
+  const vg=g.createLinearGradient(0,0,W*0.6,0);vg.addColorStop(0,'rgba(0,0,0,.55)');vg.addColorStop(1,'rgba(0,0,0,0)');g.setTransform(d,0,0,d,0,0);g.fillStyle=vg;g.fillRect(0,0,W*0.6,H);
 }
 /* ---------- gacha presentation: a treasure chest for character items, a capsule for skins, a crate for base furniture ---------- */
 function gachaShow(kind,res){
@@ -3174,7 +3310,7 @@ function gachaShow(kind,res){
     res.forEach((x,i)=>{const c=document.createElement('div');c.className='gfx-card';c.style.setProperty('--c',COSR[x.r].hex);c.style.animationDelay=(i*0.07)+'s';
       const cvs=document.createElement('canvas');cvs.width=96;cvs.height=96;c.appendChild(cvs);
       try{if(x.cos){const cs=cosIdx();cs[COS_SLOTS.indexOf(x.cos.s)]=COSI[x.cos.id];drawCosThumb(cvs,cs,-0.6)}else if(x.home)homeThumb(cvs,x.home)}catch(e){}
-      c.insertAdjacentHTML('beforeend','<span class="r">'+COSR[x.r].n+(x.sub?' · '+esc(x.sub):'')+'</span><b>'+esc(x.name)+'</b>'+(x.fresh?'<span class="nw">NEW</span>':'<span class="dp">かぶり +'+(x.refund|0)+'G</span>'));
+      c.insertAdjacentHTML('beforeend',(x.pu?'<span class="pu">PICK UP</span>':'')+'<span class="r">'+COSR[x.r].n+(x.sub?' · '+esc(x.sub):'')+'</span><b>'+esc(x.name)+'</b>'+(x.fresh?'<span class="nw">NEW</span>':'<span class="dp">かぶり +'+(x.refund|0)+'G</span>'));
       box.appendChild(c)})};
   const close=()=>{cancelAnimationFrame(raf);el.hidden=true};
   el.onclick=()=>{if(!shown){showRes();burst=true}else close()};
@@ -3330,7 +3466,7 @@ function homeLoop(){
 function renderHome(){
   if(!SAVE||!$('#homeTabs'))return;const H=homeEnsure(),own=new Set(H.own);
   $('#homeInfo').textContent='家具 '+own.size+' / '+HITEMS.length+' · 金貨 '+SAVE.gold.toLocaleString()+'G';
-  $('#hg1').disabled=SAVE.gold<150;$('#hg10').disabled=SAVE.gold<1350;
+  {const hs=$('#homeShort');if(hs&&!hs.childElementCount){for(const [k,ic,n,d] of [['stash','stash','倉庫・装備','装備を付け替える・持ち物の整理'],['craft','craft','作業台','装備・鞄・道具を作る'],['cook','cook','釜・料理','食材から料理を作る'],['gacha','gacha','拠点装飾ガチャ','家具・壁紙・ペットを集める']]){const b=document.createElement('button');b.type='button';b.innerHTML=svgI(ic)+'<span>'+n+'<small>'+d+'</small></span>';b.onclick=()=>{if(k==='gacha'){GTAB='home';$('#hideout').dataset.tab='gacha'}else{BASESUB=k;lsSet('meikutsu-basesub',k);$('#hideout').dataset.tab=k}SEL=null;sfx('tab');renderLobby();window.scrollTo(0,0)};hs.appendChild(b)}}}
   const tabs=$('#homeTabs');tabs.innerHTML='';for(const [k,n] of HSLOTS){const b=document.createElement('button');b.type='button';b.textContent=n;b.className=HOMETAB===k?'on':'';b.onclick=()=>{HOMETAB=k;renderHome()};tabs.appendChild(b)}
   const grid=$('#homeGrid');grid.innerHTML='';
   const mk=(h,label,owned,on,fn)=>{const b=document.createElement('button');b.type='button';b.className='cosc'+(on?' on':'')+(owned?'':' lock');const cv=document.createElement('canvas');cv.width=112;cv.height=84;b.appendChild(cv);
@@ -3363,7 +3499,7 @@ function benchBox(){
 let BASESUB=(()=>{try{const v=lsGet('meikutsu-basesub');return ['home','stash','craft','cook'].includes(v)?v:'home'}catch(e){return 'home'}})();
 function baseNav(){
   const t=$('#hideout').dataset.tab;for(const id of ['#paneHome','#paneGear','#paneCraft','#paneCook']){const p=$(id);if(!p)continue;let nv=p.querySelector('.subnav');if(!nv){nv=document.createElement('nav');nv.className='subnav';p.prepend(nv)}
-    nv.innerHTML='';for(const [k,n] of [['home','拠点'],['stash','倉庫・装備'],['craft','作業台'],['cook','釜・料理']]){const b=document.createElement('button');b.type='button';b.textContent=n;b.className=t===k?'on':'';b.onclick=()=>{BASESUB=k;lsSet('meikutsu-basesub',k);$('#hideout').dataset.tab=k;SEL=null;renderLobby();window.scrollTo(0,0)};nv.appendChild(b)}}
+    nv.innerHTML='';for(const [k,n] of [['home','拠点'],['stash','倉庫・装備'],['craft','作業台'],['cook','釜・料理']]){const b=document.createElement('button');b.type='button';b.innerHTML=svgI(k==='home'?'home':k)+'<span>'+n+'</span>';b.className=t===k?'on':'';b.onclick=()=>{BASESUB=k;lsSet('meikutsu-basesub',k);$('#hideout').dataset.tab=k;SEL=null;renderLobby();window.scrollTo(0,0)};nv.appendChild(b)}}
 }
 
 function renderCos(){
@@ -3371,7 +3507,6 @@ function renderCos(){
   const own=new Set(SAVE.cos.own);
   if(own.size>=20)unlockAch('cos20');
   $('#cosCount').textContent='所持 '+own.size+' / '+COS.length+' · 金貨 '+SAVE.gold.toLocaleString()+'G';
-  $('#g1').disabled=$('#gs1').disabled=SAVE.gold<200;$('#g10').disabled=$('#gs10').disabled=SAVE.gold<1800;
   const tabs=$('#cosTabs');tabs.innerHTML='';
   for(const s of COS_SLOTS){const b=document.createElement('button');b.type='button';b.textContent=COS_SLOTN[s];b.className=COSTAB===s?'on':'';b.onclick=()=>{COSTAB=s;renderCos()};tabs.appendChild(b)}
   const grid=$('#cosGrid');grid.innerHTML='';
@@ -3850,12 +3985,13 @@ function genMap(seed){
       if(t2==='swarm'){for(let j=0;j<R.i(r,3,5);j++){const q=near(p,1);if(q)M('swarm',q,{elite:0})}}else M(t2,p)}
   }
   {const sps=rooms.filter(o=>o.spawn);for(let i=mons.length-1;i>=0;i--){const m=mons[i];if(m.k==='boss'||m.k==='dragon')continue;if(sps.some(o=>Math.hypot(m.x-(o.cx*TS),m.y-(o.cy*TS))<(S<70?300:380)))mons.splice(i,1)}mons.forEach((m,i)=>m.id=i);mid=mons.length}
+  if(B.open){const keep=chests.filter(c=>c.boss||hashStr(seed+':oc'+c.id)%100<18);keep.forEach((c,i)=>c.id=i);chests.splice(0,chests.length,...keep);cid=chests.length}
   for(const c of chests){if(c.boss)continue;if(r()<0.035){c.mimId=mid;mons.push({id:mid++,k:'mimic',x:c.x,y:c.y,tier:c.tier,dg:c.dg,chest:c.id})}}
   // dragon traces around the lair
   const traces=[];const lo=rooms.find(o=>o.lair);
   if(lo){for(let k=0;k<26;k++){const an=r()*6.28,dd=R.f(r,3,17);const x=Math.round(lo.cx+Math.cos(an)*dd),y=Math.round(lo.cy+Math.sin(an)*dd);if(get(x,y)!==1)continue;traces.push({x:x*TS+16,y:y*TS+16,k:R.pick(r,['claw','claw','scorch','bones','scale']),a:r()*6.28})}}
   // hazards: powder kegs, spike plates, bear traps and suspicious urns (own rng so the rest of the map is unchanged)
-  const traps=[];{const tr=rngFrom((seed^0x7a3f1c5)>>>0);const far=(x,y)=>rooms.filter(o=>o.spawn).every(o=>Math.hypot(x-o.cx,y-o.cy)>9)&&chests.every(c=>Math.hypot(c.x-(x*TS+16),c.y-(y*TS+16))>44)&&traps.every(q=>Math.hypot(q.x-(x*TS+16),q.y-(y*TS+16))>40);
+  const traps=[];if(!B.open){const tr=rngFrom((seed^0x7a3f1c5)>>>0);const far=(x,y)=>rooms.filter(o=>o.spawn).every(o=>Math.hypot(x-o.cx,y-o.cy)>9)&&chests.every(c=>Math.hypot(c.x-(x*TS+16),c.y-(y*TS+16))>44)&&traps.every(q=>Math.hypot(q.x-(x*TS+16),q.y-(y*TS+16))>40);
     const spot=o=>{for(let k=0;k<20;k++){const x=R.i(tr,o.x+1,o.x+o.w-2),y=R.i(tr,o.y+1,o.y+o.h-2);if(get(x,y)===1&&far(x,y))return [x,y]}return null};
     for(const o of rooms){if(o.spawn||o.boss||o.lair)continue;
       if(tr()<0.15){const n=R.i(tr,1,3);let c0=spot(o);for(let k=0;k<n&&c0;k++){const x=c0[0]+(k%2),y=c0[1]+(k>>1);if(get(x,y)===1&&far(x,y))traps.push({k:'keg',x:x*TS+16,y:y*TS+16})}}
@@ -3883,6 +4019,7 @@ function genMap(seed){
   const bossRoom=rooms[0];
   const lairRoom=rooms.find(o=>o.lair);
   const map={seed,biome:B.k,style:bk,B,t,tier,ind,rooms,traces,altar,traps,pieces,bb:{x0:ox,y0:ox,S},size:S,lair:lairRoom?{x:(lairRoom.cx|0)*TS+16,y:(lairRoom.cy|0)*TS+16}:null,exts,chests,mons,spawns,anim,road,boss:{x:(bossRoom.cx|0)*TS,y:(bossRoom.cy|0)*TS}};
+  if(B.open)openObs(map);
   map.nodes=placeNodes(map,seed);
   mapCache.set(seed,map);
   return map;
@@ -4687,7 +4824,7 @@ function rescueTalk(v){
   const df=G.diff||0,r=rngFrom((G.seed^hashStr('rescue:'+NET.peerId))>>>0),gold=Math.round((140+df*130)*(0.8+r()*0.5));
   G.gold+=gold;pickLog('金貨 '+gold+'G','#e4b450');
   const pot=Math.min(9-G.potions,1+(r()<0.4?1:0));if(pot>0){G.potions+=pot;pickLog('回復薬 ×'+pot,'#e2675a')}
-  if(r()<0.4&&G.bag.length<16){const lv=clamp(5+DIFF[df].lv+R.i(r,0,2),1,13);const it=genItem(r,lv,null,{minR:2,luck:2});it.id=rid();G.bag.push(it);dexItem(it);pickLog(itemName(it),RAR[it.r].hex)}
+  if(r()<0.4&&G.bag.length<bagCap()){const lv=clamp(5+DIFF[df].lv+R.i(r,0,2),1,13);const it=genItem(r,lv,null,{minR:2,luck:2});it.id=rid();G.bag.push(it);dexItem(it);pickLog(itemName(it),RAR[it.r].hex)}
   addXp(160+df*120);SAVE.st.rescues=(SAVE.st.rescues||0)+1;persist();
   banner('救出成功','遭難者を助け出した','#7cc47f');sfx('fanfare',0.6);addFeed('遭難者を救出した！');addText(v.x,v.y-34,'ありがとう！','#bff0c0',true);renderHud();
 }
@@ -4710,7 +4847,7 @@ function renderBM(el){
     else b=tile(e.it,{sel:i===G.loot.sel,onClick:()=>{G.loot.sel=i;renderLoot()}});
     if(i===G.loot.sel)b.classList.add('sel');if(sold){b.style.opacity=0.3}grid.appendChild(b)});
   left.appendChild(grid);const right=document.createElement('div');const e=st[G.loot.sel],sold=G.bmBought.has(G.loot.sel);
-  const buy=()=>{if(sold)return;if(e.it&&G.bag.length>=16){flashMsg('バッグがいっぱいです');return}if(e.pot&&G.potions+e.pot>9){flashMsg('回復薬はこれ以上持てません');return}if(!bmPay(e.price)){flashMsg('金貨が足りない（'+e.price.toLocaleString()+'G）');sfx('hurt',0.4);return}
+  const buy=()=>{if(sold)return;if(e.it&&G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです');return}if(e.pot&&G.potions+e.pot>9){flashMsg('回復薬はこれ以上持てません');return}if(!bmPay(e.price)){flashMsg('金貨が足りない（'+e.price.toLocaleString()+'G）');sfx('hurt',0.4);return}
     G.bmBought.add(G.loot.sel);if(e.it){const it=Object.assign({},e.it,{id:rid()});G.bag.push(it);dexItem(it);pickLog(itemName(it),RAR[it.r].hex)}else{G.potions+=e.pot;pickLog('回復薬 ×'+e.pot,'#e2675a')}sfx('coin');renderLoot();renderHud()};
   if(e.it){inspector(right,e.it,[{label:sold?'売り切れ':'購入 '+e.price.toLocaleString()+'G',fn:buy,cls:sold?'':'primary'}],G.equip[BASES[e.it.b].s],'装備中');if(e.ex){const n=document.createElement('p');n.className='hint';n.style.color='#ff8a9a';n.textContent='闇商人だけが扱う品';right.querySelector('.pw').after(n)}}
   else{right.innerHTML='<p>回復薬 ×'+e.pot+'</p><p class="hint">飲むと2.5秒かけてHP45回復。</p>';const a=document.createElement('div');a.className='acts';a.appendChild(armedBtn(sold?'売り切れ':'購入 '+e.price.toLocaleString()+'G',buy,sold?'':'primary'));right.appendChild(a)}
@@ -5107,6 +5244,7 @@ function chestLoot(c){
   if(r()<0.05+(c.boss?0.5:0))out.push({key:key+'.xgem',mat:mkey('gem',dropGrade(r,null)),n:c.boss?2:1});
   if((c.dg||0)>0.7&&r()<(c.boss?0.25:0.02)*(1+0.6*(G.diff||0)))out.push({key:key+'.rk',rkey:keyRoll(r,G.diff||0)});
   if(r()<(c.boss?0.35:0.05+0.04*(c.dg||0))){const rk=rcpRoll(r);if(rk)out.push({key:key+'.rc',rcp:rk})}
+  if(r()<(c.boss?0.1:0.01)){const l=clamp(1+Math.round((c.dg||0)*8)+DIFF[G.diff||0].lv,1,13);out.push({key:key+'.bp',it:genItem(r,l,null,{b:packRoll(r)})})}
   G.lootCache.set(key,out);return out;
 }
 function monLoot(m){
@@ -5169,7 +5307,7 @@ function takeLoot0(e){
   else if(e.pot){if(G.potions>=9){flashMsg('回復薬はこれ以上持てません');return false}G.potions=Math.min(9,G.potions+e.pot);sfx('loot')}
   else{
     if(e.grave){G.recovered.push(Object.assign({},e.it));G.taken.add(e.key);G.myTaken.push(e.key);sfx('loot');return true}
-    if(G.bag.length>=16){flashMsg('バッグがいっぱいです（Tabで整理）');return false}
+    if(G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです（Tabで整理）');return false}
     const it=Object.assign({},lootItem(e),{id:rid()});G.bag.push(it);sfx(it.r>=3?'rare':'loot');
     dexItem(it);
     if(it.r>=3){addFeed('★ '+RAR[it.r].n+'「'+itemName(it)+'」を拾った');banner(RAR[it.r].n+'！',itemName(it),RAR[it.r].hex);sfx('fanfare');shake(it.r===4?6:3);for(let i=0;i<24;i++)G.fx.push({t:'bit',x:G.me.x,y:G.me.y,vx:R.f(Math.random,-160,160),vy:R.f(Math.random,-200,60),life:0.9,max:0.9,col:RAR[it.r].hex})}
@@ -5217,7 +5355,7 @@ function renderLoot(){
   if(G.loot.src.type==='bm'){renderBM(el);return}
   const list=lootList(G.loot.src);
   el.hidden=false;el.innerHTML='';
-  const h=document.createElement('h2');h.innerHTML='<span>'+esc(G.loot.src.label||'戦利品')+'</span><span class="hint">バッグ '+G.bag.length+'/16</span>';h.appendChild(closeBtn(()=>{G.loot=null;renderLoot()}));el.appendChild(h);
+  const h=document.createElement('h2');h.innerHTML='<span>'+esc(G.loot.src.label||'戦利品')+'</span><span class="hint">バッグ '+G.bag.length+'/'+bagCap()+'</span>';h.appendChild(closeBtn(()=>{G.loot=null;renderLoot()}));el.appendChild(h);
   if(!list.length){G.loot=null;el.hidden=true;return}
   const cols=document.createElement('div');cols.className='cols';
   const left=document.createElement('div');left.style.display='grid';left.style.gap='10px';
@@ -5263,9 +5401,9 @@ function renderInv(){
   const sel=G.invSel;
   const eg=document.createElement('div');eg.className='eqgrid';
   for(const s of SLOTS){const c=document.createElement('div');c.className='eqcell';c.appendChild(tile(G.equip[s],{label:SLOTN[s],always:1,drag:{c:'R',where:'equip',slot:s},drop:{c:'R',where:'equip',slot:s},sel:sel&&sel.where==='equip'&&sel.slot===s,onClick:()=>{G.invSel={where:'equip',slot:s};renderInv()}}));const l=document.createElement('span');l.textContent=SLOTN[s];c.appendChild(l);eg.appendChild(c)}
-  const bt=document.createElement('h3');bt.textContent='バッグ '+G.bag.length+'/16';
+  const bt=document.createElement('h3');bt.textContent='バッグ '+G.bag.length+'/'+bagCap()+(G.bag.length>bagCap()?'（重すぎる！足が遅い）':'');
   const bg=document.createElement('div');bg.className='grid';
-  for(let i=0;i<16;i++)bg.appendChild(tile(G.bag[i]||null,{drag:{c:'R',where:'bag',i},drop:{c:'R',where:'bag',i:G.bag[i]?i:null},sel:sel&&sel.where==='bag'&&sel.i===i,onClick:()=>{G.invSel={where:'bag',i};renderInv()}}));
+  for(let i=0;i<Math.max(bagCap(),G.bag.length);i++)bg.appendChild(tile(G.bag[i]||null,{drag:{c:'R',where:'bag',i},drop:{c:'R',where:'bag',i:G.bag[i]?i:null},sel:sel&&sel.where==='bag'&&sel.i===i,onClick:()=>{G.invSel={where:'bag',i};renderInv()}}));
   const pt=document.createElement('h3');pt.textContent='セーフポーチ（死んでも残る）';
   const pw=document.createElement('div');pw.style.width='56px';pw.appendChild(tile(SAVE.pouch,{label:'空',drag:{c:'R',where:'pouch'},drop:{c:'R',where:'pouch'},sel:sel&&sel.where==='pouch',onClick:()=>{G.invSel={where:'pouch'};renderInv()}}));
   {const ct=document.createElement('h3');ct.textContent='道具（押すと使う）';const cg=document.createElement('div');cg.className='kitgrid';
@@ -5287,10 +5425,10 @@ function renderInv(){
       acts.push({label:SAVE.pouch?'ポーチと入れ替え':'ポーチへ',fn:()=>{const old=SAVE.pouch;SAVE.pouch=it;if(old)G.bag[sel.i]=old;else G.bag.splice(sel.i,1);persist();G.invSel={where:'pouch'};renderInv()}});
       acts.push({label:'捨てる',fn:()=>{G.bag.splice(sel.i,1);G.invSel=null;renderInv()},cls:'danger'});
     }else if(sel.where==='equip'){
-      acts.push({label:'外してバッグへ',fn:()=>{if(G.bag.length>=16){flashMsg('バッグがいっぱいです');return}G.equip[slot]=null;G.bag.push(it);restat();G.invSel={where:'bag',i:G.bag.length-1};renderInv()}});
-      acts.push({label:'ポーチへ',fn:()=>{const old=SAVE.pouch;SAVE.pouch=it;G.equip[slot]=null;if(old){if(G.bag.length<16)G.bag.push(old);else{SAVE.pouch=old;G.equip[slot]=it;flashMsg('バッグがいっぱいです');return}}restat();persist();G.invSel={where:'pouch'};renderInv()}});
+      acts.push({label:'外してバッグへ',fn:()=>{if(G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです');return}G.equip[slot]=null;G.bag.push(it);restat();G.invSel={where:'bag',i:G.bag.length-1};renderInv()}});
+      acts.push({label:'ポーチへ',fn:()=>{const old=SAVE.pouch;SAVE.pouch=it;G.equip[slot]=null;if(old){if(G.bag.length<bagCap())G.bag.push(old);else{SAVE.pouch=old;G.equip[slot]=it;flashMsg('バッグがいっぱいです');return}}restat();persist();G.invSel={where:'pouch'};renderInv()}});
     }else{
-      acts.push({label:'バッグへ出す',fn:()=>{if(G.bag.length>=16){flashMsg('バッグがいっぱいです');return}G.bag.push(it);SAVE.pouch=null;persist();G.invSel={where:'bag',i:G.bag.length-1};renderInv()}});
+      acts.push({label:'バッグへ出す',fn:()=>{if(G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです');return}G.bag.push(it);SAVE.pouch=null;persist();G.invSel={where:'bag',i:G.bag.length-1};renderInv()}});
       acts.push({label:'装備する',fn:()=>{const old=G.equip[slot];G.equip[slot]=it;SAVE.pouch=old||null;restat();persist();G.invSel={where:'equip',slot};renderInv()},cls:'primary'});
     }
     {const fc=fieldRepairCost(it);if(fc){const ok=fieldCanPay(fc);acts.unshift({label:'応急修理（耐久+'+fc.add+' · '+Object.entries(fc.m).map(([k,n])=>MATS[k].n+'×'+n).join('・')+'）',fn:()=>{if(fieldRepair(it)){restat();renderInv();renderHud()}},cls:ok?'primary':''})}}
@@ -5327,15 +5465,15 @@ function die(killer,mia){
   const all=[];for(const s of SLOTS)if(G.equip[s])all.push(G.equip[s]);all.push(...G.bag,...G.recovered);
   const insured=all.filter(it=>it.ins),plain=all.filter(it=>!it.ins);
   const solo=!mia&&G.remote.size===0;
-  if(insured.length){G.claimRef={items:insured.map(it=>Object.assign({},it)),at:Date.now()+INS_MS};SAVE.claims.push(G.claimRef)}
+  if(insured.length){G.claimRef={items:insured.slice(0,48).map(it=>Object.assign({},it)),at:Date.now()+INS_MS};SAVE.claims.push(G.claimRef)}
   if(!mia&&!solo){
-    const list=all.slice(0,24);
+    const list=all.slice(0,44);
     G.corpse={x:Math.round(me.x),y:Math.round(me.y),it:list.map(encItem),g:G.gold,p:G.potions,mt:G.mats};
     if(G.claimRef)G.claimCi=G.claimRef.items.map(it=>list.findIndex(x=>x.id===it.id));
     pushEv('die',killer||'');
   }else if(solo){G.corpse={x:Math.round(me.x),y:Math.round(me.y),it:[],g:0,p:0}}
   const hasMats=Object.values(G.mats).some(n=>n>0);
-  SAVE.lost=(plain.length||G.gold||hasMats)?{items:plain.map(it=>Object.assign({},it)),gold:G.gold,potions:G.potions,mats:solo?Object.assign({},G.mats):null,seed:G.seed,x:Math.round(me.x),y:Math.round(me.y),solo,t:Date.now()}:null;
+  SAVE.lost=(plain.length||G.gold||hasMats)?{items:plain.slice(0,48).map(it=>Object.assign({},it)),gold:G.gold,potions:G.potions,mats:solo?Object.assign({},G.mats):null,seed:G.seed,x:Math.round(me.x),y:Math.round(me.y),solo,t:Date.now()}:null;
   addFeed(killer?killer+' に倒された':'力尽きた');
   SAVE.st.deaths++;SAVE.inRaid=null;if(String(killer||'').includes('ミミック'))unlockAch('mimic');persist();
   sfx('die');
@@ -5389,7 +5527,7 @@ function bossWin(){
 function bossFail(wipe){
   if(G.done)return;G.done=true;const me=G.me;
   const all=[];for(const s of SLOTS)if(G.equip[s])all.push(G.equip[s]);all.push(...G.bag);
-  const insured=all.filter(it=>it.ins);if(insured.length)SAVE.claims.push({items:insured.map(it=>Object.assign({},it)),at:Date.now()+INS_MS});
+  const insured=all.filter(it=>it.ins);if(insured.length)SAVE.claims.push({items:insured.slice(0,48).map(it=>Object.assign({},it)),at:Date.now()+INS_MS});
   SAVE.st.deaths++;SAVE.inRaid=null;persist();sendPresence();sfx('die');
   showEnd(false,wipe?'全滅':'時間切れ',wipe?'全員の残機が尽きた。持ち込んだ装備は失われた。':'ボスを倒しきれなかった。持ち込んだ装備は失われた。',all.length,0,insured.length?'<p class="hint" style="color:var(--acc)">保険付き '+insured.length+'点 は3分後に倉庫へ戻る。</p>':'');
 }
@@ -5451,7 +5589,7 @@ function update(dt){
     for(const k of ['skCd','buffD','buffA','buffS','smokeT','stunT'])if(G[k]>0)G[k]-=dt;
     if(G.smokeT<=0&&G.smokeOn){G.smokeOn=false}if(G.smokeT>0)G.smokeOn=true;
     if(G.drinkT>0){G.drinkT-=dt;if(G.drinkT<=0){G.potT=2.5;flashMsg('回復中…（少し足が遅くなる）')}}
-    let sp=s.speed*(G.sneak?0.55:1)*(G.drinkT>0?0.45:G.potT>0?0.72:1)*(G.sSlow>0?0.65:1)*(G.buffS>0?1.25:1)*(G.stunT>0?0:1)*(G.rootT>0?0:1);
+    let sp=s.speed*(G.sneak?0.55:1)*(G.drinkT>0?0.45:G.potT>0?0.72:1)*(G.sSlow>0?0.65:1)*(G.buffS>0?1.25:1)*(G.bag.length>bagCap()?0.7:1)*(G.stunT>0?0:1)*(G.rootT>0?0:1);
     if(G.kb&&G.kb.t>0){const f=G.kb.t/G.kb.T;moveCirc(me,G.kb.vx*f*dt,G.kb.vy*f*dt,PR);G.kb.t-=dt}
     if(G.dodgeT>0){moveCirc(me,G.dodgeDir[0]*s.speed*2.9*dt,G.dodgeDir[1]*s.speed*2.9*dt,PR)}
     else moveCirc(me,mx*sp*dt,my*sp*dt,PR);
@@ -5628,7 +5766,9 @@ const COS=[
   {id:'a_star',s:'aura',n:'星の加護',r:3,drop:1,lv:45},{id:'sk_mythic',s:'skin',n:'神話',r:3,c:['#3a1a5a','#ffd36b'],pat:'shine',drop:1,lv:70},{id:'sk_dawn',s:'skin',n:'暁',r:3,c:['#ff9a5a','#fff2c0'],pat:'shine',drop:1,lv:100},{id:'a_ancient',s:'aura',n:'古の灯',r:3,drop:1,secret:1},{id:'c_abyss',s:'cape',n:'深淵の外套',r:3,c:'#1a0e2a',trim:'#b876f2',drop:1},{id:'h_dhorn',s:'hat',n:'竜の角',r:3,drop:1},
 ];
 const COSI={};COS.forEach((c,i)=>COSI[c.id]=i);
-function eqIdx(e){return ['head','chest','feet'].map(s=>e&&e[s]?e[s].b:-1)}
+function eqIdx(e){return ['head','chest','feet','back'].map(s=>e&&e[s]?e[s].b:-1)}
+const PACKV={satchel:['#7a5636',0],rucksack:['#6a4628',0.4],framepack:['#5e5a40',0.7],peddler:['#7a6a44',1],scoutpack:['#3a6a52',0.25],wyrmpack:['#8a2a24',0.85],voidpack:['#4a2a7a',1]};
+const packOf=eq=>{const b=eq&&eq[3]>=0&&BASES[eq[3]];return b&&PACKV[b.k]?PACKV[b.k]:null};
 function cosIdx(){const e=(SAVE&&SAVE.cos&&SAVE.cos.eq)||{};return COS_SLOTS.map(s=>e[s]!=null&&COSI[e[s]]!=null?COSI[e[s]]:-1)}
 function drawCape(c,a,tn,moving){
   if(!c)return;
@@ -5749,7 +5889,7 @@ function drawPlayer(x,y,a,col,wk,wr,dodge,alpha,name,hpPct,friend,cs,moving,op){
   const boot=feetK==='greaves'?'#8a8f96':feetK==='beastboots'?'#7a5a3a':feetK==='boots'?'#5a3e24':'#3a2c20';
   ctx.fillStyle=boot;ctx.beginPath();ctx.ellipse(wf*6,-4.6,4.4,2.7,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(-wf*6,4.6,4.4,2.7,0,0,Math.PI*2);ctx.fill();
   // backpack
-  ctx.fillStyle='#5e4228';ctx.beginPath();ctx.roundRect(-13,-6,6,12,2);ctx.fill();ctx.fillStyle='#7a5636';ctx.fillRect(-12.5,-5,5,3);
+  {const pk=packOf(eq);if(pk){const z=pk[1],w=6+z*5,h=12+z*6;ctx.fillStyle=pk[0];ctx.beginPath();ctx.roundRect(-13-z*4,-h/2,w,h,2);ctx.fill();ctx.fillStyle='rgba(255,255,255,.18)';ctx.fillRect(-12.5-z*4,-h/2+1,w-1,3);if(z>=0.4){ctx.fillStyle='#7a6a4a';ctx.fillRect(-14-z*4,-h/2-1,3,h+2)}}else{ctx.fillStyle='#5e4228';ctx.beginPath();ctx.roundRect(-11,-4,4,8,2);ctx.fill()}}
   ctx.restore();
   drawCape(cape,a,tn,moving);
   ctx.save();ctx.rotate(a);
@@ -6186,17 +6326,19 @@ function render(){
 const BOTNAMES=['たける','ゆうと','Kaito','みかん','ぽてと','shiro','くろねこ','Ren','あおい','そら','ハル','nagi','こてつ','りく','ゆず','mochi','kuro','タロウ','ひなた','ねむ','Yuki','とうふ','さくら','zero','ルカ','しゅん','ayaka','もぶ','おでん','Leo','かげ','ミナト','sora_7','つばさ','ぎん','hiro','あめ','ponta','レイ','ゆきむら','いちご','Taiga','ちくわ','セナ','gin','はやて','らむね','kotaro','ナギ','ぺんぎん'];
 function botName(r){if(r()<0.38)return '冒険者'+R.i(r,100,999);let n=R.pick(r,BOTNAMES);if(r()<0.25)n+=R.i(r,1,99);return n}
 function setupBots(map,seed,df){
-  const h=hashStr(seed+':bot')%1000;if(h>=(df>=2?300:df>=1?240:190))return;
-  const r=rngFrom((seed^0xb07b07)>>>0),n=r()<0.16?2:1;
+  const h=hashStr(seed+':bot')%1000;if(h>=(df>=2?120:df>=1?95:70))return;
+  const r=rngFrom((seed^0xb07b07)>>>0),n=r()<0.06?2:1;
   const rooms=map.rooms.filter(o=>!o.boss&&!o.spawn&&!o.lair&&o.w>=4&&o.h>=4),SP=map.spawns||[];if(!rooms.length)return;
   const W=BASES.map((b,i)=>[b,i]),pickB=sl=>{const c=W.filter(([b])=>b.s===sl&&!b.bm&&(!b.craft||r()<0.25));return c.length?R.pick(r,c)[1]:-1};
   for(let k=0;k<n;k++){
-    const order=rooms.map(o=>{const cx=(o.x+o.w/2)*TS,cy=(o.y+o.h/2)*TS;let md=1e9;for(const p of SP)md=Math.min(md,Math.hypot(p.x-cx,p.y-cy));return {o,sc:Math.min(md,2600)*(0.5+r())}}).sort((a,b)=>b.sc-a.sc);
+    const md0=rooms.map(o=>{const cx=(o.x+o.w/2)*TS,cy=(o.y+o.h/2)*TS;let md=1e9;for(const p of SP)md=Math.min(md,Math.hypot(p.x-cx,p.y-cy));return {o,md}}),far=Math.max(...md0.map(x=>x.md));
+    const order=md0.filter(x=>x.md>=Math.min(1100,far*0.93)).map(x=>({o:x.o,sc:x.md*(0.85+0.3*r())})).sort((a,b)=>b.sc-a.sc);if(!order.length)return;
     const o=order[Math.min(order.length-1,k)].o;let x=0,y=0;for(let t=0;t<30;t++){const tx=R.i(r,o.x+1,o.x+o.w-2),ty=R.i(r,o.y+1,o.y+o.h-2);if(map.t[ty*MW+tx]===1){x=tx*TS+16;y=ty*TS+16;break}}if(!x)continue;
     for(const mo of G.mons)if(!mo.dead&&!mo.sl&&mo.k!=='boss'&&mo.k!=='dragon'&&mo.k!=='mimic'&&Math.hypot(mo.x-x,mo.y-y)<260){mo.dead=true;mo.gone=true;mo.hp=0}   // they already cleared the room they're in
     const lv=clamp(3+DIFF[df].lv*2+R.i(r,0,4),1,13),eq=emptyEquip();
     eq.weapon=genItem(r,lv,null,{b:pickB('weapon')});
     for(const sl of ['head','chest','hands','feet','ring'])if(r()<(sl==='ring'?0.45:0.82)){const b=pickB(sl);if(b>=0)eq[sl]=genItem(r,clamp(lv+R.i(r,-2,1),1,13),null,{b})}
+    if(r()<0.7+0.08*df)eq.back=genItem(r,clamp(lv+R.i(r,-2,1),1,13),null,{b:df>=2&&r()<0.3?BI.peddler:packRoll(r)});
     const st=calcStats(eq),name=botName(r),plv=clamp(2+df*6+R.i(r,0,12),1,60);
     const cosOf=s=>{const c=COS.map((o,i)=>[o,i]).filter(([o])=>o.s===s&&!o.drop);return c.length?R.pick(r,c)[1]:-1};
     const cs=[r()<0.45?cosOf('skin'):-1,r()<0.3?cosOf('hat'):-1,r()<0.22?cosOf('cape'):-1,r()<0.1?cosOf('aura'):-1];
@@ -6394,7 +6536,7 @@ const NODE_OFS=30000;
 const NODEN={ore:'鉱脈',tree:'木',herb:'薬草',fish:'釣り場'};
 function placeNodes(map,seed){
   const r=rngFrom((seed^0x6e0de5)>>>0),t=map.t,b=map.biome,open=isOpenB(b),out=[];
-  const C={ore:{mine:9,dungeon:3,crypt:2,ruins:4,town:2,forest:1,swamp:1,desert:9,meadow:3,river:4,coast:3},tree:{forest:9,swamp:5,meadow:14,river:11,coast:7,desert:3},herb:{forest:7,swamp:8,mine:3,dungeon:2,crypt:2,ruins:2,town:2,meadow:13,river:9,coast:6,desert:7},fish:{forest:3,swamp:5,meadow:8,river:14,coast:14,desert:3}};
+  const C={ore:{mine:9,dungeon:3,crypt:2,ruins:4,town:2,forest:1,swamp:1},tree:{forest:9,swamp:5},herb:{forest:7,swamp:8,mine:3,dungeon:2,crypt:2,ruins:2,town:2,meadow:13,river:9,coast:6,desert:7},fish:{forest:3,swamp:5,meadow:8,river:14,coast:14,desert:3}};
   const far=(x,y,d)=>!out.some(o=>Math.hypot(o.x-x,o.y-y)<d)&&!map.chests.some(c=>Math.hypot(c.x-x,c.y-y)<50)&&!map.spawns.some(p=>Math.hypot(p.x-x,p.y-y)<110)&&!map.exts.some(e=>Math.hypot(e.x-x,e.y-y)<80);
   const at=(x,y)=>x<0||y<0||x>=MW||y>=MH?0:t[y*MW+x];
   for(const k of ['ore','tree','herb','fish']){const n=(C[k][b]||0);let got=0;
@@ -6402,28 +6544,33 @@ function placeNodes(map,seed){
       if(k==='fish'){if(v!==2)continue;if(![[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>at(x+dx,y+dy)===1))continue}
       else{if(v!==1)continue;if(k==='ore'&&![[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>at(x+dx,y+dy)===0))continue}
       const px=x*TS+16,py=y*TS+16;if(!far(px,py,k==='fish'?90:70))continue;out.push({id:out.length,k,x:px,y:py});got++}}
+  if(open)for(const o of map.obs||[]){if(o.rim||o.k==='stone')continue;o.nid=out.length;out.push({id:out.length,k:o.k==='rock'?'rock':o.k==='cactus'?'cactus':'tree',sub:o.k,x:o.x,y:o.y,obs:1})}
   return out;
 }
 const nodeDone=i=>G.opened.has(NODE_OFS+i);
-function nodeLabel(n){return n.k==='ore'?'鉱脈（採掘）':n.k==='tree'?'木（伐採）':n.k==='herb'?(G.map.biome==='desert'?'香草（採集）':'薬草（採集）'):'釣り場（釣り）'}
-function nodeDur(n){return n.k==='ore'?2.2:n.k==='tree'?1.8:n.k==='herb'?1.0:(2+((hashStr(G.rid+':'+n.id+':'+(G.fishN||0))%250)/100))}
+function nodeLabel(n){return n.k==='ore'?'鉱脈（採掘）':n.k==='rock'?'岩（採掘）':n.k==='cactus'?'サボテン（採集）':n.sub==='palm'?'ヤシの木（伐採）':n.k==='tree'?'木（伐採）':n.k==='herb'?(G.map.biome==='desert'?'香草（採集）':'薬草（採集）'):'釣り場（釣り）'}
+function nodeDur(n){return n.k==='rock'?2.0:n.k==='cactus'?1.2:n.k==='ore'?2.2:n.k==='tree'?1.8:n.k==='herb'?1.0:(2+((hashStr(G.rid+':'+n.id+':'+(G.fishN||0))%250)/100))}
 // what a spot gives
 function gatherDone(n){
   if(nodeDone(n.id))return;G.opened.add(NODE_OFS+n.id);G.myOpened.push(NODE_OFS+n.id);
   const r=Math.random,df=G.diff||0,b=G.map.biome,give=(id,cnt)=>{if(!MATS[id]||cnt<=0)return;const q=MATS[id].cook?0:(df>=2&&r()<0.3?1:0),k=mkey(id,q);G.mats[k]=(G.mats[k]||0)+cnt;pickLog(MATS[k].n+' ×'+cnt,RAR[MATS[k].r].hex)};
   if(n.k==='ore'){give('coal',R.i(r,1,3));if(r()<0.55)give('iron',R.i(r,1,2));if(r()<0.3+df*0.08)give('ore',1);if(r()<0.1)give('gem',1);if((b==='desert'||b==='ruins'||b==='mine')&&r()<0.05)give('obsidian',1);sfx('hit')}
+  else if(n.k==='rock'){give('coal',R.i(r,0,2));if(r()<0.5)give('iron',1);if(r()<0.15+df*0.05)give('ore',1);if(r()<0.06)give('gem',1);if(b==='desert'&&r()<0.04)give('obsidian',1);if(!G.mats.coal&&!G.mats.iron)give('coal',1);sfx('hit')}
+  else if(n.k==='cactus'){give('herb',1);if(r()<0.35)give('spice',1);if(r()<0.3)give('berry',1);sfx('loot')}
+  else if(n.k==='tree'&&n.sub==='palm'){give('wood',R.i(r,1,2));give('berry',R.i(r,1,2));sfx('hit')}
+  else if(n.k==='tree'&&n.obs){give('wood',R.i(r,1,3));if(r()<0.15)give('moss',1);if((b==='meadow'||b==='river')&&r()<0.35)give('berry',1);if(b==='meadow'&&r()<0.1)give('honey',1);sfx('hit')}
   else if(n.k==='tree'){give('wood',R.i(r,2,4));if(r()<0.2)give('moss',1);if((b==='meadow'||b==='forest'||b==='river')&&r()<0.4)give('berry',R.i(r,1,2));if(b==='meadow'&&r()<0.14)give('honey',1);if(b==='coast'&&r()<0.3)give('berry',1);sfx('hit')}
   else if(n.k==='herb'){if(b==='desert'){give('spice',R.i(r,1,2));if(r()<0.4)give('herb',1)}else{give('herb',R.i(r,1,2));if(['dungeon','crypt','mine','forest','swamp'].includes(b)||r()<0.3)give('mush',R.i(r,0,2))}if(r()<0.25)give('berry',1);if(b==='swamp'&&r()<0.3)give('venom',1);sfx('loot')}
   else{G.fishN=(G.fishN||0)+1;const x=r();
     if(x<0.03){const rk=rcpRoll(r);if(rk){G.rcpGot.push(rk);pickLog('レシピ：'+rcpName(rk),'#ffd36b');banner('レシピを釣り上げた！',rcpName(rk),'#ffd36b');sfx('rare')}}
-    else if(x<0.09){if(G.bag.length<16){const it=genItem(r,clamp(3+DIFF[df].lv+R.i(r,0,3),1,13),null,{});it.id=rid();G.bag.push(it);dexItem(it);pickLog('釣り上げた：'+itemName(it),RAR[it.r].hex);sfx('rare')}else give('fish',1)}
+    else if(x<0.09){if(G.bag.length<bagCap()){const it=genItem(r,clamp(3+DIFF[df].lv+R.i(r,0,3),1,13),null,{});it.id=rid();G.bag.push(it);dexItem(it);pickLog('釣り上げた：'+itemName(it),RAR[it.r].hex);sfx('rare')}else give('fish',1)}
     else if(x<0.13){const g=R.i(r,20,80)*(1+df);G.gold+=g;pickLog('沈んでいた金貨 '+g+'G','#e4b450');sfx('coin')}
     else{const gold=r()<0.025+df*0.01;const sea=b==='coast';const kind=gold?'gfish':sea?(r()<0.35?'tuna':r()<0.4?'shell':'fish'):(r()<0.32?'salmon':'fish');give(kind,1);if(kind==='gfish'){banner('黄金魚！','めったに釣れない幻の魚','#ffd36b');sfx('fanfare',0.6)}else sfx('loot')}}
   addText(n.x,n.y-26,n.k==='fish'?'釣れた！':'採れた','#bff0c0');renderHud();
 }
 function drawNodes(tn,x0,y0,x1,y1){
   const N=G.map.nodes||[];
-  for(const n of N){if(n.x<x0-40||n.x>x1+40||n.y<y0-40||n.y>y1+40)continue;if(!exploredAt(n.x,n.y)&&!visAt(n.x,n.y))continue;const done=nodeDone(n.id),x=n.x,y=n.y;
+  for(const n of N){if(n.obs||n.x<x0-40||n.x>x1+40||n.y<y0-40||n.y>y1+40)continue;if(!exploredAt(n.x,n.y)&&!visAt(n.x,n.y))continue;const done=nodeDone(n.id),x=n.x,y=n.y;
     if(n.k==='fish'){if(done)continue;ctx.save();for(let i=0;i<3;i++){const ph=((tn*0.6+i/3+n.id*0.37)%1);ctx.strokeStyle='rgba(235,250,255,'+(0.75*(1-ph))+')';ctx.lineWidth=1.6;ctx.beginPath();ctx.ellipse(x,y,4+ph*14,2.5+ph*8,0,0,Math.PI*2);ctx.stroke()}
       for(let i=0;i<4;i++){const a=tn*3+i*1.57+n.id;ctx.fillStyle='rgba(255,255,255,.8)';ctx.fillRect(x+Math.cos(a)*6,y+Math.sin(a)*3-Math.abs(Math.sin(tn*4+i))*3,1.6,1.6)}ctx.restore();continue}
     const glint=()=>{const p=0.5+0.5*Math.sin(now()*3+n.id);ctx.fillStyle='rgba(200,255,190,'+(0.35+p*0.5)+')';ctx.beginPath();ctx.arc(x,y-(V3.cap?4:24)-p*3,2.4,0,7);ctx.fill()};
@@ -6558,19 +6705,12 @@ function openPaint(g,map,r){
    // fences and sign posts along the roads
    for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){const k=y*MW+x;if(road[k]!==1||T(x,y)!==1)continue;if(r()<0.025){const px=x*TS+R.f(r,2,30),py=y*TS+R.f(r,2,30);g.fillStyle='rgba(0,0,0,.25)';g.fillRect(px-1,py+2,4,3);g.fillStyle='#6a4a2a';g.fillRect(px-1.5,py-10,3,12);g.fillStyle='#a07a48';g.fillRect(px-7,py-11,14,5);g.fillStyle='#5a3a20';g.fillRect(px-5,py-9,10,1)}
      else if(r()<0.04&&road[k-1]!==1&&T(x-1,y)===1){const px=x*TS-2;g.fillStyle='#7a5a34';for(let i=0;i<3;i++)g.fillRect(px,y*TS+i*11+2,3,8);g.fillRect(px-1,y*TS+4,5,2);g.fillRect(px-1,y*TS+18,5,2)}}}
-  // obstacles: rocks, trees, cacti, palms are drawn live (2D) or as real models (3D); only their shadows go on the ground.
-  // the outer rim is thick woods / cliffs; huts, tents and graves stay as raised blocks
-  const obs=[],nat=new Uint8Array(MW*MH),pm=new Uint8Array(MW*MH),pmark=(x,y)=>{if(inb(x,y))pm[y*MW+x]=1};
-  for(const p of map.pieces||[]){if(p.k==='hut'||p.k==='meadow'){for(let y=p.y;y<p.y+(p.h||1);y++)for(let x=p.x;x<p.x+(p.w||1);x++)pmark(x,y)}else if(p.k==='prison'){for(let y=p.y;y<p.y+3;y++)for(let x=p.x;x<p.x+p.n*3;x++)pmark(x,y)}else if(p.st)for(const [x,y] of p.st)pmark(x,y);else if(p.tents)for(const [x,y] of p.tents){pmark(x,y);pmark(x+1,y);pmark(x,y+1);pmark(x+1,y+1)}else if(p.k==='shrine')pmark(p.x,p.y)}
-  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const k0=y*MW+x;if(t[k0]!==0||pm[k0])continue;let adj=false;for(let dy=-2;dy<=2&&!adj;dy++)for(let dx=-2;dx<=2;dx++)if(T(x+dx,y+dy)!==0){adj=true;break}
-    const rim=!inside(x,y),h=hv(x,y,'o');
-    if(!adj){if(bio!=='desert'&&h<0.7)circ(x*TS+16,y*TS+16,R.f(r,14,20),pick(['#356a2c','#2f6228','#3a7230']));continue}
-    const boss=(map.rooms||[]).some(o=>o.boss&&x>=o.x-1&&x<=o.x+o.w&&y>=o.y-1&&y<=o.y+o.h);
-    let k;if(boss)k='stone';else if(bio==='desert')k=rim?'cliff':h<0.62?'rock':'cactus';else if(bio==='coast')k=rim?'tree':sandy(x,y)?(h<0.6?'palm':'rock'):(h<0.7?'tree':'rock');else if(bio==='river')k=rim?'tree':h<0.62?'tree':'rock';else k=rim?'tree':h<0.8?'tree':'rock';
-    if(k==='cliff'){g.fillStyle='#a8784c';g.fillRect(x*TS,y*TS,TS,TS);circ(x*TS+16,y*TS+14,15,'#b98a5a');circ(x*TS+11,y*TS+9,8,'#cc9e6a');continue}
-    nat[k0]=1;const o={x:x*TS+16+(hv(x,y,'jx')-0.5)*6,y:y*TS+16+(hv(x,y,'jy')-0.5)*6,k,h,id:k0};obs.push(o);
-    const big=k==='tree'||k==='palm';ell(o.x+6,o.y+8,big?17:12,big?10:7,0,'rgba(20,30,10,.3)')}
-  obs.sort((a,b)=>a.y-b.y);map.obs=obs;map.nat=nat;
+  // obstacles (worked out with the map): only their shadows go on the ground; cliffs and the deep woods are painted here
+  if(!map.obs)openObs(map);
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const k0=y*MW+x;if(t[k0]!==0||map.nat[k0]||map.pm[k0])continue;
+    if(map.cliff[k0]){g.fillStyle='#a8784c';g.fillRect(x*TS,y*TS,TS,TS);circ(x*TS+16,y*TS+14,15,'#b98a5a');circ(x*TS+11,y*TS+9,8,'#cc9e6a');continue}
+    if(bio!=='desert'&&hv(x,y,'o')<0.7)circ(x*TS+16,y*TS+16,R.f(r,14,20),pick(['#356a2c','#2f6228','#3a7230']))}
+  for(const o of map.obs){const big=o.k==='tree'||o.k==='palm';ell(o.x+6,o.y+8,big?17:12,big?10:7,0,'rgba(20,30,10,.3)')}
   // a few haystacks / wells / crates near the clearings (just decoration on the ground)
   for(const o of map.rooms||[]){if(o.boss||r()>0.35)continue;const x=Math.round(o.cx+R.f(r,-3,3)),y=Math.round(o.cy+R.f(r,-3,3));if(T(x,y)!==1||road[y*MW+x])continue;if(Math.abs(x-o.cx)<1.5&&Math.abs(y-o.cy)<1.5)continue;const px=x*TS+16,py=y*TS+16;
     if(bio==='desert'){ell(px+4,py+5,12,6,0,'rgba(0,0,0,.25)');g.fillStyle='#7a5a3a';g.fillRect(px-10,py-6,20,12);g.fillStyle='#9a7a4a';g.fillRect(px-10,py-6,20,3);g.fillStyle='#b8925c';g.fillRect(px-2,py-6,4,12)}
@@ -6578,6 +6718,24 @@ function openPaint(g,map,r){
     else{circ(px,py,10,'#7a7a74');circ(px,py,7,'#2a5a78');circ(px-2,py-2,2,'rgba(255,255,255,.5)');g.fillStyle='#6a4a2a';g.fillRect(px-11,py-14,3,10);g.fillRect(px+8,py-14,3,10);g.fillRect(px-11,py-15,22,3)}}
   // the guardian's clearing: a ring of old standing stones and a little glow
   {const bo=(map.rooms||[])[0];if(bo){const gr=g.createRadialGradient(bo.cx*TS,bo.cy*TS,10,bo.cx*TS,bo.cy*TS,170);gr.addColorStop(0,'rgba(255,240,180,.22)');gr.addColorStop(1,'rgba(255,240,180,0)');g.fillStyle=gr;g.fillRect(bo.cx*TS-170,bo.cy*TS-170,340,340)}}
+}
+// which blocked tiles of an open map are trees / rocks / cacti / palms (same on every device)
+function openObs(map){
+  const t=map.t,bio=map.biome,bb=map.bb||{x0:0,y0:0,S:MW};
+  const inb=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH,T=(x,y)=>inb(x,y)?t[y*MW+x]:0,inside=(x,y)=>x>bb.x0&&y>bb.y0&&x<bb.x0+bb.S-1&&y<bb.y0+bb.S-1;
+  const hv=(x,y,k)=>(hashStr(x+','+y+':'+k+':'+map.seed)%1000)/1000;
+  const vn=(x,y,s,k)=>{const gx=Math.floor(x/s),gy=Math.floor(y/s),fx=x/s-gx,fy=y/s-gy,sm=v=>v*v*(3-2*v),a=hv(gx,gy,k),b=hv(gx+1,gy,k),c=hv(gx,gy+1,k),d=hv(gx+1,gy+1,k),u=sm(fx),v=sm(fy);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v};
+  const dW=new Uint8Array(MW*MH).fill(9);{const q=[];for(let k=0;k<MW*MH;k++)if(t[k]===2){dW[k]=0;q.push(k)}for(let h=0;h<q.length;h++){const k=q[h];if(dW[k]>=6)continue;for(const d of [1,-1,MW,-MW]){const n=k+d;if(n<0||n>=MW*MH)continue;if(dW[n]>dW[k]+1){dW[n]=dW[k]+1;q.push(n)}}}}
+  const sandy=(x,y)=>bio==='coast'?dW[y*MW+x]<=3+(vn(x,y,5,'sb')*2|0):bio==='river'?dW[y*MW+x]<=1:false;
+  const obs=[],nat=new Uint8Array(MW*MH),pm=new Uint8Array(MW*MH),cliff=new Uint8Array(MW*MH),pmark=(x,y)=>{if(inb(x,y))pm[y*MW+x]=1};
+  for(const p of map.pieces||[]){if(p.k==='hut'||p.k==='meadow'){for(let y=p.y;y<p.y+(p.h||1);y++)for(let x=p.x;x<p.x+(p.w||1);x++)pmark(x,y)}else if(p.k==='prison'){for(let y=p.y;y<p.y+3;y++)for(let x=p.x;x<p.x+p.n*3;x++)pmark(x,y)}else if(p.st)for(const [x,y] of p.st)pmark(x,y);else if(p.tents)for(const [x,y] of p.tents){pmark(x,y);pmark(x+1,y);pmark(x,y+1);pmark(x+1,y+1)}else if(p.k==='shrine')pmark(p.x,p.y)}
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const k0=y*MW+x;if(t[k0]!==0||pm[k0])continue;let adj=false;for(let dy=-2;dy<=2&&!adj;dy++)for(let dx=-2;dx<=2;dx++)if(T(x+dx,y+dy)!==0){adj=true;break}
+    if(!adj)continue;const rim=!inside(x,y),h=hv(x,y,'o');
+    const boss=(map.rooms||[]).some(o=>o.boss&&x>=o.x-1&&x<=o.x+o.w&&y>=o.y-1&&y<=o.y+o.h);
+    let k;if(boss)k='stone';else if(bio==='desert')k=rim?'cliff':h<0.62?'rock':'cactus';else if(bio==='coast')k=rim?'tree':sandy(x,y)?(h<0.6?'palm':'rock'):(h<0.7?'tree':'rock');else if(bio==='river')k=rim?'tree':h<0.62?'tree':'rock';else k=rim?'tree':h<0.8?'tree':'rock';
+    if(k==='cliff'){cliff[k0]=1;continue}
+    nat[k0]=1;obs.push({x:x*TS+16+(hv(x,y,'jx')-0.5)*6,y:y*TS+16+(hv(x,y,'jy')-0.5)*6,k,h,id:k0,rim})}
+  obs.sort((a,b)=>a.y-b.y);map.obs=obs;map.nat=nat;map.pm=pm;map.cliff=cliff;
 }
 function mixHex(a,b,f){const pa=[1,3,5].map(i=>parseInt(a.slice(i,i+2),16)),pb=[1,3,5].map(i=>parseInt(b.slice(i,i+2),16));return '#'+pa.map((v,i)=>Math.round(v+(pb[i]-v)*f).toString(16).padStart(2,'0')).join('')}
 // a bright little landscape for the 探索 card on the map picker
@@ -6607,6 +6765,7 @@ function drawObs(x0,y0,x1,y1){
   const circ=(x,y,r,col)=>{c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill()},ell=(x,y,rx,ry,rot,col)=>{c.fillStyle=col;c.beginPath();c.ellipse(x,y,rx,ry,rot,0,Math.PI*2);c.fill()};
   for(const o of L){if(o.x<x0-40||o.x>x1+40||o.y<y0-40||o.y>y1+60)continue;const x=o.x,y=o.y,h=o.h,k=o.k;
     if(V3.cap){v3Ent('o',o,null);continue}
+    if(o.nid!=null&&nodeDone(o.nid)){if(k==='rock'){for(const [dx,dy,r0] of [[-5,2,5],[4,3,4],[0,-3,3.5]])ell(x+dx,y+dy,r0,r0*0.75,0,b==='desert'?'#a8784c':'#7c7e78')}else if(k==='cactus'){c.fillStyle='#4f7f34';c.beginPath();c.roundRect(x-4,y-3,8,9,3);c.fill();circ(x,y-3,3.2,'#8ab868')}else{circ(x,y,7.5,'#6a4a2e');circ(x,y,5,'#b8946a');c.strokeStyle='#8a6a44';c.lineWidth=0.8;c.beginPath();c.arc(x,y,2.6,0,7);c.stroke()}continue}
     if(k==='rock'||k==='stone'){const s=k==='stone'?1.1:0.8+h*0.5,base=k==='stone'?'#8a8c86':b==='desert'?'#b8875a':'#8c8e88',hi=k==='stone'?'#b0b2aa':b==='desert'?'#d4a774':'#b2b4ac';
       if(k==='stone'){c.fillStyle=base;c.beginPath();c.roundRect(x-7,y-14,14,24,4);c.fill();c.fillStyle=hi;c.fillRect(x-5,y-12,5,18);c.fillStyle='rgba(120,230,170,.5)';c.fillRect(x-1,y-6,2,8);continue}
       ell(x,y+2,13*s,10*s,0,base);ell(x-3*s,y-2*s,8*s,6*s,-0.3,hi);ell(x+5*s,y+4*s,5*s,3*s,0,'rgba(0,0,0,.18)');if(b!=='desert'&&h>0.6)ell(x-6*s,y+5*s,4*s,2.5*s,0,'#6a9a48');continue}
@@ -6619,6 +6778,7 @@ function drawObs(x0,y0,x1,y1){
 function v3Obs(o){
   const b=G.map.biome,h=o.h,me=G.me,front=o.y>me.y-6&&o.y-me.y<110&&Math.abs(o.x-me.x)<70,al=front?0.4:1;
   entBegin(o.x,o.y,0,h*6.28,1,0,al);const A=al<1?{a:al}:undefined;
+  if(o.nid!=null&&nodeDone(o.nid)){if(o.k==='rock'){for(const [dx,dy,r0] of [[-5,2,5],[4,3,4],[0,-3,3.5]])sph(dx,dy,r0*0.5,r0,r0*0.8,r0*0.6,b==='desert'?'#a8784c':'#7c7e78')}else if(o.k==='cactus'){seg([0,0,0],[0,0,7],4,'#4f7f34');sph(0,0,7,3.6,3.6,1,'#8ab868')}else{seg([0,0,0],[0,0,5],3.6,'#6a4a2e');sph(0,0,5,3.6,3.6,0.6,'#b8946a')}return 10}
   if(o.k==='rock'){const s=0.8+h*0.5,base=b==='desert'?'#b8875a':'#8c8e88',hi=b==='desert'?'#d4a774':'#a8aaa2';sph(0,0,3*s,13*s,10*s,8*s,base,A);sph(-3*s,-2*s,8*s,7*s,6*s,5*s,hi,A);if(b!=='desert'&&h>0.6)sph(5*s,4*s,9*s,4*s,3*s,2*s,'#6a9a48',A);return 14*s}
   if(o.k==='stone'){bx(0,0,13,6,4,13,'#8a8c86',A);bx(-1,0,27,5,3.5,1.5,'#9a9c96',A);bx(0,-4.1,14,0.8,0.2,6,'#7cf0b0',{e:0.6,a:al});return 30}
   if(o.k==='cactus'){const cc='#4f7f34';seg([0,0,0],[0,0,26],4,cc,A);sph(0,0,26,4,4,4,cc,A);limb([0,0,10],[8,0,12],2.6,cc,A);limb([8,0,12],[8,0,21],2.6,cc,A);limb([0,0,14],[-7,0,15],2.4,cc,A);limb([-7,0,15],[-7,0,22],2.4,cc,A);if(h>0.85)sph(0,0,30,2,2,2,'#f07aa0',A);return 30}
@@ -6722,7 +6882,7 @@ function v3Player(e){
   if(chestK==='plate'||chestK==='dragonplate'){const pc=chestK==='dragonplate'?'#8a2a24':'#b4bac2';sph(1.6,0,15.5,4.4,5.6,6.2,pc);sph(-0.5,-6.4,19.5,2.8,2.8,2.4,pc);sph(-0.5,6.4,19.5,2.8,2.8,2.4,pc)}
   else if(chestK==='mail'||chestK==='ghostmail')sph(1,0,15,5.2,6.3,6.6,chestK==='ghostmail'?'#9fc0dc':'#8f969e');
   else if(chestK==='leather'||chestK==='trollhide'||chestK==='brigandine'){sph(1.2,0,15,5,6.2,6.4,chestK==='trollhide'?'#4e5a3a':'#6a4626');bx(0,0,11.8,5.8,6.8,0.9,'#3a2816')}
-  bx(-6.2,0,15,1.8,4.2,4.8,'#5e4228');
+  {const pk=packOf(eq);if(pk){const z=pk[1];bx(-7-z*1.6,0,15+z*1.5,2.2+z*1.8,4.4+z*1.2,4.8+z*2.6,pk[0]);bx(-7-z*1.6,0,19.6+z*4,2.4+z*1.8,4.6+z*1.2,0.9,v3eHex(pk[0],0.75));if(z>=0.4)bx(-7.5-z*1.8,0,10.5-z*0.5,2+z,5.2+z*1.4,1.4,'#7a6a4a');if(z>=0.7){seg([-9.5-z*2,-5.4-z,8],[-9.5-z*2,-5.4-z,27+z*3],0.55,'#4a3218');seg([-9.5-z*2,5.4+z,8],[-9.5-z*2,5.4+z,27+z*3],0.55,'#4a3218')}}else bx(-6.2,0,15,1.4,3,3,'#5e4228')}
   // cape / wings
   if(cape){const swy=Math.sin(tn*(moving?9:2))*(moving?0.25:0.1);
     if(cape.wing){for(const s of [-1,1]){mPush(m4(MT(-6,s*3,19),MRz(s*(0.5+swy))));bx(-2,s*8,1,1,8,6,cape.wing,{a:PE.alpha});mPop()}}
@@ -7483,11 +7643,11 @@ function dropOn(src,t,it){
     else{const old=G.equip[t.slot];G.equip[t.slot]=it;SAVE.pouch=old||null;restat();persist();G.invSel={where:'equip',slot:t.slot}}
   }else if(t.where==='pouch'){
     const old=SAVE.pouch;take();SAVE.pouch=it;
-    if(old){if(src.where==='equip'&&BASES[old.b].s===src.slot)G.equip[src.slot]=old;else if(G.bag.length<16)G.bag.push(old);else{SAVE.pouch=old;if(src.where==='bag')G.bag.splice(src.i,0,it);else G.equip[src.slot]=it;flashMsg('バッグがいっぱいです');renderInv();return}}
+    if(old){if(src.where==='equip'&&BASES[old.b].s===src.slot)G.equip[src.slot]=old;else if(G.bag.length<bagCap())G.bag.push(old);else{SAVE.pouch=old;if(src.where==='bag')G.bag.splice(src.i,0,it);else G.equip[src.slot]=it;flashMsg('バッグがいっぱいです');renderInv();return}}
     restat();persist();G.invSel={where:'pouch'};
   }else if(t.where==='bag'){
     if(src.where==='bag'){const [x]=G.bag.splice(src.i,1);const to=t.i==null?G.bag.length:t.i;G.bag.splice(to,0,x);G.invSel={where:'bag',i:to}}
-    else{if(G.bag.length>=16){flashMsg('バッグがいっぱいです');return}take();G.bag.push(it);restat();persist();G.invSel={where:'bag',i:G.bag.length-1}}
+    else{if(G.bag.length>=bagCap()){flashMsg('バッグがいっぱいです');return}take();G.bag.push(it);restat();persist();G.invSel={where:'bag',i:G.bag.length-1}}
   }
   renderInv();
 }
@@ -7741,8 +7901,8 @@ function toggleBigMap(force){
   requestAnimationFrame(stageLoop);
   for(const b of document.querySelectorAll('#tabbar button,#tabnav button'))b.onclick=()=>{$('#hideout').dataset.tab=b.dataset.t==='base'?BASESUB:b.dataset.t;SEL=null;renderLobby();window.scrollTo(0,0)};
   $('#inspClose').onclick=()=>{SEL=null;renderLobby()};
-  $('#hg1').onclick=()=>homeGacha(1);$('#hg10').onclick=()=>homeGacha(10);$('#g1').onclick=()=>gacha(1,'char');$('#g10').onclick=()=>gacha(10,'char');$('#gs1').onclick=()=>gacha(1,'skin');$('#gs10').onclick=()=>gacha(10,'skin');
-  requestAnimationFrame(cosPreviewLoop);requestAnimationFrame(homeLoop);
+  $('#gDetClose').onclick=()=>{$('#gDetModal').hidden=true};$('#toGacha').onclick=()=>{GTAB=GTAB==='home'?'chara':GTAB;$('#hideout').dataset.tab='gacha';renderLobby();window.scrollTo(0,0)};
+  requestAnimationFrame(cosPreviewLoop);requestAnimationFrame(gArtLoop);requestAnimationFrame(homeLoop);
   document.addEventListener('pointerdown',audioInit,{once:true});
   setInterval(()=>{if(!G){renderParty();if(SAVE.claims.length){if(processClaims())renderLobby();else renderLoss()}}},1000);
   setupTouch();
