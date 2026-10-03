@@ -349,6 +349,9 @@ details.rules ul b{color:var(--fg);font-weight:400}
 .mbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;width:min(860px,100%);max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;display:grid;gap:12px}
 .mbox>h2:first-child{position:sticky;top:-16px;z-index:6;background:var(--panel);margin:-16px -16px 0;padding:12px 16px;border-bottom:1px solid var(--line)}
 #mapOk{position:sticky;bottom:-16px;z-index:6;margin:0 -16px -16px;border-radius:0 0 10px 10px;padding:14px;font-size:16px;box-shadow:0 -10px 20px rgba(0,0,0,.6)}
+.it.tool .hk{position:absolute;top:1px;left:3px;font-size:11px;color:var(--gold);font-weight:bold}
+.htools{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;pointer-events:auto}.htool{position:relative;display:flex;align-items:center;gap:2px;height:28px;padding:0 6px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:rgba(10,8,6,.72);color:var(--ink);font-family:inherit;cursor:pointer}.htool i{font-style:normal;font-size:11px;color:var(--gold);margin-right:2px}.htool b{font-size:14px}.htool.pot b{color:#e2675a}.htool small{font-size:11px;color:var(--mute)}
+.btn.mini{padding:2px 8px;font-size:12px;min-height:0}
 .it.tool .lv{position:absolute;top:1px;right:3px;bottom:auto;font-size:11px;color:#fff;text-shadow:0 1px 2px #000}
 .mbox h2{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:20px}
 .mgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
@@ -1014,7 +1017,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>依頼</b>：「依頼」タブの掲示板に6〜10件の依頼が並ぶ（人ごとに内容も数も違う。討伐・納品・探索・脱出・人に会う・宝箱）。報告した依頼は消え、3時間ごとに新しく入れ替わる。同時に3件まで受注でき、★が多いほど報酬が良い。</li>
         <li><b>3D表示</b>：ダンジョンは少し斜めから見下ろす3D表示になっている（壁に高さと影、松明の明かり、立体のキャラ・魔物・宝箱）。壁の手前に立つと壁が透けて自分が見える。設定の「ダンジョンの表示」で真上からの2D表示に戻せる。端末が重いときは自動で2D表示に切り替わる。</li>
         <li><b>ホストとPING</b>：マルチでは魔物の動きを1人が「ホスト」として計算する。レイド中は通信状況（PING）と端末の重さを見て、一番快適な人に自動でホストが移る（頻繁には交代しない）。PINGはマップ選択画面・オンライン一覧・プレイ中の画面右上に表示される。緑は快適、黄は少し遅延、赤はラグが出やすい。</li>
-        <li><b>人命救助</b>：まれにダンジョンのどこかで、魔物に襲われている遭難者がいる。近づくと「助けて！」という声が聞こえ、見えないときは画面の端に<b>悲鳴の方角</b>が出る。周りの魔物を倒してから話しかけると救出成功で、金貨・回復薬・経験値（ときどき装備）がもらえる。遅いと力尽きてしまう。</li>
+        <li><b>人命救助</b>：まれにダンジョンのどこかで、魔物に襲われている遭難者がいる。近づくと「助けて！」という声が聞こえ、見えないときは画面の端に<b>悲鳴の方角</b>が出る。遭難者を襲っている魔物（頭上に残りの数が出る）を全部倒すと救出成功で、近くにいた人は金貨・回復薬・経験値（ときどき装備）がもらえる。遅いと力尽きてしまう。</li>
         <li><b>素材の売却</b>：倉庫の素材を押すと商人に売れる。単価は安め（品位が高いほど高い）。</li>
         <li><b>ボスレイドをソロで</b>：鍵の横の「ソロで挑む」で、募集せずに一人で挑める。</li>
         <li><b>闇商人</b>：ごくまれにダンジョンの中にいる。その階層には不釣り合いな強い装備・回復薬・闇商人限定の品を高値で売っている（手持ちの金貨→倉庫の金貨の順に払う）。</li>
@@ -1031,7 +1034,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
         <li><b>攻撃アシスト</b>（画面左上のボタン・スマホは「狙」・PCは<span data-kb="assist">R</span>キーですぐ切り替え）：オンだと攻撃した瞬間だけ近くの敵の方を向く（弓・杖は動きを先読み）。移動中や逃げるときは進む方向を向いたまま。</li>
         <li><b>武器スキル</b>（<span data-kb="skill">F</span>キー・スマホは「技」）：武器の種類ごとに固有の技がある。剣＝旋風斬り、斧・槌＝大地割り（スタン）、短剣＝影走り、槍＝穿ち、弓＝五月雨、杖＝魔力爆発。斧や槌の通常攻撃は相手を一瞬スタンさせる。</li>
         <li><b>鞄（バックパック）</b>：装備欄の「鞄」に付けると、レイド中のバッグの枠が増える（鞄なしは12枠）。大きい鞄ほど足が遅くなり、斥候の軽背嚢のように速くなるものもある。鞄は主に作業台の「鞄」で作るか、他の冒険者を倒して奪う。宝箱からはめったに出ない。バッグの枠を超えて持つと足がかなり遅くなる。</li>
-        <li><b>バッグと道具</b>：回復薬・道具・料理は拠点の「倉庫・装備」でバッグに入れたものだけ持ち込める。道具もレイドで拾った装備も、バッグの枠を1つずつ使う。枠の数は装備した鞄で決まり（鞄なしは12枠）、大きい鞄ほど広がる。レイド中は持ち物（Tab・スマホは「持物」）のバッグの中の道具を押すと使う。生還すると残った道具はバッグに戻る。</li>
+        <li><b>バッグと道具</b>：回復薬・道具・料理は拠点の「倉庫・装備」でバッグに入れたものだけ持ち込める。道具もレイドで拾った装備も、バッグの枠を1つずつ使う。枠の数は装備した鞄で決まり（鞄なしは12枠）、大きい鞄ほど広がる。レイド中は持ち物（Tab・スマホは「持物」）のバッグの中の道具を押すか、数字キー（1〜9）で使う。画面左上の道具ボタンからも使える。生還すると残った道具はバッグに戻る。</li>
         <li><b>探索マップ</b>：マップ選択の「探索」は砂漠・草原・川辺・海岸のどれかがランダムに生成される明るい屋外。道や小屋、野営地などがあり、ダンジョンより採集場所が多く、遭難者の救助イベントも起こりやすい。魔物もいるので油断しないこと。</li>
         <li><b>採集</b>：鉱脈・木・薬草の近くで調べる（宝箱と同じ操作）と、少しの間その場にとどまって素材を集める。動いたり殴られたりすると中断する。一部のダンジョンにもある。探索マップでは外周以外の木・岩・サボテン・ヤシはすべて採集できる（鉱脈やトラップは置かれていない）。</li>
         <li><b>ガチャ</b>：「ガチャ」タブに キャラクター（スキン）・衣装（帽子・マント・オーラ）・拠点装飾 の3つがある。毎週月曜9:00にピックアップが入れ替わり、レジェンドとエピックの半分はピックアップになる。10回はエピック以上が1つ確定、60回でレジェンド確定。</li>
@@ -1054,6 +1057,7 @@ body.dragging .it.dropOver{outline:3px solid var(--acc);background:color-mix(in 
     <div class="who"><span id="hName"></span><span class="chip" id="hTeam"></span></div>
     <div class="hpbar"><div id="hpFill"></div><span id="hpText"></span></div>
     <div class="hrow"><span class="kbd" data-kb="dodge">Space</span>回避<b id="hDodge"></b><span class="kbd" data-kb="inv">Tab</span>持ち物<b id="hPot"></b></div>
+    <div class="htools" id="hTools"></div>
     <div class="hrow"><span class="kbd" data-kb="skill">F</span>技<b id="hSkill"></b><b id="hCons" hidden></b></div>
     <div class="hbtns"><button class="btn assist" id="assistBtn" type="button" hidden></button><button class="btn assist" id="pvpBtn" type="button">PvP</button><button class="btn assist" id="optBtnR" type="button" aria-label="設定">⚙</button></div>
     <div class="hrow">金貨<b id="hGold"></b>· 巻物<b id="hScroll"></b>· 撃破<b id="hKills"></b><span id="hSneak"></span></div>
@@ -1822,12 +1826,13 @@ function renderAcct(){
   else{t='同期済み';cls='ok'}
   c.textContent=t;c.className='acct '+cls;
   const box=$('#acctBox');if(!box||$('#hideout').dataset.tab!=='prof')return;
-  const sig=[t,AUTH.user&&AUTH.user.email,AUTH.err].join('|');if(box.dataset.sig===sig)return;box.dataset.sig=sig;
+  const sig=[t,AUTH.user&&AUTH.user.email,AUTH.err,OPT.hideMail?1:0].join('|');if(box.dataset.sig===sig)return;box.dataset.sig=sig;
   box.innerHTML='';
   const p=document.createElement('p');
-  if(AUTH.user){p.innerHTML='ログイン中：<b>'+esc(AUTH.user.email||'')+'</b><br><span class="hint">'+(AUTH.err?(AUTH.err==='NET'?'サーバーにつながらないため、この端末にだけ保存中。つながると自動で送ります。':esc(authMsg(AUTH.err))):'セーブはサーバーに保存されています。')+'</span>'}
+  if(AUTH.user){const em=AUTH.user.email||'',shown=OPT.hideMail?em.replace(/^(.).*?(@.*)$/,(m0,a,b)=>a+'••••'+b.replace(/^@(.).*?(\.[^.]+)$/,'@$1•••$2')):em;p.innerHTML='ログイン中：<b>'+esc(shown)+'</b> <button type="button" class="btn mini" id="mailTgl">'+(OPT.hideMail?'表示する':'隠す')+'</button><br><span class="hint">'+(AUTH.err?(AUTH.err==='NET'?'サーバーにつながらないため、この端末にだけ保存中。つながると自動で送ります。':esc(authMsg(AUTH.err))):'セーブはサーバーに保存されています。')+'</span>'}
   else p.innerHTML='<b>ゲストで遊んでいます</b><br><span class="hint">セーブはこの端末のブラウザにだけ保存されます。ログインすると、このデータをアカウントに引き継げます。</span>';
   box.appendChild(p);
+  {const mt=p.querySelector('#mailTgl');if(mt)mt.onclick=()=>{OPT.hideMail=!OPT.hideMail;saveOpt();box.dataset.sig='';renderAcct()}}
   const row=document.createElement('div');row.className='acts';
   if(AUTH.user)row.appendChild(armedBtn('ログアウト',logout,'danger'));
   else if(SB){const b=document.createElement('button');b.type='button';b.className='btn primary';b.textContent='ログイン / 新規登録';b.onclick=()=>openAuth('login');row.appendChild(b)}
@@ -1938,7 +1943,7 @@ function buildPresence(){
   return p;
 }
 /* ---------- version check: everyone in a room should run the same build ---------- */
-const BUILD='2026.10.03.1700';
+const BUILD='2026.10.03.1900';
 const UPD={newer:null,t:0,going:false};
 async function checkUpdate(force){
   if(!/^https?:$/.test(location.protocol))return;const t=Date.now();if(!force&&t-UPD.t<45000)return;UPD.t=t;
@@ -2522,6 +2527,10 @@ function kitReturn(){
   for(const e of left){if(kitFits(e))SAVE.kit.push(e);else if(e.k==='f')(SAVE.food=SAVE.food||[]).push(e.d);else if(e.k==='pot')SAVE.potions=(SAVE.potions||0)+1;else SAVE.cons[e.id]=(SAVE.cons[e.id]||0)+1}
   SAVE.potions=Math.min(99,SAVE.potions||0);kitEnsure();
 }
+// tools in the bag in a fixed order (same as the bag grid): stacks of 3 potions / 2 tools / single dishes
+function toolStacks(){const tl=[];if(!G)return tl;{let p=G.potions||0;while(p>0){const n=Math.min(STK.pot,p);tl.push({k:'pot',n});p-=n}}for(const id of Object.keys(G.consInv||{}).sort()){let c=G.consInv[id]|0;while(c>0){const n=Math.min(STK.c,c);tl.push({k:'c',id,n});c-=n}}for(const d of G.foodInv||[])tl.push({k:'f',d,n:1});return tl}
+function useTool(e){if(!G||G.me.st!=='alive'||G.done)return;if(e.k==='pot')drink();else if(e.k==='f'){if(eatFood(e.d))G.foodInv.splice(G.foodInv.indexOf(e.d),1)}else useCons(e.id);if(G.inv)renderInv();renderHud()}
+function useToolN(n){const tl=toolStacks();const e=tl[n];if(!e){flashMsg((n+1)+'番の道具はない');return}useTool(e)}
 // can the raid bag take this?
 function bagFits(k,id,n){const ci=Object.assign({},G.consInv||{});let p=G.potions||0,fn=(G.foodInv||[]).length;if(k==='pot')p+=n;else if(k==='c')ci[id]=(ci[id]|0)+n;else if(k==='f')fn+=n;else return G.bag.length+n+toolsN()<=bagCap();return G.bag.length+toolSlots(p,ci,fn)<=bagCap()}
 // throw away what the cursor is on (or what's selected)
@@ -4845,6 +4854,9 @@ function rescueTick(dt){
     for(const m of near){if(m.s!==0||Math.hypot(m.x-v.x,m.y-v.y)>90)continue;m.fk=(m.fk==null?Math.random()*1.5:m.fk)-dt;if(m.fk<=0){m.fk=1.2+Math.random()*1.2;m.ang=Math.atan2(v.y-m.y,v.x-m.x);G.fx.push({t:'sw',x:m.x,y:m.y,a:m.ang,range:28+m.def.r,arc:90,life:0.18,max:0.18,col:'#f0e6d0'});v.flT=0.25;if(visAt(v.x,v.y)>0)sfx('hit',0.25)}}}
   if(v.flT>0)v.flT-=dt;
   if(v.hp<=0){v.hp=0;v.st=2;v.done=true;v.doneT=tn;pushEv('rd');if(v.heard){addFeed('助けを呼ぶ声が途絶えた…');flashMsg('遭難者は力尽きた…')}return}
+  // every attacker is down: rescued (whoever is close by gets the thanks)
+  if(v.act&&v.att.length&&v.att.every(i=>{const m=G.mons[i];return !m||m.dead})){v.st=1;v.done=true;v.doneT=tn;
+    if(me.st==='alive'&&!G.done&&dMe<700)rescueReward(v);else if(v.heard)addFeed('遭難者は救出されたようだ');return}
   if(!v.act||me.st!=='alive'||G.done)return;
   v.cryT-=dt;if(v.cryT<=0&&dMe<1400){v.cryT=near.length?4.5:7;const vis=visAt(v.x,v.y)>0;
     if(vis)addText(v.x,v.y-34,near.length?'助けて！':'こっちだ…！','#ffb0a0',true);else v.cry=tn;
@@ -4862,14 +4874,17 @@ function drawCry(){
 function rescueTalk(v){
   if(v.st===1){flashMsg('遭難者「ご恩は忘れません…！」');return}
   if(v.st===2)return;
-  if(rescueNear(v).length){flashMsg('まだ魔物がいる！先に倒そう');sfx('hurt',0.3);return}
-  v.st=1;v.done=true;v.doneT=now();pushEv('rs');
+  const left=v.att.filter(i=>{const m=G.mons[i];return m&&!m.dead}).length;if(left){flashMsg('遭難者「襲ってきた魔物を倒してください！（残り'+left+'体）」');sfx('hurt',0.3);return}
+  v.st=1;v.done=true;v.doneT=now();rescueReward(v);
+}
+function rescueReward(v){
+  pushEv('rs');
   const df=G.diff||0,r=rngFrom((G.seed^hashStr('rescue:'+NET.peerId))>>>0),gold=Math.round((140+df*130)*(0.8+r()*0.5));
   G.gold+=gold;pickLog('金貨 '+gold+'G','#e4b450');
-  const pot=Math.min(9-G.potions,1+(r()<0.4?1:0));if(pot>0){G.potions+=pot;pickLog('回復薬 ×'+pot,'#e2675a')}
+  const pot=1+(r()<0.4?1:0);if(bagFits('pot',0,pot)){G.potions+=pot;pickLog('回復薬 ×'+pot,'#e2675a')}else{const g2=40*pot;G.gold+=g2;pickLog('金貨 '+g2+'G（バッグがいっぱい）','#e4b450')}
   if(r()<0.4&&bagUsed()<bagCap()){const lv=clamp(5+DIFF[df].lv+R.i(r,0,2),1,13);const it=genItem(r,lv,null,{minR:2,luck:2});it.id=rid();G.bag.push(it);dexItem(it);pickLog(itemName(it),RAR[it.r].hex)}
   addXp(160+df*120);SAVE.st.rescues=(SAVE.st.rescues||0)+1;persist();
-  banner('救出成功','遭難者を助け出した','#7cc47f');sfx('fanfare',0.6);addFeed('遭難者を救出した！');addText(v.x,v.y-34,'ありがとう！','#bff0c0',true);renderHud();
+  banner('救出成功','襲っていた魔物を倒し、遭難者を助け出した','#7cc47f');sfx('fanfare',0.6);addFeed('遭難者を救出した！');addText(v.x,v.y-34,'ありがとう！','#bff0c0',true);renderHud();
 }
 function bmStock(){
   if(G.bmStock)return G.bmStock;const r=rngFrom((G.seed^0xb1ac)>>>0),df=G.diff||0,lv=clamp(5+DIFF[df].lv+4+R.i(r,0,1),1,13),out=[];
@@ -4909,7 +4924,7 @@ function drawNpcs(tn){
 }
 function npcLabels(n,tn){
   const x=n.x,y=n.y+10;ctx.textAlign='center';
-  if(n.k==='rescue'){if(n.st===1&&tn-(n.doneT||0)>10)return;if(n.st===0){ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(x-16,y-22,32,4);ctx.fillStyle=n.hp>0.35?'#7cc47f':'#e2675a';ctx.fillRect(x-16,y-22,32*clamp(n.hp,0,1),4);ctx.fillStyle='#ff9a8a';ctx.font='bold 16px DotGothic16, monospace';ctx.fillText('！',x,y-28+Math.sin(tn*6)*2)}
+  if(n.k==='rescue'){if(n.st===1&&tn-(n.doneT||0)>10)return;if(n.st===0){ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(x-16,y-22,32,4);ctx.fillStyle=n.hp>0.35?'#7cc47f':'#e2675a';ctx.fillRect(x-16,y-22,32*clamp(n.hp,0,1),4);ctx.fillStyle='#ff9a8a';ctx.font='bold 16px DotGothic16, monospace';ctx.fillText('！',x,y-28+Math.sin(tn*6)*2);{const left=n.att.filter(i=>{const m=G.mons[i];return m&&!m.dead}).length;if(left){ctx.font='11px DotGothic16, monospace';ctx.fillStyle='#ffb0a0';ctx.fillText('襲っている魔物 残り'+left,x,y-46+Math.sin(tn*6)*2)}}}
     ctx.font='11px DotGothic16, monospace';ctx.fillStyle=n.st===1?'#bff0c0':'#ffc0b0';ctx.fillText(n.st===1?'救出済み':n.name,x,y-10);return}
   if(n.k!=='bm'&&!n.done){ctx.fillStyle='#ffd36b';ctx.font='bold 18px DotGothic16, monospace';ctx.fillText('！',x,y-28+Math.sin(tn*4)*2)}
   ctx.font='11px DotGothic16, monospace';ctx.fillStyle=n.k==='bm'?'#8affb0':'#e8dcc0';ctx.fillText(n.name,x,y-12);
@@ -5370,7 +5385,7 @@ function findInteract(){
   for(const n of G.map.nodes||[]){if(nodeDone(n.id))continue;const d=Math.hypot(n.x-me.x,n.y-me.y);if(d<bd){bd=d;best={type:'node',n,c:{x:n.x,y:n.y,id:-1},x:n.x,y:n.y,label:nodeLabel(n)}}}
   for(const m of G.mons){if(!m.dead)continue;const d=Math.hypot(m.x-me.x,m.y-me.y);if(d<bd&&lootList({type:'mon',m}).length){bd=d;best={type:'mon',m,x:m.x,y:m.y,label:m.name+(isBot(m)?'の死体':'の遺物')}}}
   if(best&&best.type==='mon'){const subs=nearbyDrops(best.x,best.y);if(subs.length>1)best={type:'multi',subs,x:best.x,y:best.y,label:'周りの遺物（'+subs.length+'か所まとめて）'}}
-  for(const n of G.npcs||[]){if(n.k==='rescue'&&n.st===2)continue;const d=Math.hypot(n.x-me.x,n.y-me.y);if(d<bd){bd=d;best={type:'npc',n,x:n.x,y:n.y,label:n.k==='bm'?'闇商人と取引する':n.k==='rescue'?(n.st===2?'…':n.st===1?'遭難者':'遭難者を助ける'):n.name+'と話す'}}}
+  for(const n of G.npcs||[]){if(n.k==='rescue'&&n.st===2)continue;const d=Math.hypot(n.x-me.x,n.y-me.y);if(d<bd){bd=d;best={type:'npc',n,x:n.x,y:n.y,label:n.k==='bm'?'闇商人と取引する':n.k==='rescue'?(n.st===2?'…':'遭難者'):n.name+'と話す'}}}
   trapList().forEach((T,i)=>{if((T.k!=='keg'&&T.k!=='urn')||trapS(i).st)return;const d=Math.hypot(T.x-me.x,T.y-me.y);if(d<bd){bd=d;best={type:'trap',i,x:T.x,y:T.y,label:T.k==='keg'?'火薬樽に火をつける（離れろ！）':'怪しい壺を割る'}}});
   if(G.map.altar&&!G.altarDone){const d=Math.hypot(G.map.altar.x-me.x,G.map.altar.y-me.y);if(d<bd){bd=d;best={type:'altar',x:G.map.altar.x,y:G.map.altar.y,label:'古の祭壇'}}}
   if(G.grave){const d=Math.hypot(G.grave.x-me.x,G.grave.y-me.y);if(d<bd&&lootList({type:'grave'}).length){bd=d;best={type:'grave',x:G.grave.x,y:G.grave.y,label:'あなたの死体'}}}
@@ -5447,9 +5462,9 @@ function renderInv(){
   const bt=document.createElement('h3');bt.innerHTML='バッグ '+bagUsed()+'/'+bagCap()+(bagUsed()>bagCap()?'（重すぎる！足が遅い）':'')+' <span class="hint">道具は押すと使う'+(document.body.classList.contains('touchui')?' · 長押しで捨てる':' · カーソルを合わせて'+kbName('drop')+'で捨てる（右クリックでも）')+'</span>';
   const bg=document.createElement('div');bg.className='grid';
   for(let i=0;i<G.bag.length;i++){const t=tile(G.bag[i],{drag:{c:'R',where:'bag',i},drop:{c:'R',where:'bag',i},sel:sel&&sel.where==='bag'&&sel.i===i,onClick:()=>{G.invSel={where:'bag',i};renderInv()}});t.addEventListener('mouseenter',()=>{G.invHover={where:'bag',i}});t.addEventListener('mouseleave',()=>{G.invHover=null});bg.appendChild(t)}
-  {const tl=[];{let p=G.potions||0;while(p>0){const n=Math.min(STK.pot,p);tl.push({k:'pot',n});p-=n}}for(const id in (G.consInv||{})){let c=G.consInv[id]|0;while(c>0){const n=Math.min(STK.c,c);tl.push({k:'c',id,n});c-=n}}for(const d of G.foodInv||[])tl.push({k:'f',d,n:1});
-   for(const e of tl){const b=document.createElement('button');b.type='button';b.className='it tool'+(e.k==='pot'?' pot':'');b.dataset.r=e.k==='f'?2:1;b.innerHTML='<span class="g">'+kitGlyph(e)+'</span><span class="tn">'+esc(kitName(e))+'</span>'+(e.n>1?'<span class="lv">×'+e.n+'</span>':'');b.addEventListener('mouseenter',()=>{G.invHover={where:'tool',e}});b.addEventListener('mouseleave',()=>{G.invHover=null});b.oncontextmenu=ev=>{ev.preventDefault();G.invHover={where:'tool',e};invDrop()};b.title=(e.k==='pot'?'回復薬：2.5秒かけてHP45回復':e.k==='f'?e.d.n+'：'+dishDesc(e.d):CONS[e.id].n+'：'+CONS[e.id].d)+'（押すと使う）';
-     b.onclick=()=>{if(e.k==='pot')drink();else if(e.k==='f'){if(eatFood(e.d))G.foodInv.splice(G.foodInv.indexOf(e.d),1)}else useCons(e.id);renderInv();renderHud()};bg.appendChild(b)}
+  {const tl=toolStacks();
+   for(const e of tl){const b=document.createElement('button');b.type='button';b.className='it tool'+(e.k==='pot'?' pot':'');b.dataset.r=e.k==='f'?2:1;b.innerHTML='<span class="g">'+kitGlyph(e)+'</span><span class="tn">'+esc(kitName(e))+'</span>'+(e.n>1?'<span class="lv">×'+e.n+'</span>':'')+(tl.indexOf(e)<9&&!document.body.classList.contains('touchui')?'<span class="hk">'+(tl.indexOf(e)+1)+'</span>':'');b.addEventListener('mouseenter',()=>{G.invHover={where:'tool',e}});b.addEventListener('mouseleave',()=>{G.invHover=null});b.oncontextmenu=ev=>{ev.preventDefault();G.invHover={where:'tool',e};invDrop()};b.title=(e.k==='pot'?'回復薬：2.5秒かけてHP45回復':e.k==='f'?e.d.n+'：'+dishDesc(e.d):CONS[e.id].n+'：'+CONS[e.id].d)+'（押すと使う）';
+     b.onclick=()=>useTool(e);bg.appendChild(b)}
    for(let i=G.bag.length+tl.length;i<bagCap();i++)bg.appendChild(tile(null,{drop:{c:'R',where:'bag',i:null}}))}
   const pt=document.createElement('h3');pt.textContent='セーフポーチ（死んでも残る）';
   const pw=document.createElement('div');pw.style.width='56px';pw.appendChild(tile(SAVE.pouch,{label:'空',drag:{c:'R',where:'pouch'},drop:{c:'R',where:'pouch'},sel:sel&&sel.where==='pouch',onClick:()=>{G.invSel={where:'pouch'};renderInv()}}));
@@ -5603,11 +5618,11 @@ function computeVis(){
       if(tx<0||ty<0||tx>=MW||ty>=MH)break;
       const k=ty*MW+tx,v=1-(d/RV)*(d/RV)*0.75;
       if(v>vis[k])vis[k]=v;ex[k]=1;
-      if(t[k]===0)break;
+      if(t[k]===0&&!(G.map.nat&&G.map.nat[k]))break;
     }
   }
   const data=G.fogImg.data;
-  for(let k=0;k<MW*MH;k++){const v=vis[k];data[k*4+3]=v>0?Math.round((1-v)*255):255}
+  if(isOpenB(G.map.biome)){for(let k=0;k<MW*MH;k++)data[k*4+3]=0}else for(let k=0;k<MW*MH;k++){const v=vis[k];data[k*4+3]=v>0?Math.round((1-v)*255):255}
   G.fogCtx.putImageData(G.fogImg,0,0);
 }
 const visAt=(x,y)=>{const tx=x/TS|0,ty=y/TS|0;if(tx<0||ty<0||tx>=MW||ty>=MH)return 0;return G.vis[ty*MW+tx]};
@@ -7475,6 +7490,7 @@ function renderHud(){
     if(hp.textContent!==t){hp.textContent=t;hp.style.color=c}}
   const pct=clamp(me.hp/s.mhp,0,1);$('#hpFill').style.width=(pct*100)+'%';$('#hpText').textContent=Math.max(0,Math.ceil(me.hp))+' / '+s.mhp;
   $('#hPot').textContent=G.drinkT>0?'飲んでいる…':G.potT>0?'回復中':'';
+  {const ht=$('#hTools');if(ht){const tl=toolStacks(),sig=tl.map(e=>e.k+(e.id||'')+(e.d?e.d.n:'')+e.n).join(',');if(ht.dataset.sig!==sig){ht.dataset.sig=sig;ht.innerHTML='';const touch=document.body.classList.contains('touchui');tl.slice(0,9).forEach((e,i)=>{const b=document.createElement('button');b.type='button';b.className='htool'+(e.k==='pot'?' pot':'');b.innerHTML=(touch?'':'<i>'+(i+1)+'</i>')+'<b>'+kitGlyph(e)+'</b>'+(e.n>1?'<small>×'+e.n+'</small>':'');b.title=kitName(e)+(touch?'':'（'+(i+1)+'キー）');b.onclick=ev=>{ev.stopPropagation();useTool(e)};b.addEventListener('pointerdown',ev=>ev.stopPropagation());ht.appendChild(b)})}}}
   {const sk=skillOfBase(G.stats.wb===FIST?null:G.stats.wb);$('#hSkill').textContent=sk?sk.n+' '+(G.skCd>0?G.skCd.toFixed(1)+'秒':'OK'):'なし';const c=null;$('#hCons').textContent=c&&c.id?CONS[c.id].n+'×'+c.n:'なし';if(TOUCH.skBtn){const f=sk&&G.skCd>0?clamp(G.skCd/sk.cd,0,1):0;TOUCH.skBtn.textContent=G.skCd>0?Math.ceil(G.skCd*10)/10+'':'技';TOUCH.skBtn.style.opacity=sk?1:0.5;TOUCH.skBtn.style.background=f>0?'conic-gradient(rgba(0,0,0,.72) '+(f*360)+'deg, rgba(201,154,62,.35) 0)':'rgba(201,154,62,.32)';TOUCH.skBtn.classList.toggle('ready',!!sk&&f<=0)}
   skSlotPaint(sk);if(TOUCH.itBtn){TOUCH.itBtn.textContent=c&&c.id&&c.n>0?CONS[c.id].g+c.n:'道具';TOUCH.itBtn.style.opacity=c&&c.n>0?1:0.5}}
   $('#hDodge').textContent=G.dodgeCd>0?G.dodgeCd.toFixed(1)+'秒':'OK';
@@ -7530,6 +7546,7 @@ window.addEventListener('keydown',e=>{
   if(G.me.st!=='alive'||G.done)return;
   if(k==='Escape'){G.loot=null;G.inv=false;renderLoot();renderInv();return}
   if(G.inv&&kbHas('drop',k)){invDrop();return}
+  {const m=/^(Digit|Numpad)([1-9])$/.exec(k);if(m&&!bound){useToolN(+m[2]-1);return}}
   if(kbHas('dodge',k))G.wantDodge=true;
   else if(0&&kbHas('potion',k))drink();
   else if(G.loot&&kbHas('lootall',k))lootAll();
